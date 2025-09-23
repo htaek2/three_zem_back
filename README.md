@@ -1,2 +1,2 @@
-# C-Users-301-25-Desktop-hteak-three
-미융최프
+# Git_One
+# Git_One
