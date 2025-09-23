@@ -8,37 +8,37 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class threeController {
     @GetMapping("/login")
     public String login(){
-        return "login";
+        return "page/login";
     }
 
     @GetMapping("/overview")
     public String overview(){
-        return "overview";
+        return "page/overview";
     }
 
     @GetMapping("/monitoring")
     public String page2(){
-        return "monitoring";
+        return "page/monitoring";
     }
 
     @GetMapping("/condition")
     public String condition(){
-        return "condition";
+        return "page/condition";
     }
 
     @GetMapping("/condition/detail")
     public String condition_detail(){
-        return "condition_detail";
+        return "page/condition_detail";
     }
 
     @GetMapping("/analysis")
     public String analysis(){
-        return "analysis";
+        return "page/analysis";
     }
 
     @GetMapping("/emission")
     public String emission(){
-        return "emission";
+        return "page/emission";
     }
 
 }
