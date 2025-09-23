@@ -4,26 +4,92 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Document</title>
 </head>
+
 <style>
-<!--바탕색 지정-->
+/* 바탕색 지정 */
     body {
-    background: #040B12;
+        background: #040B12;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
+/* 로그인 창 */
+    .login {
+        display: flex;
+        width: 500px;
+        height: 450px;
+        background: #09131A;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        border-radius: 10px;
+    }
+    .login_input_name{
+        display: flex;
+        font: bold 60px "나눔고딕";
+        color: white;
+    }
+    .login_input_frame{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        color: white;
+    }
+    .login_input_id,
+    .login_input_pw {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .login_input_id input,
+    .login_input_pw input {
+        width: 190px;
+        height: 24px;
+    }
+    .login_input_head {
+        display: flex;
+        width: 60px;
+        height: 24px;
+
+    }
+    .login_input_btn {
+        width: 250px;
+        height: 60px;
+        border-radius: 10px;
+        background: #00AA6F;
+        font: 400 25px "나눔고딕";
+        color: #FAFAFA;
+    }
 
 </style>
+
 <body>
-    <div>
-        <h1>로그인 창</h1>
+    <div class="login">
+        <div class="login_input_name">
+            BEMS
+        </div>
+        <div class="login_input_frame">
+            <div class="login_input_id">
+                <div class="login_input_head">ID</div>
+                <input type="text" placeholder="아이디 입력">
+            </div>
+            <div class="login_input_pw">
+                <div class="login_input_head">PW</div>
+                <input type="password" placeholder="비밀번호 입력">
+            </div>
+            <button class="login_input_btn">LOGIN</button>
+        </div>
     </div>
+
+
 </body>
 </html>
 
 
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-
-
 <script>
+
 </script>
