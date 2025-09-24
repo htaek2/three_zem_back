@@ -23,10 +23,17 @@
         display: flex;
         justify-content: flex-start;
         align-items: center;
-        width: 1888px;
+        width: 100%;
+        max-width: 1888px;
         height: 736px;
-        margin: 16px 16px;
+        margin: 16px;
         gap: 16px;
+        flex-wrap: wrap;
+    }
+    .main > div {
+        flex: 1 1 460px;
+        min-width: 456px;
+        max-width: 459px;
     }
     .elect {
         display: flex;
