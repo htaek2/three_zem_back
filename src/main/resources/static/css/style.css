@@ -1,0 +1,74 @@
+* {
+    box-size: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+        display: flex;
+        background-color: #040B12;
+        align-items: flex-start;
+        flex-direction: column;
+        margin: 0px;
+    }
+.title {
+    display: flex;
+    font: bold 30px "나눔고딕";
+    color: #FAFAFA;
+    margin: 16px 0px 0px 16px;
+}
+.main {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    max-width: 1888px;
+    height: 736px;
+    margin: 16px;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+.main > div {
+    flex: 1 1;
+    min-width: 343px;
+    max-width: 459px;
+}
+
+.elect {
+    display: flex;
+    width: 460px;
+    height: 100%;
+    min-width: 343px;
+    border-radius: 10px;
+    border: 1px solid #1A242B;
+    background: #09131A;
+    color: #FAFAFA;
+}
+
+.gas {
+    display: flex;
+    width: 460px;
+    height: 100%;
+    background: blue;
+    min-width: 343px;
+}
+.water {
+    display: flex;
+    width: 460px;
+    height: 100%;
+    background: white;
+    min-width: 343px;
+}
+.average {
+    display: flex;
+    width: 460px;
+    height: 100%;
+    background: green;
+    min-width: 343px;
+}
+
+@media (max-width: 411px) {
+            .main {
+                margin: 0;
+            }
+        }
