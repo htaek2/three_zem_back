@@ -1,0 +1,186 @@
+{{! frame/frame.mustache : 상단바 + 하단 네비 (완전 포함판) }}
+
+<style>
+    :root{
+      /* 공통 색상 */
+      --topbar-bg:#09131A;
+      --topbar-text:#FAFAFA;
+
+      --footer-bg:rgba(9,19,26,.9);
+      --footer-line:#0E1C26;
+      --tile-bg:#09131A;     /* 각 버튼 칸 배경 */
+      --tile-border:#1D282F; /* 각 버튼 칸 테두리 */
+      --green:#00AA6F;       /* 86x50 초록 박스 */
+      --label:#FAFAFA;       /* 라벨 텍스트 */
+    }
+
+    /* 고정바 높이만큼 여백만 부여 (배경/텍스트 컬러는 건드리지 않음) */
+    body{ padding-top:50px; padding-bottom:60px; margin:0; }
+
+    /* ========= 상단바 ========= */
+    .main-header{
+      position:fixed; top:0; left:0; right:0; height:50px;
+      background:var(--topbar-bg);
+      display:flex; align-items:center; gap:12px;
+      padding:0 20px; z-index:1000;
+      color:var(--topbar-text);
+    }
+    .main-header .logo,
+    .main-header .logo-ph{
+      width: clamp(18px, 1.2vw, 28px);
+      height: clamp(18px, 1.2vw, 28px);
+    }
+    .main-header .logo{ object-fit:contain; display:block; }
+    .main-header .logo-ph{
+      display:grid; place-items:center;
+      border-radius:6px; background:#0F2230; color:#8FBBD0;
+      font-size: clamp(8px, .8vw, 11px); font-weight:700; letter-spacing:.5px;
+    }
+    .main-header .title{
+      margin:0; font-weight:700; letter-spacing:.2px;
+      font-size: clamp(14px, 1.2vw, 18px); color:var(--topbar-text);
+    }
+
+    /* ========= 하단 네비 ========= */
+    .main-footer{
+      position:fixed; left:0; right:0; bottom:0; height:60px;
+      background:var(--footer-bg);
+      border-top:1px solid var(--footer-line);
+      backdrop-filter: blur(6px);
+      z-index:1000;
+    }
+    /* 1920px에서 정확히 384×60이 되도록 5등분, 중앙정렬 */
+    .bottom-nav{
+      height:100%; display:grid; grid-template-columns:repeat(5, 1fr);
+      width:100%; max-width:1920px; margin:0 auto;
+    }
+
+    /* 각 버튼 타일: 384×60, 배경(#09131A) + 1px 테두리(#1D282F) */
+    .nav-button{
+      position:relative; height:60px;
+      display:flex; align-items:center; justify-content:center;
+      text-decoration:none; user-select:none;
+      background:var(--tile-bg);
+      border-top:1px solid var(--tile-border);
+      border-bottom:1px solid var(--tile-border);
+      /* 좌/우 테두리는 겹치지 않게 왼쪽만 공통, 마지막만 오른쪽 추가 */
+      border-left:1px solid var(--tile-border);
+      color:var(--label);
+    }
+    .nav-button:last-child{ border-right:1px solid var(--tile-border); }
+
+    /* 86×50 컨테이너: 아이콘 + 라벨을 좀 더 가깝게 */
+    .icon-wrapper{
+      position:relative; width:86px; height:50px; border-radius:10px;
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      gap:2px; overflow:hidden;
+    }
+
+    /* 초록 박스: 기본 숨김, 호버/active 시에만 등장. 아이콘+라벨 모두 감쌈 */
+    .icon-wrapper::before{
+      content:""; position:absolute; inset:0; border-radius:10px;
+      background:var(--green); opacity:0; transition:opacity .12s ease;
+      z-index:0;
+    }
+    .nav-button:hover .icon-wrapper::before,
+    .nav-button.active .icon-wrapper::before{ opacity:1; }
+
+    /* 아이콘 PNG: 기본은 원본색. 흰색 강제하려면 icon--white 추가 */
+    .icon-img{
+      width: clamp(18px,1.6vw,28px); height: clamp(18px,1.6vw,28px);
+      object-fit:contain; z-index:1;
+    }
+    .icon--white{ filter:brightness(0) invert(1); }
+
+    /* 라벨: 순수 흰색, 스트로크 없음 */
+    .nav-label{
+      z-index:1; line-height:1; color:var(--label);
+      font-size: clamp(10px,.9vw,13px);
+    }
+
+    @media (max-width:1280px){
+      .icon-wrapper{ width:68px; height:44px; }
+    }
+</style>
+
+{{! ---------- 상단바 ---------- }}
+<header class="main-header" role="banner" aria-label="상단 바">
+    {{#logoPath}}
+        <img src="{{logoPath}}" alt="로고" class="logo"
+             onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';">
+        <div class="logo-ph" style="display:none">LOGO</div>
+    {{/logoPath}}
+    {{^logoPath}}
+        <div class="logo-ph">LOGO</div>
+    {{/logoPath}}
+    <h1 class="title">BEMS 제어</h1>
+</header>
+
+{{! ---------- 하단 네비 ---------- }}
+<footer class="main-footer" role="navigation" aria-label="하단 네비게이션">
+    <nav class="bottom-nav">
+        {{#navItems}}
+            <a href="{{href}}" class="nav-button {{#isActive}}active{{/isActive}}" data-key="{{key}}" aria-label="{{text}}">
+                <div class="icon-wrapper">
+                    {{#iconPath}}
+                        <img src="{{iconPath}}" alt="{{text}}" class="icon-img {{#white}}icon--white{{/white}}">
+                    {{/iconPath}}
+                    {{^iconPath}}
+                        <!-- 임시 아이콘(이모지/문자) -->
+                        <span class="icon-img icon--white" style="display:grid;place-items:center;font-weight:800;">
+                            {{placeholder}}
+                        </span>
+                    {{/iconPath}}
+                    <span class="nav-label">{{text}}</span>
+                </div>
+            </a>
+        {{/navItems}}
+
+        {{^navItems}}
+            <!-- 기본 5개: 개요, 모니터링, 에너지 현황, 통합 분석, 탄소배출 -->
+            <a href="/overview"   class="nav-button" data-key="overview"   aria-label="개요">
+                <div class="icon-wrapper">
+                    <span class="icon-img icon--white" style="display:grid;place-items:center;font-weight:800;">⌂</span>
+                    <span class="nav-label">개요</span>
+                </div>
+            </a>
+            <a href="/monitoring" class="nav-button" data-key="monitoring" aria-label="모니터링">
+                <div class="icon-wrapper">
+                    <span class="icon-img icon--white" style="display:grid;place-items:center;font-weight:800;">⏱</span>
+                    <span class="nav-label">모니터링</span>
+                </div>
+            </a>
+            <a href="/energy"     class="nav-button" data-key="energy"     aria-label="에너지 현황">
+                <div class="icon-wrapper">
+                    <span class="icon-img icon--white" style="display:grid;place-items:center;font-weight:800;">⚡</span>
+                    <span class="nav-label">에너지 현황</span>
+                </div>
+            </a>
+            <a href="/analysis"   class="nav-button" data-key="analysis"   aria-label="통합 분석">
+                <div class="icon-wrapper">
+                    <span class="icon-img icon--white" style="display:grid;place-items:center;font-weight:800;">📊</span>
+                    <span class="nav-label">통합 분석</span>
+                </div>
+            </a>
+            <a href="/carbon"     class="nav-button" data-key="carbon"     aria-label="탄소배출">
+                <div class="icon-wrapper">
+                    <span class="icon-img icon--white" style="display:grid;place-items:center;font-weight:800;">🌿</span>
+                    <span class="nav-label">탄소배출</span>
+                </div>
+            </a>
+        {{/navItems}}
+    </nav>
+</footer>
+
+<script>
+    (function(){
+      /* 서버가 isActive를 안 줄 때, main[data-page] 기준으로 활성 처리 */
+      if(!document.querySelector('.nav-button.active')){
+        var key = document.querySelector('main[data-page]')?.getAttribute('data-page');
+        if(key){
+          var el = document.querySelector('.nav-button[data-key="'+key+'"]');
+          if(el) el.classList.add('active');
+        }
+      }
+    })();
+</script>
