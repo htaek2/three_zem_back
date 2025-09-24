@@ -11,6 +11,14 @@ body {
         flex-direction: column;
         margin: 0px;
     }
+
+.container {
+    max-height: 833px;
+}
+.container sub_container{
+    max-height:
+}
+
 .title {
     display: flex;
     font: bold 30px "나눔고딕";
