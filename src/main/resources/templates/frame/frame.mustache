@@ -1,168 +1,177 @@
-{{! frame/frame.mustache : 상단바 + 하단 네비 (완전 포함판) }}
+{{! frame/frame.mustache : 상단바 + 하단 네비 (Nanum Gothic, 풀블리드, CSS만으로 활성 탭 상시 표시) }}
 
 <style>
     :root{
-      /* 상단바 */
-      --topbar-bg:#09131A;
-      --topbar-text:#FAFAFA;
-      /* 하단 네비 */
-      --footer-bg:rgba(9,19,26,.9);
-      --footer-line:#0E1C26;
-      --tile-bg:#09131A;     /* 각 버튼 칸 배경 */
-      --tile-border:#1D282F; /* 각 버튼 칸 테두리 */
-      --green:#00AA6F;       /* 86x50 초록 박스 */
-      --label:#FAFAFA;       /* 라벨 텍스트 */
+      --topbar-bg:#09131A;        /* 상단바 배경 */
+      --topbar-text:#FAFAFA;      /* 상단바 텍스트 */
+
+      --footer-bg:rgba(9,19,26,.9);/* 하단바 배경(반투명) */
+      --footer-line:#0E1C26;      /* 하단바 상단 경계선(바 자체의 라인) */
+
+      --tile-bg:#09131A;          /* 하단 버튼 타일 배경 */
+      --tile-border:#1D282F;      /* 타일/구분용 스트로크 컬러(요구 색상) */
+
+      --green:#00AA6F;            /* 86×50 녹색 박스 */
+      --label:#FAFAFA;            /* 라벨 텍스트(흰색) */
     }
 
-    /* 고정바 높이만큼 여백만 부여 (배경/텍스트 컬러는 건드리지 않음) */
-    body{ padding-top:50px; padding-bottom:60px; margin:0; }
+    html,body{ width:100%; }                                           /* 전폭 보장 */
+    body{
+      margin:0;                                                        /* 기본 마진 제거 */
+      padding-top:50px;                                                /* 상단 고정바 높이만큼 여백 */
+      padding-bottom:60px;                                             /* 하단 고정바 높이만큼 여백 */
+      font-family:"Nanum Gothic","나눔고딕",Apple SD Gothic Neo,Malgun Gothic,system-ui,sans-serif; /* 나눔고딕 적용 */
+    }
 
     /* ========= 상단바 ========= */
     .main-header{
-      position:fixed; top:0; left:0; right:0; height:50px;
-      background:var(--topbar-bg);
-      display:flex; align-items:center; gap:12px;
-      padding:0 20px; z-index:1000;
-      color:var(--topbar-text);
+      position:fixed; top:0; left:0; right:0; height:50px;             /* 상단 고정 */
+      background:var(--topbar-bg);                                     /* 배경색 */
+      display:flex; align-items:center; gap:12px;                       /* 정렬/간격 */
+      padding:0 20px;                                                   /* 좌우 패딩 */
+      color:var(--topbar-text);                                        /* 텍스트 색상 */
+      z-index:2000;                                                     /* 위로 */
+      border-bottom:1px solid var(--tile-border);                       /* ✅ 상단바 아래쪽 스트로크(타일과 동일 1px #1D282F) */
     }
-    .main-header .logo{ width: clamp(18px,1.2vw,28px); height: clamp(18px,1.2vw,28px); object-fit:contain; display:block; }
-    .main-header .title{ margin:0; font-weight:700; letter-spacing:.2px; font-size: clamp(14px,1.2vw,18px); color:var(--topbar-text); }
+    .main-header .logo{
+      width:clamp(18px,1.2vw,28px); height:clamp(18px,1.2vw,28px);     /* 반응형 로고 크기 */
+      object-fit:contain; display:block;                                /* 로고 렌더링 */
+    }
+    .main-header .title{
+      margin:0; font-weight:700; letter-spacing:.2px;                   /* 타이포 설정 */
+      font-size:clamp(14px,1.2vw,18px); color:var(--topbar-text);       /* 반응형 크기 */
+    }
 
-    /* ========= 하단 네비 ========= */
+    /* ========= 하단 네비(바 자체 라인 + 타일 테두리) ========= */
     .main-footer{
-      position:fixed; left:0; right:0; bottom:0; height:60px;
-      background:var(--footer-bg);
-      border-top:1px solid var(--footer-line);
-      backdrop-filter: blur(6px);
-      z-index:1000;
+      position:fixed; left:0; right:0; bottom:0; height:60px;          /* 하단 고정(Y:1020 at 1080p) */
+      background:var(--footer-bg);                                     /* 반투명 배경 */
+      border-top:1px solid var(--footer-line);                         /* 바 상단 경계선(#0E1C26) */
+      backdrop-filter:blur(6px);                                       /* 살짝 블러 */
+      z-index:2000;                                                     /* 위로 */
     }
-    /* 1920px에서 정확히 384×60이 되도록 5등분, 중앙정렬 */
+
     .bottom-nav{
-      height:100%; display:grid; grid-template-columns:repeat(5, 1fr);
-      width:100%; max-width:1920px; margin:0 auto;
+      height:100%;                                                     /* 푸터 높이 채움 */
+      display:grid; grid-template-columns:repeat(5,minmax(0,1fr));     /* 5칸 균등 분할 */
+      width:100%; margin:0 !important; max-width:none !important;      /* 풀블리드 강제(좌우 여백 방지) */
+      padding:0 !important;                                            /* 내부 패딩 제거 */
     }
 
-    /* 각 버튼 타일: 384×60, 배경(#09131A) + 1px 테두리(#1D282F) */
     .nav-button{
-      position:relative; height:60px;
-      display:flex; align-items:center; justify-content:center;
-      text-decoration:none; user-select:none;
-      background:var(--tile-bg);
-      color:var(--label);
-      /* 위/아래/왼쪽 테두리 공통, 마지막만 오른쪽 추가 */
-      border-top:1px solid var(--tile-border);
-      border-bottom:1px solid var(--tile-border);
-      border-left:1px solid var(--tile-border);
+      position:relative; height:60px;                                   /* 타일 높이 고정 */
+      display:flex; align-items:center; justify-content:center;         /* 중앙 정렬 */
+      text-decoration:none; user-select:none;                           /* 링크 기본 제거 */
+      background:var(--tile-bg);                                        /* 타일 배경(#09131A) */
+      color:var(--label);                                               /* 라벨 흰색 */
+      border-top:1px solid var(--tile-border);                          /* 타일 위 스트로크(#1D282F) */
+      border-bottom:1px solid var(--tile-border);                       /* 타일 아래 스트로크 */
+      border-left:1px solid var(--tile-border);                         /* 타일 좌 스트로크 */
     }
-    .nav-button:last-child{ border-right:1px solid var(--tile-border); }
+    .nav-button:last-child{ border-right:1px solid var(--tile-border); }/* 마지막만 우 스트로크 */
 
-    /* 86×50 컨테이너: 아이콘 + 라벨을 좀 더 가깝게 */
     .icon-wrapper{
-      position:relative; width:86px; height:50px; border-radius:10px;
-      display:flex; flex-direction:column; align-items:center; justify-content:center;
-      gap:2px; overflow:hidden;
+      position:relative; width:86px; height:50px; border-radius:10px;   /* 86×50 스펙 */
+      display:flex; flex-direction:column; gap:5px;                      /* 아이콘-라벨 간격 좁게 */
+      align-items:center; justify-content:center; overflow:hidden;       /* 녹색 박스 클립 */
     }
-/**/
-    /* 초록 박스: 기본 숨김, 호버/active 시에만 등장. 아이콘+라벨 모두 감쌈 */
     .icon-wrapper::before{
-      content:""; position:absolute; inset:0; border-radius:10px;
-      background:var(--green); opacity:0; transition:opacity .12s ease;
-      z-index:0;
+      content:""; position:absolute; inset:0; border-radius:10px;       /* wrapper 전체 덮음 */
+      background:var(--green); opacity:0; transition:opacity .12s ease; /* 기본 숨김 → 부드럽게 표시 */
+      z-index:0;                                                         /* 내용 뒤쪽 */
     }
-    .nav-button:hover .icon-wrapper::before,
-    .nav-button.active .icon-wrapper::before{ opacity:1; }
 
-    /* 아이콘 PNG: 기본은 원본색. 흰색 강제하려면 icon--white 추가 */
+    /* 호버 시 녹색 박스 + 아이콘 흰색화 */
+    .nav-button:hover .icon-wrapper::before{ opacity:1; }                /* 호버: 녹색 박스 표시 */
+    .nav-button:hover .icon-img{ filter:brightness(0) invert(1); }       /* 호버: 아이콘 흰색처럼 */
+
     .icon-img{
-      width: clamp(18px,1.6vw,28px); height: clamp(18px,1.6vw,28px);
-      object-fit:contain; z-index:1;
+      width:clamp(18px,1.6vw,28px); height:clamp(18px,1.6vw,28px);      /* 아이콘 크기 */
+      object-fit:contain; z-index:1;                                     /* 녹색 박스 위 */
     }
-    .icon--white{ filter:brightness(0) invert(1); }
 
-    /* 라벨: 순수 흰색, 스트로크 없음 */
     .nav-label{
-      z-index:1; line-height:1; color:var(--label);
-      font-size: clamp(10px,.9vw,13px);
+      z-index:1; line-height:1; color:var(--label);                      /* 라벨(흰색) */
+      font-size:clamp(10px,.9vw,13px); font-weight:700;                  /* 가독성 ↑ */
     }
+
+    /* ── CSS만으로 “현재 페이지 탭 상시 활성화” 매핑(깜빡임 방지) ── */
+    body[data-page="overview"]   .nav-button[data-key="overview"]   .icon-wrapper::before,
+    body[data-page="monitoring"] .nav-button[data-key="monitoring"] .icon-wrapper::before,
+    body[data-page="condition"]  .nav-button[data-key="condition"]  .icon-wrapper::before,
+    body[data-page="analysis"]   .nav-button[data-key="analysis"]   .icon-wrapper::before,
+    body[data-page="emission"]   .nav-button[data-key="emission"]   .icon-wrapper::before{ opacity:1; } /* 활성 탭 녹색 박스 항상 ON */
+
+    body[data-page="overview"]   .nav-button[data-key="overview"]   .icon-img,
+    body[data-page="monitoring"] .nav-button[data-key="monitoring"] .icon-img,
+    body[data-page="condition"]  .nav-button[data-key="condition"]  .icon-img,
+    body[data-page="analysis"]   .nav-button[data-key="analysis"]   .icon-img,
+    body[data-page="emission"]   .nav-button[data-key="emission"]   .icon-img{ filter:brightness(0) invert(1); } /* 활성 탭 아이콘 흰색화 */
 
     @media (max-width:1280px){
-      .icon-wrapper{ width:68px; height:44px; }
+      .icon-wrapper{ width:68px; height:44px; }                          /* 저해상도 보정 */
     }
 </style>
 
-{{! ---------- 상단바 ---------- }}
-<header class="main-header" role="banner" aria-label="상단 바">
+<header class="main-header" role="banner" aria-label="상단 바">             <!-- 상단 고정 바 -->
     {{#logoPath}}
-        <img src="{{logoPath}}" alt="로고" class="logo">
+        <img src="{{logoPath}}" alt="로고" class="logo">                    <!-- 커스텀 로고(있으면) -->
     {{/logoPath}}
     {{^logoPath}}
-        <img src="/icon/main_icon.svg" alt="메인 아이콘" class="logo">
+        <img src="/icon/main_icon.svg" alt="메인 아이콘" class="logo">     <!-- 기본 상단 아이콘 -->
     {{/logoPath}}
-    <h1 class="title">BEMS 제어</h1>
+    <h1 class="title">BEMS 제어</h1>                                     <!-- 타이틀 -->
 </header>
 
-{{! ---------- 하단 네비 ---------- }}
-<footer class="main-footer" role="navigation" aria-label="하단 네비게이션">
-    <nav class="bottom-nav">
+<footer class="main-footer" role="navigation" aria-label="하단 네비게이션"> <!-- 하단 고정 네비 -->
+    <nav class="bottom-nav">                                              <!-- 5등분 그리드(풀블리드) -->
         {{#navItems}}
-            <a href="{{href}}" class="nav-button {{#isActive}}active{{/isActive}}" data-key="{{key}}" aria-label="{{text}}">
-                <div class="icon-wrapper">
+            <a href="{{href}}" class="nav-button" data-key="{{key}}" aria-label="{{text}}"> <!-- 버튼(활성은 CSS가 매핑) -->
+                <div class="icon-wrapper">                                      <!-- 86×50 컨테이너 -->
                     {{#iconPath}}
-                        <img src="{{iconPath}}" alt="{{text}}" class="icon-img {{#white}}icon--white{{/white}}">
+                        <img src="{{iconPath}}" alt="{{text}}" class="icon-img">    <!-- 개별 아이콘 경로 -->
                     {{/iconPath}}
                     {{^iconPath}}
-                        <img src="/icon/{{key}}_icon.svg" alt="{{text}}" class="icon-img {{#white}}icon--white{{/white}}">
+                        <img src="/icon/{{key}}_icon.svg" alt="{{text}}" class="icon-img"> <!-- key 기반 기본 아이콘 -->
                     {{/iconPath}}
-                    <span class="nav-label">{{text}}</span>
+                    <span class="nav-label">{{text}}</span>                       <!-- 라벨 -->
                 </div>
             </a>
         {{/navItems}}
 
-        {{^navItems}}
+        {{^navItems}}                                                       <!-- 서버 navItems 없을 때 기본 5개 -->
             <a href="/overview"   class="nav-button" data-key="overview"   aria-label="개요">
                 <div class="icon-wrapper">
-                    <img src="/icon/overview_icon.svg"   alt="개요"       class="icon-img icon--white">
+                    <img src="/icon/overview_icon.svg"   alt="개요"       class="icon-img">
                     <span class="nav-label">개요</span>
                 </div>
             </a>
             <a href="/monitoring" class="nav-button" data-key="monitoring" aria-label="모니터링">
                 <div class="icon-wrapper">
-                    <img src="/icon/monitoring_icon.svg" alt="모니터링"   class="icon-img icon--white">
+                    <img src="/icon/monitoring_icon.svg" alt="모니터링"   class="icon-img">
                     <span class="nav-label">모니터링</span>
                 </div>
             </a>
             <a href="/condition"  class="nav-button" data-key="condition"  aria-label="에너지 현황">
                 <div class="icon-wrapper">
-                    <img src="/icon/condition_icon.svg"  alt="에너지 현황" class="icon-img icon--white">
+                    <img src="/icon/condition_icon.svg"  alt="에너지 현황" class="icon-img">
                     <span class="nav-label">에너지 현황</span>
                 </div>
             </a>
             <a href="/analysis"   class="nav-button" data-key="analysis"   aria-label="통합 분석">
                 <div class="icon-wrapper">
-                    <img src="/icon/analysis_icon.svg"   alt="통합 분석"   class="icon-img icon--white">
+                    <img src="/icon/analysis_icon.svg"   alt="통합 분석"   class="icon-img">
                     <span class="nav-label">통합 분석</span>
                 </div>
             </a>
             <a href="/emission"   class="nav-button" data-key="emission"   aria-label="탄소배출">
                 <div class="icon-wrapper">
-                    <img src="/icon/emission_icon.svg"   alt="탄소배출"    class="icon-img icon--white">
+                    <img src="/icon/emission_icon.svg"   alt="탄소배출"    class="icon-img">
                     <span class="nav-label">탄소배출</span>
                 </div>
             </a>
         {{/navItems}}
-
     </nav>
 </footer>
 
-<script>
-    (function(){
-      /* 서버가 isActive를 안 줄 때, main[data-page] 기준으로 활성 처리 */
-      if(!document.querySelector('.nav-button.active')){
-        var key = document.querySelector('main[data-page]')?.getAttribute('data-page');
-        if(key){
-          var el = document.querySelector('.nav-button[data-key="'+key+'"]');
-          if(el) el.classList.add('active');
-        }
-      }
-    })();
-</script>
+
