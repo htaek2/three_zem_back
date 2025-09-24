@@ -8,11 +8,26 @@
 <style>
 /* 바탕색 지정 */
     body {
+        position: relative;
+        margin: 0px;
+    }
+
+    #background_canvas {
+        background-color: #040B12;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+    }
+    #contain {
+        width: 100%;
+        height: 100%;
         background: #040B12;
         display: flex;
         justify-content: center;
         align-items: center;
+        position: absolute;
     }
+
 
 /* 로그인 창 */
     .login {
@@ -24,6 +39,7 @@
         align-items: center;
         flex-direction: column;
         border-radius: 10px;
+        gap: 80px;
     }
     .login_input_name{
         display: flex;
@@ -36,6 +52,7 @@
         align-items: center;
         flex-direction: column;
         color: white;
+        gap: 5px;
     }
     .login_input_id,
     .login_input_pw {
@@ -61,28 +78,32 @@
         background: #00AA6F;
         font: 400 25px "나눔고딕";
         color: #FAFAFA;
+        margin: 10px 0px 0px 0px;
     }
 
 </style>
 
 <body>
-    <div class="login">
-        <div class="login_input_name">
-            BEMS
-        </div>
-        <div class="login_input_frame">
-            <div class="login_input_id">
-                <div class="login_input_head">ID</div>
-                <input type="text" placeholder="아이디 입력">
+
+    <canvas id="background_canvas"></canvas>
+    <div id="contain">
+        <div class="login">
+            <div class="login_input_name">
+                BEMS
             </div>
-            <div class="login_input_pw">
-                <div class="login_input_head">PW</div>
-                <input type="password" placeholder="비밀번호 입력">
+            <div class="login_input_frame">
+                <div class="login_input_id">
+                    <div class="login_input_head">ID</div>
+                    <input type="text" placeholder="아이디 입력">
+                </div>
+                <div class="login_input_pw">
+                    <div class="login_input_head">PW</div>
+                    <input type="password" placeholder="비밀번호 입력">
+                </div>
+                <button class="login_input_btn">LOGIN</button>
             </div>
-            <button class="login_input_btn">LOGIN</button>
         </div>
     </div>
-
 
 </body>
 </html>
