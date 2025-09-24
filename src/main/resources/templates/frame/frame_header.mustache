@@ -1,10 +1,125 @@
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Document</title>
-</head>
-<body>
+<style>
+    /* ===== Bottom Nav in frame_header ===== */
+    :root{
+      --nav-text:#FAFAFA;
+      --nav-muted:#9AA7B0;
+      --nav-line:#0E1C26;
+      --nav-accent:#00AA6F;
+      --nav-bg:rgba(9,19,26,.9);
+    }
+    /* 하단바 높이만큼 본문 위로 올리기 */
+    body{ padding-bottom:60px; }
 
-</body>
-</html>
+    .main-footer{
+      position:fixed; left:0; right:0; bottom:0;
+      height:60px;
+      background:var(--nav-bg);
+      backdrop-filter: blur(6px);
+      border-top:1px solid var(--nav-line);
+      z-index:1000;
+    }
+    .bottom-nav{
+      height:100%;
+      display:flex;
+    }
+    .nav-button{
+      flex:1 1 20%;
+      display:flex; flex-direction:column;
+      align-items:center; justify-content:center;
+      gap:4px;
+      text-decoration:none;
+      color:var(--nav-muted);
+      position:relative;
+      transition: transform .12s ease, color .12s ease;
+      user-select:none;
+      padding:0 4px;
+    }
+    .nav-button:hover{ transform:translateY(-2px); color:var(--nav-text); }
+
+    .icon-wrapper{
+      width:86px; height:50px;             /* 요구사항: 86 x 50 */
+      border-radius:10px;
+      background:var(--nav-accent);
+      display:grid; place-items:center;
+      overflow:hidden;
+    }
+    .icon-wrapper img{
+      width: clamp(18px, 1.6vw, 28px);
+      height: clamp(18px, 1.6vw, 28px);
+      object-fit:contain;
+      filter: drop-shadow(0 0 2px rgba(0,0,0,.25));
+      display:block;
+    }
+    /* 아이콘 플레이스홀더(텍스트/이모지) */
+    .icon-placeholder{
+      display:grid; place-items:center;
+      width:100%; height:100%;
+      font-weight:800;
+      font-size: clamp(16px, 1.4vw, 22px);
+      color:#003a27; /* 녹색 배경 위 대비 */
+      letter-spacing:.2px;
+    }
+
+    .nav-button span{
+      font-size: clamp(10px, .9vw, 13px);
+      line-height:1;
+    }
+    .nav-button.active{ color:var(--nav-text); }
+    .nav-button.active::after{
+      content:"";
+      position:absolute; top:-2px;
+      width:24%; height:3px; border-radius:2px;
+      background:var(--nav-accent);
+    }
+
+    @media (max-width: 1280px){
+      .icon-wrapper{ width:68px; height:44px; }
+    }
+</style>
+
+<footer class="main-footer" role="navigation" aria-label="하단 네비게이션">
+    <nav class="bottom-nav">
+        {{#navItems}}
+            <a href="{{href}}" class="nav-button {{#isActive}}active{{/isActive}}" data-key="{{key}}" aria-label="{{text}}">
+                <div class="icon-wrapper">
+                    {{#iconPath}}
+                        <img src="{{iconPath}}" alt="{{text}}"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';">
+                        <span class="icon-placeholder" style="display:none">{{placeholder}}</span>
+                    {{/iconPath}}
+                    {{^iconPath}}
+                        <span class="icon-placeholder">{{placeholder}}</span>
+                    {{/iconPath}}
+                </div>
+                <span>{{text}}</span>
+            </a>
+        {{/navItems}}
+    </nav>
+</footer>
+
+<script>
+    (function(){
+      /* 1) 활성 탭 자동 지정 (서버에서 isActive 못 줄 때) */
+      if(!document.querySelector('.nav-button.active')){
+        var key = document.querySelector('main[data-page]')?.getAttribute('data-page');
+        if(key){
+          var el = document.querySelector('.nav-button[data-key="'+key+'"]');
+          if(el) el.classList.add('active');
+        }
+      }
+
+      /* 2) 아이콘 플레이스홀더 텍스트 보정
+         - navItems.placeholder가 비어 있으면 key → 이모지 매핑
+           (없으면 첫 글자 사용)
+      */
+      var map = { overview:'⌂', monitoring:'⏱', energy:'⚡', analysis:'📊', carbon:'🌿' };
+      document.querySelectorAll('.nav-button').forEach(function(a){
+        var ph = a.querySelector('.icon-placeholder');
+        if(!ph) return;
+        if(ph.textContent.trim()) return; // 서버가 이미 채워준 경우
+        var key = a.getAttribute('data-key');
+        var label = a.querySelector('span')?.textContent?.trim();
+        ph.textContent = (key && map[key]) ? map[key] : (label ? label[0] : '•');
+      });
+    })();
+</script>
