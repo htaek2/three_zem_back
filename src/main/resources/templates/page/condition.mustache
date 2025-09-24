@@ -7,21 +7,67 @@
 
 <style>
     body {
+        display: flex;
         background-color: #040B12;
+        justify-content: flex-start;
+        align-items: flex-start;
+        flex-direction: column;
+        margin: 0px;
     }
     .title {
+        display: flex;
         font: bold 30px "나눔고딕";
         color: #FAFAFA;
-        margin: 18px 0px 0px 18px;
+        margin: 14.8px 0px 0px 14.8px;
     }
     .main {
-
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        width: 100%;
+        height: 750px;
+        margin: 0px;
     }
     .elect {
+        display: flex;
+        width: 457.5px;
+        height: 750px;
+        background: red;
+        margin: 14.8px 0px 0px 14.8px;
     }
+    .gas {
+        display: flex;
+        width: 457.5px;
+        height: 750px;
+        background: blue;
+        margin: 14.8px 0px 0px 14.8px;
+    }
+    .water {
+        display: flex;
+        width: 457.5px;
+        height: 750px;
+        background: white;
+        margin: 14.8px 0px 0px 14.8px;
+    }
+    .average {
+        display: flex;
+        width: 457.5px;
+        height: 750px;
+        background: green;
+        margin: 14.8px 14.8px 0px 14.8px;
+    }
+
+    @media (min-width: )
 </style>
 
 <body>
+{{>frame/frame}}
+
+    <main class="page" data-page="condition">
+        <div style="padding:20px; max-width:1920px; margin:0 auto;">
+        </div>
+    </main>
+
     <div class="title">에너지 현황</div>
     <div class="main">
         <div class="elect">
