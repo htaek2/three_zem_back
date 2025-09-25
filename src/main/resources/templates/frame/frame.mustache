@@ -3,6 +3,7 @@
 <link rel="stylesheet" href="css/overview.css" />
 
 <style>
+
     :root{
       --topbar-bg:#09131A;        /* 상단바 배경 */
       --topbar-text:#FAFAFA;      /* 상단바 텍스트 */
@@ -19,6 +20,8 @@
 
     html,body{ width:100%; }                                           /* 전폭 보장 */
     body{
+
+      box-sizing: border-box;
       margin:0;                                                        /* 기본 마진 제거 */
       padding-top:50px;                                                /* 상단 고정바 높이만큼 여백 */
       padding-bottom:60px;                                             /* 하단 고정바 높이만큼 여백 */
@@ -113,6 +116,26 @@
     @media (max-width:1280px){
       .icon-wrapper{ width:68px; height:44px; }                          /* 저해상도 보정 */
     }
+
+    .container {
+        max-width: 1884px;
+        width:100%;
+        margin: 16px;
+        height: calc(100vh - 50px - 60px - 32px); /* 상단바 - 하단바 - 마진 고려 */
+        min-height: 600px; /* 최소 높이 보장 */
+        overflow-y: auto; /* 세로 스크롤 허용 */
+
+    }
+    /* 반응형 미디어 쿼리 추가 */
+       @media (max-width: 768px) {
+            .container {
+                margin: 8px; /* 모바일에서 마진 줄임 */
+                min-height: 400px;
+                height: auto; /* 모바일에서는 자동 높이 */
+         }
+}
+
+
 </style>
 
 <header class="main-header" role="banner" aria-label="상단 바">             <!-- 상단 고정 바 -->
@@ -126,7 +149,7 @@
 </header>
 {{! ---------- 하단 네비 ---------- }}
         <div class="container">
-            <div class="sub_container">
+           {{! <div class="sub_container"> }}
                 {{#isOverview}}
                     {{> page/overview }}
                 {{/isOverview}}
@@ -143,7 +166,7 @@
                 {{#isEmission}}
                     {{> page/emission }}
                 {{/isEmission}}
-            </div>
+            {{! </div> }}
         </div>
 
 

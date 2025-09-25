@@ -1,5 +1,5 @@
 * {
-    box-size: border-box;
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
@@ -12,12 +12,7 @@ body {
         margin: 0px;
     }
 
-.container {
-    max-height: 833px;
-}
-.container sub_container{
-    max-height:
-}
+
 
 .title {
     display: flex;
@@ -32,7 +27,6 @@ body {
     width: 100%;
     max-width: 1888px;
     height: 736px;
-    margin: 16px;
     gap: 16px;
     flex-wrap: wrap;
 }
