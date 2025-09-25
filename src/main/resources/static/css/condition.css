@@ -44,6 +44,8 @@ body {
 
 .elect {
     display: flex;
+    align-items: flex-start;
+    flex-direction: column;
     width: 460px;
     height: 100%;
     min-width: 343px;
@@ -51,6 +53,7 @@ body {
     border: 1px solid #1A242B;
     background: #09131A;
     color: #FAFAFA;
+    padding: 16px;
 }
 
 .gas {
@@ -74,6 +77,37 @@ body {
     background: green;
     min-width: 343px;
 }
+
+.elect_1usage {
+    width: 100%
+}
+.elect_1usage_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%
+    max-width: 459px;
+    min-width: 0;
+}
+#elect_title {
+    display: flex;
+    border-radius: 10px;
+    border: 1px solid #1A242B;
+    width: 135px;
+    height: 50px;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    color: #FAFAFA;
+    font: bold 28px "나눔고딕";
+}
+.elect_1usage_header_R img {
+    display: block;
+    height: 100%;
+}
+
+
+
 
 @media (max-width: 411px) {
             .main {
