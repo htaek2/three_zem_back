@@ -122,13 +122,21 @@
     {{/logoPath}}
     <h1 class="title">BEMS 제어</h1>                                     <!-- 타이틀 -->
 </header>
-<<<<<<< HEAD
 {{! ---------- 하단 네비 ---------- }}
 <footer class="main-footer" role="navigation" aria-label="하단 네비게이션">
     <nav class="bottom-nav">
-=======
+
 <div class="container">
-    <div class="sub_container"></div>
+    <div class="sub_container">
+        {{#isCondition}}
+            {{> page/condition }}
+        {{/isCondition}}
+        {{^isCondition}}
+
+        {{/isCondition}}
+
+
+    </div>
 
 </div>
 <footer class="main-footer" role="navigation" aria-label="하단 네비게이션"> <!-- 하단 고정 네비 -->
