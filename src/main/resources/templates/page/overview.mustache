@@ -1,66 +1,3 @@
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Document</title>
-
-
-
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-        /* 바탕색 지정 */
-            body {
-                background: #040B12;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-            }
-
-        .container {
-            max-width: 1884px;
-            width: 100%;
-        }
-
-
-        /* 3d 뷰어 영역 */
-
-
-       .viewer_3d_container{
-            width: 100%;
-            height: 453px;  /* 고정 높이 설정 */
-    }
-        .viewer_3d {
-            width: 100%;
-            margin-top: 25px;
-            height: 59.6%;  /* % 단위로 수정 */
-            background: linear-gradient(to bottom,
-                #072F2A 0%,
-                #073028 4%,
-                #082A27 48%,
-                #081C1F 98%
-            );
-        }
-
-        .info_3d {
-            margin-top : 25px;
-            margin-bottom : 25px;
-            height: 27.4%;
-            background: #040B12;
-            border: 1px solid white;
-        }
-
-    </style>
-
-
-</head>
-
-<body>
-<!--프레임(액자) 불러오기 1 -->
-{{#frame/frame_header}}
-{{/frame/frame_header}}
-
 <div class="container">
     <div class="viewer_3d_container">
         <div class="viewer_3d">awdwadaw</div>
@@ -71,12 +8,6 @@
     </div>
 </div>
 
-<!--프레임(액자) 불러오기 2 -->
-{{#frame/frame_footer}}
-{{/frame/frame_footer}}
 
-
-</body>
-</html>
 
 

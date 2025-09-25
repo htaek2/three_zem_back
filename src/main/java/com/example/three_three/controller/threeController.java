@@ -14,18 +14,27 @@ public class threeController {
     }
 
     @GetMapping("/login")
-    public String login(){
-        return "page/login";
+    public String login(Model model){
+        model.addAttribute("isLoggedIn",true);
+        model.addAttribute("isOverview",false);
+        model.addAttribute("isMonitoring",false);
+        model.addAttribute("isCondition",false);
+        model.addAttribute("isConditionDetail", false);
+        model.addAttribute("isAnalysis", false);
+        model.addAttribute("isEmission",false);
+        return "frame/frame";
     }
 
     @GetMapping("/overview")
-    public String overview(){
-        return "page/overview";
+    public String overview(Model model){
+        model.addAttribute("isOverview",true);
+        return "frame/frame";
     }
 
     @GetMapping("/monitoring")
-    public String page2(){
-        return "page/monitoring";
+    public String page2(Model model){
+        model.addAttribute("isMonitoring",true);
+        return "frame/frame";
     }
 
     @GetMapping("/condition")
@@ -35,18 +44,23 @@ public class threeController {
     }
 
     @GetMapping("/condition/detail")
-    public String condition_detail(){
-        return "page/condition_detail";
+    public String condition_detail(Model model){
+        model.addAttribute("isConditionDetail",true);
+        return "frame/frame";
     }
 
     @GetMapping("/analysis")
-    public String analysis(){
-        return "page/analysis";
+    public String analysis(Model model)
+    {
+        model.addAttribute("isAnalysis",true);
+        return "frame/frame";
     }
 
     @GetMapping("/emission")
-    public String emission(){
-        return "page/emission";
+    public String emission(Model model)
+    {
+        model.addAttribute("isEmission",true);
+        return "frame/frame";
     }
 
 }
