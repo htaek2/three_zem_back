@@ -1,5 +1,5 @@
 * {
-    box-sizing: border-box;
+    box-size: border-box;
     margin: 0;
     padding: 0;
 }
@@ -11,8 +11,6 @@ body {
         flex-direction: column;
         margin: 0px;
     }
-
-
 
 .title {
     display: flex;
@@ -27,6 +25,7 @@ body {
     width: 100%;
     max-width: 1888px;
     height: 736px;
+    margin: 16px;
     gap: 16px;
     flex-wrap: wrap;
 }
@@ -82,26 +81,61 @@ body {
     width: 100%
     max-width: 459px;
     min-width: 0;
+    margin: 0 0 16px 0;
 }
 #elect_title {
     display: flex;
     border-radius: 10px;
     border: 1px solid #1A242B;
-    width: 135px;
+    width: 128px;
     height: 50px;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     flex-shrink: 0;
     color: #FAFAFA;
     font: bold 28px "나눔고딕";
+    padding: 8px 16px 8px 16px;
+}
+#elect_title img {
+    width: 34px;
+    height: 34px;
 }
 .elect_1usage_header_R img {
     display: block;
     height: 100%;
 }
 
+/* 내용 */
+    .elect_1usage_main {
+    }
+    .elect_1usage_main_L {
+    }
+    .today_title {
+    }
+    .today_value {
+    }
+    .today_ratio {
+    }
+    .updown_icon {
+    }
+    .updown_font {
+    }
 
 
+
+
+
+
+/* 선 긋기 */
+.liner {
+    border: 0;
+    border-top: 2px solid #1A242B; /* 선 굵기/색상 */
+    width: calc(100% + 32px);   /* 좌우 padding 16px * 2 = 32px */
+    margin-top: 16px;
+    margin-left: -16px;          /* 왼쪽 padding 무시 */
+    margin-right: -16px;         /* 오른쪽 padding 무시 */
+    height: 0;                   /* 높이 제거 */
+}
 
 @media (max-width: 411px) {
             .main {
