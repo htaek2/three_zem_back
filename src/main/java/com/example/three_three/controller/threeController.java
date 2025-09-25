@@ -14,15 +14,9 @@ public class threeController {
     }
 
     @GetMapping("/login")
-    public String login(Model model){
-        model.addAttribute("isLoggedIn",true);
-        model.addAttribute("isOverview",false);
-        model.addAttribute("isMonitoring",false);
-        model.addAttribute("isCondition",false);
-        model.addAttribute("isConditionDetail", false);
-        model.addAttribute("isAnalysis", false);
-        model.addAttribute("isEmission",false);
-        return "frame/frame";
+    public String login(){
+
+        return "page/login";
     }
 
     @GetMapping("/overview")
