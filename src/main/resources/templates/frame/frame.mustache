@@ -1,4 +1,5 @@
 {{! frame/frame.mustache : 상단바 + 하단 네비 (Nanum Gothic, 풀블리드, CSS만으로 활성 탭 상시 표시) }}
+<link rel="stylesheet" href="css/style.css" />
 
 <style>
     :root{
@@ -123,22 +124,28 @@
     <h1 class="title">BEMS 제어</h1>                                     <!-- 타이틀 -->
 </header>
 {{! ---------- 하단 네비 ---------- }}
-<footer class="main-footer" role="navigation" aria-label="하단 네비게이션">
-    <nav class="bottom-nav">
+        <div class="container">
+            <div class="sub_container">
+                {{#isOverview}}
+                    {{> page/overview }}
+                {{/isOverview}}
+                {{#isMonitoring}}
+                    {{> page/monitoring }}
+                {{/isMonitoring}}
+                {{#isCondition}}
+                    {{> page/condition }}
+                {{/isCondition}}
+                {{#isAnalysis}}
+                    {{> page/analysis }}
+                {{/isAnalysis}}
 
-<div class="container">
-    <div class="sub_container">
-        {{#isCondition}}
-            {{> page/condition }}
-        {{/isCondition}}
-        {{^isCondition}}
-
-        {{/isCondition}}
+                {{#isEmission}}
+                    {{> page/emission }}
+                {{/isEmission}}
+            </div>
+        </div>
 
 
-    </div>
-
-</div>
 <footer class="main-footer" role="navigation" aria-label="하단 네비게이션"> <!-- 하단 고정 네비 -->
     <nav class="bottom-nav">                                              <!-- 5등분 그리드(풀블리드) -->
         {{#navItems}}
