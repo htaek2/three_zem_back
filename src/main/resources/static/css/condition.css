@@ -16,7 +16,7 @@ body {
     display: flex;
     font: bold 30px "나눔고딕";
     color: #FAFAFA;
-    margin: 16px 0px 0px 16px;
+    margin: 0 0 16px 0;
 }
 .main {
     display: flex;
@@ -25,7 +25,6 @@ body {
     width: 100%;
     max-width: 1888px;
     height: 736px;
-    margin: 16px;
     gap: 16px;
     flex-wrap: wrap;
 }
@@ -93,7 +92,7 @@ body {
     align-items: center;
     flex-shrink: 0;
     color: #FAFAFA;
-    font: bold 28px "나눔고딕";
+    font: 700 28px "나눔고딕";
     padding: 8px 16px 8px 16px;
 }
 #elect_title img {
@@ -107,23 +106,78 @@ body {
 
 /* 내용 */
     .elect_1usage_main {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 0 0 16px 0;
     }
     .elect_1usage_main_L {
+        display: flex;
+        align-items: flex-start;
+        flex-direction: column;
+        width: 60%;
     }
+    .elect_1usage_main_R {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        width: 40%;
+    }
+
+
     .today_title {
+        display: flex;
+        font: 700 28px "나눔고딕";
+        color: #FAFAFA;
     }
     .today_value {
+        display: flex;
+        font: 700 32px "나눔고딕";
+        color: F3C41F;
     }
     .today_ratio {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        font: 700 16px "나눔고딕";
+        color: #FAFAFA;
+        gap: 4px;
     }
+
     .updown_icon {
+        display: flex;
+    }
+    .updown_icon img {
+        display: block;
     }
     .updown_font {
+        display: flex;
+    }
+    .updown_font div {
+        display: flex;
     }
 
-
-
-
+/* 사용량 푸터 */
+    .elect_1usage_footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+    }
+    .elect_1usage_footer_L {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        width: 30%;
+        gap: 8px;
+    }
+    .elect_1usage_footer_R {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        width: 70%;
+        gap: 8px;
+    }
 
 
 /* 선 긋기 */
