@@ -8,15 +8,20 @@
 
 
         /* 3d 뷰어 영역 */
-
-
        .viewer_3d_container{
             width: 100%;
-            height: 47%;  /* 고정 높이 설정 */
+            height: 51%;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            position: relative;
+
     }
         .viewer_3d {
+            display: flex;
             width: 100%;
             height: 59.6%;  /* % 단위로 수정 */
+            gap: 22%;
             background: linear-gradient(to bottom,
                 #072F2A 0%,
                 #073028 4%,
@@ -24,13 +29,81 @@
                 #081C1F 98%
             );
         }
+        .viewer_3d_title_section{
+            margin-top: 19px;
+            margin-left: 18px;
+            width: fit-content;
+        }
+        .viewer_3d_title {
+            display: flex;
+            gap: 11px;
+            height: 55px;
+            align-items: center;
+        }
+        .viewer_3d_title > img {
+            width: 25px;
+        }
+        .viewer_3d_title > h1 {
+            font-size: 32px;
+            font-weight: 800;
+            color: #FFFFFF;
+        }
 
+        .viewer_3d_sub_title {
+             width: fit-content;
+             padding-top: 5px;
+             font-size: 10px;
+             font-weight: 400px;
+             color: #FFFFFF;
+        }
+
+        .viewer_3d_render {
+            max-width: 691px;
+            height: 100%;
+            border: 1px solid white;
+            flex: 1;
+        }
+
+        .viewer_3d_back {
+            position: absolute;
+            width: 45px;
+            height: 45px;
+            background-color: #1D282F;
+            top: 19px;
+            right: 18px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10; /* 다른 요소 위에 표시 */
+
+        }
         .info_3d {
             height: 27.4%;
             background: #040B12;
             border: 1px solid white;
+
         }
 
+        .info_3d > h2 {
+            font-weight: 800;
+            font-size: 24px;
+            color: #FAFAFA;
+            height: auto;
+        }
+
+        .info_3d_values {
+            width:100%;
+            height: auto;
+            border: 1px solid blue;
+            display: flex;
+        }
+
+        .info_3d_value {
+            width: 155px;
+            height: 70px;
+            border: 1px solid white;
+        }
 
        .usage_container {
             width: 100%;
