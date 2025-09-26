@@ -6,7 +6,7 @@ plugins {
 
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
-description = 'Demo project for Spring Boot'
+description = '계룡건설 과정 최종 프로젝트 - 탄소 배출 감소를 위한 BEMS'
 
 java {
 	toolchain {
@@ -25,9 +25,11 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-mustache'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-json'
-	runtimeOnly 'com.h2database:h2'
+//	runtimeOnly 'com.h2database:h2'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    implementation 'io.github.cdimascio:java-dotenv:5.2.2'
+    implementation 'mysql:mysql-connector-java:8.0.23'
 }
 
 tasks.named('test') {
