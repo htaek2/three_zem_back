@@ -26,4 +26,7 @@ public class Device {
     @Column
     private Timestamp installedTime;
 
+    @Column(length = 20)
+    private String status;
+
 }
