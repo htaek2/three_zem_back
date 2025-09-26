@@ -1,4 +1,13 @@
-{{! frame/frame.mustache : 상단바 + 하단 네비 (Nanum Gothic, 풀블리드, CSS만으로 활성 탭 상시 표시) }}
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8"> <!-- 인코딩 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- 반응형 -->
+    <title>BEMS - 모니터링</title> <!-- 타이틀 -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap"> <!-- 나눔고딕 -->
+
+
+    {{! frame/frame.mustache : 상단바 + 하단 네비 (Nanum Gothic, 풀블리드, CSS만으로 활성 탭 상시 표시) }}
 <link rel="stylesheet" href="css/condition.css" />
 <link rel="stylesheet" href="css/overview.css" />
 
@@ -136,6 +145,7 @@
 
 
 </style>
+</head>
 
 <header class="main-header" role="banner" aria-label="상단 바">             <!-- 상단 고정 바 -->
     {{#logoPath}}
@@ -220,3 +230,5 @@
     </nav>
 </footer>
 
+    </body>
+</html>
