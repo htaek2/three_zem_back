@@ -1,0 +1,19 @@
+{
+    "buildingId" : 0,
+    "memberId" : 0,
+    "buildingName" : "",
+    "address" : "",
+    "totalArea" : 0.0,
+    "floorDatas" : {
+        "floorId" : 0,
+        "buildingId" : 0,
+        "floorNum" : 0,
+        "deviceDatas" : {
+            "deviceId" : 0,
+            "floorId" : 0,
+            "deviceType" : 0,
+            "installedTime" : "",
+            "status" : 0
+        }
+    }
+}
