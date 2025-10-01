@@ -15,13 +15,13 @@ public class WaterReading {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int waterReadingId;
+    private Integer waterReadingId;
 
     @Column
-    private int floorId;
+    private Integer floorId;
 
     @Column
-    private float value;
+    private Float value;
 
     @Column
     private Timestamp readingTime;

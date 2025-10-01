@@ -15,19 +15,19 @@ public class TotalPrice {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int totalPriceId;
+    private Integer totalPriceId;
 
     @Column
-    private int buildingId;
+    private Integer buildingId;
 
     @Column
-    private int gasPrice;
+    private Integer gasPrice;
 
     @Column
-    private int waterPrice;
+    private Integer waterPrice;
 
     @Column
-    private int elecPrice;
+    private Integer elecPrice;
 
     @Column
     private Timestamp pricingTime;

@@ -15,13 +15,13 @@ public class ElecConsumReading {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int elecConsumReadingId;
+    private Integer elecConsumReadingId;
 
     @Column
-    private int deviceId;
+    private Integer deviceId;
 
     @Column
-    private float value;
+    private Float value;
 
     @Column
     private Timestamp readingTime;

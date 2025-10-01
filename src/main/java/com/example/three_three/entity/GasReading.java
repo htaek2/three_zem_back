@@ -15,13 +15,13 @@ public class GasReading {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int gasReadingId;
+    private Integer gasReadingId;
 
     @Column
-    private int buildingId;
+    private Integer buildingId;
 
     @Column
-    private float value;
+    private Float value;
 
     @Column
     private Timestamp readingTime;

@@ -13,12 +13,12 @@ public class Floor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int floorId;
+    private Integer floorId;
 
     @Column
-    private int buildingId;
+    private Integer buildingId;
 
     @Column
-    private int floorNum;
+    private Integer floorNum;
 
 }

@@ -3,8 +3,6 @@ package com.example.three_three.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.sql.Timestamp;
-
 @Entity
 @ToString
 @Getter
@@ -15,10 +13,10 @@ public class Building {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int buildingId;
+    private Integer buildingId;
 
     @Column
-    private int memberId;
+    private Integer memberId;
 
     @Column(length = 45)
     private String buildingName;
@@ -27,6 +25,6 @@ public class Building {
     private String address;
 
     @Column
-    private float totalArea;
+    private Float totalArea;
 
 }

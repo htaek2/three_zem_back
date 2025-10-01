@@ -15,10 +15,10 @@ public class Device {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int deviceId;
+    private Integer deviceId;
 
     @Column
-    private int floorId;
+    private Integer floorId;
 
     @Column(length = 20)
     private String deviceType;

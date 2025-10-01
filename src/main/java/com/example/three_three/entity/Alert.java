@@ -15,10 +15,10 @@ public class Alert {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int alertId;
+    private Integer alertId;
 
     @Column
-    private int floorId;
+    private Integer floorId;
 
     @Column(length = 20)
     private String alertType;
