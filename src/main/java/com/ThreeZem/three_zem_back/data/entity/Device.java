@@ -1,13 +1,11 @@
 package com.ThreeZem.three_zem_back.data.entity;
 
+import com.ThreeZem.three_zem_back.data.dto.building.DeviceDto;
 import com.ThreeZem.three_zem_back.data.dto.buildingConfig.DeviceConfigDto;
 import com.ThreeZem.three_zem_back.data.enums.DeviceStatus;
 import com.ThreeZem.three_zem_back.util.TimeUtil;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -16,6 +14,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class Device {
 
     @Id
@@ -56,4 +55,7 @@ public class Device {
         }
     }
 
+    public DeviceDto toDto() {
+        return new DeviceDto(this.id, this.deviceName, this.floor.getFloorNum(), this.deviceType, this.installedTime, this.status);
+    }
 }

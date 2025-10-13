@@ -15,7 +15,7 @@ public class BuildingDataCache {
 
     private final BuildingRepository buildingRepository;
     private final DataGenerationService dataGenerationService;
-    private final BuildingConfigDto buildingConfigDto;
+//    private final BuildingConfigDto buildingConfigDto;
 
     public void init() {
 

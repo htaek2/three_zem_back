@@ -6,26 +6,18 @@ import com.ThreeZem.three_zem_back.data.dto.buildingConfig.BuildingConfigDto;
 import com.ThreeZem.three_zem_back.data.dto.buildingConfig.DeviceConfigDto;
 import com.ThreeZem.three_zem_back.data.dto.buildingConfig.FloorConfigDto;
 import com.ThreeZem.three_zem_back.data.dto.energy.BuildingEnergyDto;
-import com.ThreeZem.three_zem_back.data.dto.energy.EnergyReadingsDto;
-import com.ThreeZem.three_zem_back.data.dto.energy.ReadingDto;
 import com.ThreeZem.three_zem_back.data.entity.*;
 import com.ThreeZem.three_zem_back.data.enums.DeviceStatus;
 import com.ThreeZem.three_zem_back.data.enums.DeviceType;
-import com.ThreeZem.three_zem_back.data.enums.EnergyType;
 import com.ThreeZem.three_zem_back.repository.*;
-import com.ThreeZem.three_zem_back.util.TimeUtil;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.time.YearMonth;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -113,7 +105,7 @@ public class DataGenerationService {
     public float generateElecData(DeviceConfigDto device) {
         float usage = 0.0f;
         float timeIntervalHours = 1f / 3600.0f;  // kWh를 kWs로 바꾸기 위함
-        int dataGenSec = DATA_GEN_MS / 1000;
+        int dataGenSec = ConfigConst.DATA_UPDATE_MS / 1000;
 
         // 장비가 켜져 있는 경우
         if (device.getStatus() == DeviceStatus.DEVICE_ON) {
@@ -128,7 +120,7 @@ public class DataGenerationService {
     /// 가스 데이터 생성
     public float generateGasData(int totalPeople) {
         float timeIntervalHours = 1f / 3600.0f;
-        int dataGenSec = DATA_GEN_MS / 1000;
+        int dataGenSec = ConfigConst.DATA_UPDATE_MS / 1000;
 
         float usage = totalPeople * PowerConsum.GAS_PER_PERSON * timeIntervalHours * dataGenSec;
         usage = simulationLogicService.applyNoise(usage);
@@ -140,7 +132,7 @@ public class DataGenerationService {
     /// 수도 데이터 생성
     public float generateWaterData(FloorConfigDto floor) {
         float timeIntervalHours = 1f / 3600.0f;  // kWh를 kWs로 바꾸기 위함
-        int dataGenSec = DATA_GEN_MS / 1000;
+        int dataGenSec = ConfigConst.DATA_UPDATE_MS / 1000;
         int people = peoplePerFloor.getOrDefault(floor.getFloorNum(), 0);
 
         float usage = people * PowerConsum.WATER_PER_PERSON * timeIntervalHours * dataGenSec;
