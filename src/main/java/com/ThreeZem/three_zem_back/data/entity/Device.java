@@ -47,4 +47,13 @@ public class Device {
         this.status = DeviceStatus.DEVICE_OFF.getValue();
     }
 
+    public void setStatus(byte status) {
+        if (0 <= status && status < DeviceStatus.values().length) {
+            this.status = status;
+        }
+        else {
+            throw new IllegalArgumentException("잘못된 타입 값");
+        }
+    }
+
 }

@@ -1,6 +1,5 @@
 package com.ThreeZem.three_zem_back.data.common;
 
-import com.ThreeZem.three_zem_back.data.dto.buildingConfig.BuildingConfigDto;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;

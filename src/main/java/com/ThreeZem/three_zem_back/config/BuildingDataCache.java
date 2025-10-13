@@ -19,7 +19,5 @@ public class BuildingDataCache {
 
     public void init() {
 
-        Optional
-
     }
 }

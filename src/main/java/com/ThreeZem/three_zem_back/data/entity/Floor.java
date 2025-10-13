@@ -1,6 +1,5 @@
 package com.ThreeZem.three_zem_back.data.entity;
 
-import com.ThreeZem.three_zem_back.data.dto.buildingConfig.BuildingConfigDto;
 import com.ThreeZem.three_zem_back.data.dto.buildingConfig.FloorConfigDto;
 import jakarta.persistence.*;
 import lombok.Getter;
