@@ -23,6 +23,6 @@ public enum DeviceType {
                 return type;
             }
         }
-        throw new IllegalArgumentException("Unknown device type value: " + value);
+        throw new IllegalArgumentException("[Error] 잘못된 DeviceType: " + value);
     }
 }

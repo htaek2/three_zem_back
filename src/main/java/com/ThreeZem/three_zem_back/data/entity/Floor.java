@@ -1,12 +1,18 @@
 package com.ThreeZem.three_zem_back.data.entity;
 
+import com.ThreeZem.three_zem_back.data.dto.buildingConfig.BuildingConfigDto;
+import com.ThreeZem.three_zem_back.data.dto.buildingConfig.FloorConfigDto;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 @Entity
 @ToString
 @Getter
+@Setter
+@NoArgsConstructor
 public class Floor {
 
     @Id
@@ -21,18 +27,9 @@ public class Floor {
     @Column(name = "floor_num", nullable = false)
     private Integer floorNum;
 
-    public Floor() {
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setBuilding(Building building) {
+    public Floor(Building building, FloorConfigDto floorConfigDto) {
         this.building = building;
+        this.floorNum = floorConfigDto.getFloorNum();
     }
 
-    public void setFloorNum(Integer floorNum) {
-        this.floorNum = floorNum;
-    }
 }

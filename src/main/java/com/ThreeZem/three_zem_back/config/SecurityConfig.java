@@ -19,6 +19,7 @@ import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 @RequiredArgsConstructor  // 생성자를 통한 의존성 주입은 순환 참조 문제를 컴파일 단계에서 발견할 수 있다고 함. 굳
 public class SecurityConfig {
 
+    // 다른 사람이 만든 클래스는 이런식으로 Bean에 등록해서 DI함
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

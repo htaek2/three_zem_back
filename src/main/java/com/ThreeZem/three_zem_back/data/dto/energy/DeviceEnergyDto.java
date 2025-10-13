@@ -11,5 +11,5 @@ public class DeviceEnergyDto {
     private Long deviceId;
     private DeviceType deviceType;
     private String deviceName;
-    private EnergyReadingDto electricityUsage;
+    private EnergyReadingsDto electricityUsage;
 }

@@ -2,6 +2,7 @@ package com.ThreeZem.three_zem_back.data.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
@@ -9,6 +10,7 @@ import java.time.LocalDateTime;
 @Entity
 @ToString
 @Getter
+@Setter
 public class Alert {
 
     @Id
@@ -29,27 +31,4 @@ public class Alert {
     @Column(name = "message", nullable = false, columnDefinition = "TEXT")
     private String message;
 
-    public Alert() {
-
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setFloor(Floor floor) {
-        this.floor = floor;
-    }
-
-    public void setAlertType(Byte alertType) {
-        this.alertType = alertType;
-    }
-
-    public void setCreatedTime(LocalDateTime createdTime) {
-        this.createdTime = createdTime;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
 }
