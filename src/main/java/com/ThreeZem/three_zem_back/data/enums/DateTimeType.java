@@ -19,13 +19,4 @@ public enum DateTimeType {
     YEAR((byte) 3);
 
     private byte value;
-
-    public static DateTimeType fromByte(byte value) {
-        for (DateTimeType type : DateTimeType.values()) {
-            if (type.getValue() == value) {
-                return type;
-            }
-        }
-        throw new IllegalArgumentException("Unknown type value: " + value);
-    }
 }

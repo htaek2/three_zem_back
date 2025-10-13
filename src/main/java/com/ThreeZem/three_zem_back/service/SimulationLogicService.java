@@ -49,8 +49,8 @@ public class SimulationLogicService {
 
     public float getACSeasonalFactor(Month month) {
         return switch (month) {
-            case JUNE, SEPTEMBER -> 0.6f;
-            case JULY, AUGUST -> 0.95f;
+            case JUNE, OCTOBER -> 0.7f;
+            case JULY, AUGUST, SEPTEMBER -> 0.95f;
             default -> 0.05f;
         };
     }
@@ -70,7 +70,7 @@ public class SimulationLogicService {
     }
 
     public float applyNoise(float value) {
-        float noise = (random.nextFloat() * 2 - 1) * 0.05f; // -0.05 to +0.05
+        float noise = (random.nextFloat() * 2 - 1) * 0.05f; // -0.05 ~ 0.05
         return value * (1 + noise);
     }
 }

@@ -16,13 +16,4 @@ public enum EnergyType {
     WATER((byte) 2);
     
     private byte value;
-
-    public static EnergyType fromByte(byte value) {
-        for (EnergyType type : EnergyType.values()) {
-            if (type.getValue() == value) {
-                return type;
-            }
-        }
-        throw new IllegalArgumentException("Unknown type value: " + value);
-    }
 }
