@@ -1,0 +1,9 @@
+package com.ThreeZem.three_zem_back;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class ThreeZemBackApplicationTests {
+
+}

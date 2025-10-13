@@ -4,9 +4,9 @@ plugins {
 	id 'io.spring.dependency-management' version '1.1.7'
 }
 
-group = 'com.example'
+group = 'com.ThreeZem'
 version = '0.0.1-SNAPSHOT'
-description = '계룡건설 과정 최종 프로젝트 - 탄소 배출 감소를 위한 BEMS'
+description = 'building Zero Energy Management system'
 
 java {
 	toolchain {
@@ -19,28 +19,23 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-mustache'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-json'
-//	runtimeOnly 'com.h2database:h2'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-    implementation 'io.github.cdimascio:java-dotenv:5.2.2'
-    implementation 'mysql:mysql-connector-java:8.0.23'
 
-	// jwt 라이브러리
-	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
-    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
-    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
-
-	// Spring Security
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.1.RELEASE'
+	implementation 'mysql:mysql-connector-java:8.0.23'
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 
-	// web socket
-	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+	implementation 'io.jsonwebtoken:jjwt-api:0.12.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.5'
 }
 
 tasks.named('test') {
