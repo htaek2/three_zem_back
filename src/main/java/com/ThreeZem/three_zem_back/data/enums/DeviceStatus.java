@@ -17,4 +17,12 @@ public enum DeviceStatus {
 
     private byte value;
 
+    public static DeviceStatus fromByte(byte value) {
+        for (DeviceStatus type : DeviceStatus.values()) {
+            if (type.getValue() == value) {
+                return type;
+            }
+        }
+        throw new IllegalArgumentException("Unknown type value: " + value);
+    }
 }

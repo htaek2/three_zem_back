@@ -12,7 +12,7 @@ public class FloorEnergyDto {
     private int floorNum;
 
     /// 수도 사용량
-    private EnergyReadingsDto waterUsage;
+    private EnergyReadingDto waterUsage;
 
     /// 전자기기별 전력 사용량
     private List<DeviceEnergyDto> devices;

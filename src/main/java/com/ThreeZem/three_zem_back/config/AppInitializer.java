@@ -213,7 +213,7 @@ public class AppInitializer implements ApplicationRunner {
         return memberRepository.findByEmail(adminId)
                 .orElseGet(() -> {
                     Member member = new Member();
-                    member.setUserName("기본 관리자");
+                    member.setUserName("한**");
                     member.setEmail(adminId);
                     member.setPassword(passwordEncoder.encode(adminPw));
                     return memberRepository.save(member);
