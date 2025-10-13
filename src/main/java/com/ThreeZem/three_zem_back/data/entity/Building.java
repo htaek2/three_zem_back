@@ -1,9 +1,7 @@
 package com.ThreeZem.three_zem_back.data.entity;
 
-import com.ThreeZem.three_zem_back.data.dto.buildingConfig.BuildingConfigDto;
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -13,7 +11,6 @@ import java.util.UUID;
 @ToString
 @Getter
 @Setter
-@NoArgsConstructor
 public class Building {
 
     @Id
@@ -33,12 +30,4 @@ public class Building {
 
     @Column(name = "total_area", nullable = false)
     private Float totalArea;
-
-    public Building(Member member, BuildingConfigDto buildingConfigDto) {
-        this.member = member;
-        this.buildingName = buildingConfigDto.getBuildingName();
-        this.address = buildingConfigDto.getAddress();
-        this.totalArea = buildingConfigDto.getTotalArea();
-    }
-
 }

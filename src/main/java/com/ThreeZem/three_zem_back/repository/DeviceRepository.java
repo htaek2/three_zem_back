@@ -9,5 +9,8 @@ import java.util.Optional;
 
 public interface DeviceRepository extends JpaRepository<Device, Long> {
     Optional<Device> findByFloorId(Long floorId);
+
     List<Device> findByFloorBuilding(Building building);
+
+    List<Device> findByFloorFloorNum(int floorNum);
 }

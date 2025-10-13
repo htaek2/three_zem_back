@@ -2,8 +2,6 @@ package com.ThreeZem.three_zem_back.data.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
@@ -11,8 +9,6 @@ import java.time.LocalDateTime;
 @Entity
 @ToString
 @Getter
-@Setter
-@NoArgsConstructor
 public class WaterReading {
 
     @Id
@@ -30,10 +26,22 @@ public class WaterReading {
     @Column(name = "reading_time", nullable = false)
     private LocalDateTime readingTime;
 
-    public WaterReading(Floor floor, LocalDateTime readingTime, float value) {
+    public WaterReading() {
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setFloor(Floor floor) {
         this.floor = floor;
-        this.readingTime = readingTime;
+    }
+
+    public void setValue(Float value) {
         this.value = value;
     }
 
+    public void setReadingTime(LocalDateTime readingTime) {
+        this.readingTime = readingTime;
+    }
 }

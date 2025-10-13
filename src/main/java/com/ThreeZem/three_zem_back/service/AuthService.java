@@ -69,7 +69,7 @@ public class AuthService {
 
         // 쿠키 생성
         var cookie = new Cookie("jwt", token);
-        cookie.setMaxAge(36000);  // 쿠키 만료 시간. 초 단위. 10시간
+        cookie.setMaxAge(3600);  // 쿠키 만료 시간. 초 단위
         cookie.setHttpOnly(true);  // 쿠키 조작을 어렵게 만듬
         cookie.setPath("/");  // 어떤 페이지에서 생성할지
         response.addCookie(cookie);

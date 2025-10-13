@@ -23,7 +23,6 @@ public enum DeviceStatus {
                 return type;
             }
         }
-        throw new IllegalArgumentException("[Error] 잘못된 DeviceStatus: " + value);
+        throw new IllegalArgumentException("Unknown type value: " + value);
     }
-
 }

@@ -1,6 +1,5 @@
 package com.ThreeZem.three_zem_back.data.common;
 
-import com.ThreeZem.three_zem_back.data.dto.buildingConfig.BuildingConfigDto;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,7 +18,6 @@ public class CustomUser extends User {
     private String userEmail;
     /// Member의 userName과 동일
     private String userDisplayName;
-    /// 소속 빌딩
     private String buildingId;
 
     /// 여기 username은 우리 프로젝트에서 멤버의 email 즉 유저의 식별자라고 보면됨.
