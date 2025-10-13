@@ -1,9 +1,13 @@
 package com.ThreeZem.three_zem_back.data.entity;
 
-import com.ThreeZem.three_zem_back.data.dto.building.DeviceDto;
+import com.ThreeZem.three_zem_back.data.dto.buildingConfig.DeviceConfigDto;
 import com.ThreeZem.three_zem_back.data.enums.DeviceStatus;
+import com.ThreeZem.three_zem_back.util.TimeUtil;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
@@ -11,7 +15,6 @@ import java.time.LocalDateTime;
 @ToString
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 public class Device {
 
@@ -36,16 +39,12 @@ public class Device {
     @Column(name = "status", nullable = false)
     private byte status;
 
-    public DeviceDto toDto() {
-        return new DeviceDto(this.id, this.deviceName, this.floor.getFloorNum(), this.deviceType, this.installedTime, this.status);
+    public Device(Floor floor, DeviceConfigDto deviceConfigDto) {
+        this.floor = floor;
+        this.deviceName = deviceConfigDto.getDeviceName();
+        this.deviceType = deviceConfigDto.getDeviceType().getValue();
+        this.installedTime = LocalDateTime.parse(deviceConfigDto.getInstalledTime(), TimeUtil.getDateTimeFormatter());
+        this.status = DeviceStatus.DEVICE_OFF.getValue();
     }
 
-    public void setStatus(byte status) {
-        if (0 <= status && status < DeviceStatus.values().length) {
-            this.status = status;
-        }
-        else {
-            throw new IllegalArgumentException("잘못된 타입 값");
-        }
-    }
 }

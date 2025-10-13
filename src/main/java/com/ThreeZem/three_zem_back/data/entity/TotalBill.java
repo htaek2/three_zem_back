@@ -2,6 +2,7 @@ package com.ThreeZem.three_zem_back.data.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
@@ -9,6 +10,7 @@ import java.time.LocalDateTime;
 @Entity
 @ToString
 @Getter
+@Setter
 public class TotalBill {
 
     @Id
@@ -32,30 +34,4 @@ public class TotalBill {
     @Column(name = "calc_time", nullable = false)
     private LocalDateTime calcTime;
 
-    public TotalBill() {
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setBuilding(Building building) {
-        this.building = building;
-    }
-
-    public void setGasFee(Integer gasFee) {
-        this.gasFee = gasFee;
-    }
-
-    public void setWaterFee(Integer waterFee) {
-        this.waterFee = waterFee;
-    }
-
-    public void setElecFee(Integer elecFee) {
-        this.elecFee = elecFee;
-    }
-
-    public void setCalcTime(LocalDateTime calcTime) {
-        this.calcTime = calcTime;
-    }
 }
