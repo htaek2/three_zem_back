@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 
@@ -20,8 +21,8 @@ public class EnergyDataController {
     private final EnergyDataService energyDataService;
 
     @GetMapping("/api/energy/elec")
-    public ResponseEntity<EnergyReadingDto> getElecData(@RequestBody RangeDataRequestDto rangeDataRequestDto) {
-        return energyDataService.getElecRangeData(rangeDataRequestDto);
+    public ResponseEntity<EnergyReadingDto> getElecData(String start, String end, byte datetimeType) {
+        return energyDataService.getElecRangeData(start, end, datetimeType);
     }
 
     @GetMapping("/api/energy/gas")

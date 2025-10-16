@@ -9,6 +9,7 @@ import com.ThreeZem.three_zem_back.data.entity.Floor;
 import com.ThreeZem.three_zem_back.repository.BuildingRepository;
 import com.ThreeZem.three_zem_back.repository.DeviceRepository;
 import com.ThreeZem.three_zem_back.repository.FloorRepository;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -28,20 +29,28 @@ public class BuildingDataCache {
     private Building buildingEntity;
     private List<Floor> floorEntities;
     private List<Device> deviceEntities;
+    /// 층별 사용인원
+    private final Map<Integer, Integer> peoplePerFloor = new HashMap<>();
 
     public void init() {
-        Optional<Building> building = buildingRepository.findById(UUID.fromString("f6e6ac9a-9987-429c-a7cb-daeb6434af2e"));
+        // 사용인원 임시로 정의
+        peoplePerFloor.put(1, 7);
+        peoplePerFloor.put(2, 30);
+        peoplePerFloor.put(3, 30);
+        peoplePerFloor.put(4, 15);
+
+        List<Building> building = buildingRepository.findAll();
 
         if (building.isEmpty()) {
             throw new RuntimeException("[ERROR] 해당 계정과 관련된 빌딩 정보가 없습니다.");
         }
         else {
-            buildingEntity = building.get();
+            buildingEntity = building.get(0);
 
-            List<Device> devices = deviceRepository.findByFloorBuilding(building.get());
+            List<Device> devices = deviceRepository.findByFloorBuilding(buildingEntity);
             deviceEntities = devices;
 
-            List<Floor> floors = floorRepository.findByBuilding(building.get());
+            List<Floor> floors = floorRepository.findByBuilding(buildingEntity);
             floorEntities = floors;
 
             Map<Long, List<Device>> devicesByFloorId = devices.stream().collect(Collectors.groupingBy(d -> d.getFloor().getId()));
@@ -51,8 +60,16 @@ public class BuildingDataCache {
                 return new FloorConfigDto(floor, deviceDtos);
             }).collect(Collectors.toList());
 
-            buildingDto = new BuildingConfigDto(building.get(), floorDtos);
+            buildingDto = new BuildingConfigDto(buildingEntity, floorDtos);
         }
+    }
+
+    public int getPeoplePerFloor(int floorNum) {
+        return  peoplePerFloor.getOrDefault(floorNum, 10);
+    }
+
+    public int getTotalPeople() {
+        return 82;
     }
 
     public Building getBuildingEntity() {
@@ -85,12 +102,5 @@ public class BuildingDataCache {
             return null;
         }
         return buildingDto;
-    }
-
-    public void clearData() {
-        buildingDto = null;
-        buildingEntity = null;
-        floorEntities = null;
-        deviceEntities = null;
     }
 }

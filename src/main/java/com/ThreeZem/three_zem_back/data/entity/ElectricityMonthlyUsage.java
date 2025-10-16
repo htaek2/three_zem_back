@@ -22,7 +22,7 @@ public class ElectricityMonthlyUsage {
     private Long buildingId;
     @Column
     private LocalDateTime timestamp;
-    @Column
+    @Column(name = "monthly_usage")
     private Float usage;
 
 }

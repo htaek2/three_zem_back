@@ -1,7 +1,9 @@
 package com.ThreeZem.three_zem_back.service;
 
+import com.ThreeZem.three_zem_back.config.BuildingDataCache;
 import com.ThreeZem.three_zem_back.data.constant.ConfigConst;
 import com.ThreeZem.three_zem_back.data.constant.PowerConsum;
+import com.ThreeZem.three_zem_back.data.dto.building.BuildingDto;
 import com.ThreeZem.three_zem_back.data.dto.buildingConfig.BuildingConfigDto;
 import com.ThreeZem.three_zem_back.data.dto.buildingConfig.DeviceConfigDto;
 import com.ThreeZem.three_zem_back.data.dto.buildingConfig.FloorConfigDto;
@@ -22,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.time.YearMonth;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -31,44 +34,40 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DataGenerationService {
 
+    private final BuildingDataCache buildingDataCache;
+    private final ElectricityReadingRepository electricityReadingRepository;
+    private final GasReadingRepository gasReadingRepository;
+    private final WaterReadingRepository waterReadingRepository;
+
     private final Random random = new Random();
 
-    /// 층별 사용인원
-    private final Map<Integer, Integer> peoplePerFloor = new HashMap<>();
-
-    @PostConstruct
-    public void init() {
-        // 사용인원 임시로 정의
-        peoplePerFloor.put(1, 7);
-        peoplePerFloor.put(2, 30);
-        peoplePerFloor.put(3, 30);
-        peoplePerFloor.put(4, 15);
-    }
-
-    public float generateElecData(DeviceConfigDto device) {
+    public float generateElecData(DeviceType type, DeviceStatus status, boolean isDataCreate) {
         float usage = 0.0f;
         float timeIntervalHours = 1f / 3600.0f;
         int dataGenSec = ConfigConst.DATA_UPDATE_MS / 1000;
 
-        if (device.getStatus() == DeviceStatus.DEVICE_ON) {
-            float powerKw = PowerConsum.getPowerConsumption(DeviceType.fromByte(device.getDeviceType().getValue()));
+        if (status == DeviceStatus.DEVICE_ON || isDataCreate) {
+            float powerKw = PowerConsum.getPowerConsumption(type);
             usage = applyNoise(powerKw * timeIntervalHours * dataGenSec);
         }
         return usage;
     }
 
-    public float generateGasData(int totalPeople) {
+    public float generateGasData(int totalNum, LocalDateTime now) {
         float timeIntervalHours = 1f / 3600.0f;
         int dataGenSec = ConfigConst.DATA_UPDATE_MS / 1000;
-        float usage = totalPeople * PowerConsum.GAS_PER_PERSON * timeIntervalHours * dataGenSec;
+        int people = (int) (buildingDataCache.getTotalPeople() * getPeopleFactor(now));
+        float usage = people * PowerConsum.GAS_PER_PERSON * timeIntervalHours * dataGenSec;
         return applyNoise(usage);
     }
 
-    public float generateWaterData(FloorConfigDto floor) {
-        float timeIntervalHours = 1f / 3600.0f;
-        int dataGenSec = ConfigConst.DATA_UPDATE_MS / 1000;
-        int people = peoplePerFloor.getOrDefault(floor.getFloorNum(), 10);
+    public float generateWaterData(int floorNum, LocalDateTime now) {
+        float timeIntervalHours = 1f / 3600.0f;  // 1시간당 사용량을 1초당 사용 전력량으로 변환하기 위한 값
+        int dataGenSec = ConfigConst.DATA_UPDATE_MS / 1000;  // 데이터 생성 주기를 ms에서 sec로 변환
+        int people = (int) (buildingDataCache.getPeoplePerFloor(floorNum) * getPeopleFactor(now));  // 사용인원수
+
         float usage = people * PowerConsum.WATER_PER_PERSON * timeIntervalHours * dataGenSec;
+
         return applyNoise(usage);
     }
 
@@ -134,13 +133,14 @@ public class DataGenerationService {
     }
 
     /// 과거 데이터 생성
-    private void generateHistoricalData(int startYearsAgo, int intervalMinutes) {
+    public void generateHistoricalData(int startYearsAgo, int intervalMinutes) {
+
         String now = LocalDateTime.now().format(TimeUtil.getDateTimeFormatter());
         log.info("[DATA] {} ----- 과거 {}년치 데이터 생성을 시작합니다. ({}분 단위)", now, startYearsAgo, intervalMinutes);
 
-        Building building = buildingRepository.findAll().get(0);
-        List<Floor> floors = floorRepository.findByBuilding(building);
-        List<Device> devices = deviceRepository.findByFloorBuilding(building);
+        Building building = buildingDataCache.getBuildingEntity();
+        List<Floor> floors = buildingDataCache.getFloorEntities();
+        List<Device> devices = buildingDataCache.getDeviceEntities();
 
         List<ElectricityReading> elecBuffer = new ArrayList<>();
         List<WaterReading> waterBuffer = new ArrayList<>();
@@ -161,34 +161,27 @@ public class DataGenerationService {
             float intervalHours = (float) intervalMinutes / 60.0f;
 
             for (Device device : devices) {
-                if (simulationLogicService.isDeviceOn(device, cursor)) {
-                    float usage = simulationLogicService.applyNoise(PowerConsum.getPowerConsumption(DeviceType.fromByte(device.getDeviceType()).name()) * intervalHours);
-                    ElectricityReading reading = new ElectricityReading();
-                    reading.setDevice(device);
-                    reading.setReadingTime(cursor);
-                    reading.setValue(usage);
-                    elecBuffer.add(reading);
+                float usage = 0.0f;
+                if (isDeviceOn(device, cursor)) {
+                    usage = generateElecData(DeviceType.fromByte(device.getDeviceType()), DeviceStatus.fromByte(device.getStatus()), true);
                 }
+
+                elecBuffer.add(new ElectricityReading(device, cursor, usage));
             }
 
-            Map<Integer, Integer> peoplePerFloor = Map.of(1, 7, 2, 30, 3, 30, 4, 15);
             for (Floor floor : floors) {
-                int people = (int) (peoplePerFloor.getOrDefault(floor.getFloorNum(), 0) * simulationLogicService.getPeopleFactor(cursor));
-                float usage = simulationLogicService.applyNoise(people * PowerConsum.WATER_PER_PERSON * intervalHours);
-                WaterReading reading = new WaterReading();
-                reading.setFloor(floor);
-                reading.setReadingTime(cursor);
-                reading.setValue(usage);
-                waterBuffer.add(reading);
+                float usage = generateWaterData(floor.getFloorNum(), cursor);
+                waterBuffer.add(new WaterReading(floor, cursor, usage));
             }
 
-            int totalPeople = (int) (82 * simulationLogicService.getPeopleFactor(cursor));
-            float gasUsage = simulationLogicService.applyNoise(totalPeople * PowerConsum.GAS_PER_PERSON * intervalHours * simulationLogicService.getGasSeasonalFactor(cursor.getMonth()));
+            float gasUsage = generateGasData(buildingDataCache.getTotalPeople(), cursor);
             GasReading gasReading = new GasReading();
             gasReading.setBuilding(building);
             gasReading.setReadingTime(cursor);
             gasReading.setValue(gasUsage);
             gasBuffer.add(gasReading);
+
+            int BATCH_SIZE = 2000;
 
             if (elecBuffer.size() >= BATCH_SIZE) {
                 electricityReadingRepository.saveAll(elecBuffer);

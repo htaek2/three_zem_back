@@ -62,7 +62,7 @@ public class RealTimeDataService {
             return;
         }
 
-        log.info("[DATA] {} ----- 데이터 생성({}초)", LocalDateTime.now().format(TimeUtil.getDateTimeFormatter()), ConfigConst.DATA_UPDATE_MS / 1000);
+        log.info("[DATA] ----- 데이터 생성({}초)", ConfigConst.DATA_UPDATE_MS / 1000);
 
         accumulateElectricityUsage(buildingDataCache.getBuildingDto());
         accumulateWaterUsage(buildingDataCache.getBuildingDto());
@@ -79,7 +79,7 @@ public class RealTimeDataService {
             return;
         }
 
-        log.info("[DATA] {} ----- 누적 데이터 DB에 저장({}초)", LocalDateTime.now().format(TimeUtil.getDateTimeFormatter()), ConfigConst.DATA_SAVE_MS / 1000);
+        log.info("[DATA] ----- 누적 데이터 DB에 저장({}분)", ConfigConst.DATA_SAVE_MS / 1000 / 60);
         LocalDateTime now = LocalDateTime.now();
 
         // 누적 데이터를 다른 컨테이너에 담고 누적 컨테이너는 초기화
@@ -131,7 +131,7 @@ public class RealTimeDataService {
         }
     }
 
-    public BuildingEnergyDto getBuildingEnergyData() {
+    public BuildingEnergyDto  getBuildingEnergyData() {
 
         // 과거 데이터 생성 중이라면 빠꾸
         if (!applicationStateService.getDataGenerated()) {
@@ -191,13 +191,15 @@ public class RealTimeDataService {
         recentWaterDatas.clear();
         recentElecDatas.clear();
 
+        log.info("[DATA] 실시간 데이터 전송");
         return buildingEnergyDto;
     }
 
+    /// 전력 데이터 생성 후 버퍼에 누적
     private void accumulateElectricityUsage(BuildingConfigDto buildingConfig) {
         for (FloorConfigDto floor : buildingConfig.getFloors()) {
             for (DeviceConfigDto device : floor.getDevices()) {
-                float usage = dataGenerationService.generateElecData(device);
+                float usage = dataGenerationService.generateElecData(device.getDeviceType(), device.getStatus(), false);
                 Long deviceId = device.getId();
                 recentElecDatas.put(deviceId, usage);
                 electricityUsageBuffer.merge(deviceId, usage, Float::sum);
@@ -205,17 +207,18 @@ public class RealTimeDataService {
         }
     }
 
+    /// 가스 데이터 생성 후 버퍼에 누적
     private void accumulateGasUsage(BuildingConfigDto buildingConfig) {
-        int totalPeople = 82;
-        float usage = dataGenerationService.generateGasData(totalPeople);
+        float usage = dataGenerationService.generateGasData(buildingDataCache.getTotalPeople(), LocalDateTime.now(), false);
         UUID buildingId = buildingConfig.getId();
         recentGasDatas.put(buildingId, usage);
         gasUsageBuffer.merge(buildingId, usage, Float::sum);
     }
 
+    /// 수도 데이터 생성 후 버퍼에 누적
     private void accumulateWaterUsage(BuildingConfigDto buildingConfig) {
         for (FloorConfigDto floor : buildingConfig.getFloors()) {
-            float usage = dataGenerationService.generateWaterData(floor);
+            float usage = dataGenerationService.generateWaterData(floor.getFloorNum(), LocalDateTime.now(), false);
             Long floorId = floor.getId();
             recentWaterDatas.put(floorId, usage);
             waterUsageBuffer.merge(floorId, usage, Float::sum);

@@ -16,6 +16,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 @Component
 @Slf4j
 @RequiredArgsConstructor
@@ -30,10 +32,10 @@ public class AppInitializer implements ApplicationRunner {
     private final DeviceRepository deviceRepository;
     private final ElectricityReadingRepository electricityReadingRepository;
 
-    private final boolean isDataCreate = false;
+    private final boolean isDataCreate = true;
 
     /// 몇 년치 데이터를 만들지. 기본 2 = 2년 전부터 오늘까지
-    private final int startYearsAgo = 2;
+    private final int startYearsAgo = 1;
 
     /// 데이터 생성시간 단위. 기본 360 = 6시간
     private final int intervalMinutes = 60;
@@ -61,6 +63,8 @@ public class AppInitializer implements ApplicationRunner {
             log.info("[INIT] 초기 데이터 OK");
         }
 
+        buildingDataCache.init();
+
         if (isDataCreate) {
             long dataNum = electricityReadingRepository.count();
 
@@ -72,7 +76,7 @@ public class AppInitializer implements ApplicationRunner {
             if (dataNum == 0) {
                 log.info("[INIT] 과거 데이터를 생성합니다.");
                 // TODO
-//                dataGenerationService.
+                dataGenerationService.generateHistoricalData(startYearsAgo, intervalMinutes);
             }
             // 부분 생성
             else if (dataNum < need) {
@@ -93,7 +97,6 @@ public class AppInitializer implements ApplicationRunner {
 
         appInitializeService.createBuildingIdSheet();
         log.info("[INIT] 빌딩 ID 시트 생성 완료");
-        buildingDataCache.init();
         log.info("[INIT] 서버 초기화 완료.");
     }
 

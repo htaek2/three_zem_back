@@ -71,7 +71,7 @@ public class AuthService {
         cookie.setPath("/");  // 어떤 페이지에서 생성할지
         response.addCookie(cookie);
 
-        applicationStateService.setIsLogin(true);
+        System.out.println();
 
         return ResponseEntity.status(HttpStatus.OK).headers(headers).body(ResponseMessage.SUCCESS);
     }
@@ -108,10 +108,6 @@ public class AuthService {
 
     /// 로그아웃 처리
     public ResponseEntity<String> logout() {
-        // 빌딩 데이터 제거
-        buildingDataCache.clearData();
-        applicationStateService.setIsLogin(false);
-
         return ResponseEntity.status(HttpStatus.OK).body(ResponseMessage.SUCCESS);
     }
 }
