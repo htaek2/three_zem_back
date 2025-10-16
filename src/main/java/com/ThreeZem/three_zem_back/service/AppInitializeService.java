@@ -56,7 +56,7 @@ public class AppInitializeService {
                 }
             }
         } catch (Exception e) {
-            log.error("[Init] 초기 빌딩 데이터 생성 실패: {}", String.valueOf(e));
+            log.error("\n[Init] 초기 빌딩 데이터 생성 실패: {}", String.valueOf(e));
         }
     }
 
@@ -74,7 +74,7 @@ public class AppInitializeService {
             });
         }
         catch (Exception e) {
-            log.error("[Init] 초기 관리자 계정 생성 실패: {}", String.valueOf(e));
+            log.error("\n[Init] 초기 관리자 계정 생성 실패: {}", String.valueOf(e));
             return null;
         }
     }
@@ -90,7 +90,7 @@ public class AppInitializeService {
                 bw.write(building.getId() + "\n");
             }
         } catch (Exception e) {
-            log.error("[Init] 빌딩 ID 목록 파일 생성 실패", e);
+            log.error("\n[Init] 빌딩 ID 목록 파일 생성 실패", e);
         }
     }
 }

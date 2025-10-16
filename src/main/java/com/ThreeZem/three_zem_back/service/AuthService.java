@@ -47,10 +47,9 @@ public class AuthService {
         var auth = authenticationManagerBuilder.getObject().authenticate(authToken);  // loadUserByUsername 메서드가 잘 설정되어 있다면 자동으로 유저 정보를 비교해줌.
         SecurityContextHolder.getContext().setAuthentication(auth);  // Jwt 사용해서 수동 로그인 방식으로 한다면 이 설정을 해야 다른 Controller에서 Authentication 변수 사용 가능
 
-        CustomUser user = (CustomUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal(); // 등록한 Authentication 변수 사용은 이렇게
+        CustomUser user = (CustomUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         // 토큰 정보 추가
-        buildingDataCache.init(user.getUserDbId());
         String buildingId = String.valueOf(buildingDataCache.getBuildingDto().getId());
 
         Map<String, String> claims = new HashMap<>();

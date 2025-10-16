@@ -26,6 +26,7 @@ public class MyUserDetailsService implements UserDetailsService {
 
     @Override
     /// 사용자의 아이디(이메일)로 사용자의 정보를 가져온다
+    /// 여기서 반환한 값은 전역에서 컨트롤러 등으로 Authentication 변수를 자동 할당 해줌
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         var result = memberRepository.findByEmail(username);
@@ -44,7 +45,7 @@ public class MyUserDetailsService implements UserDetailsService {
 
         Optional<Building> building = buildingRepository.findByMemberId(customUser.getUserDbId());
         if (building.isEmpty()) {
-            throw new UsernameNotFoundException("유저 정보가 소속된 빌딩 정보 없음");
+            throw new UsernameNotFoundException("\n[ERROR]유저 정보가 소속된 빌딩 정보 없음");
         }
         else {
             customUser.setBuildingId(String.valueOf(building.get().getId()));

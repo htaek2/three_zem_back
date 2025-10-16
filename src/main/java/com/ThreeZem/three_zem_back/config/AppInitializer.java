@@ -7,6 +7,7 @@ import com.ThreeZem.three_zem_back.repository.ElectricityReadingRepository;
 import com.ThreeZem.three_zem_back.repository.FloorRepository;
 import com.ThreeZem.three_zem_back.service.AppInitializeService;
 import com.ThreeZem.three_zem_back.service.ApplicationStateService;
+import com.ThreeZem.three_zem_back.service.DataGenerationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
@@ -22,6 +23,8 @@ public class AppInitializer implements ApplicationRunner {
 
     private final AppInitializeService appInitializeService;
     private final ApplicationStateService applicationStateService;
+    private final BuildingDataCache buildingDataCache;
+    private final DataGenerationService dataGenerationService;
 
     private final BuildingRepository buildingRepository;
     private final DeviceRepository deviceRepository;
@@ -33,7 +36,7 @@ public class AppInitializer implements ApplicationRunner {
     private final int startYearsAgo = 2;
 
     /// 데이터 생성시간 단위. 기본 360 = 6시간
-    private final int intervalMinutes = 360;
+    private final int intervalMinutes = 60;
 
     @Override
     @Transactional
@@ -69,11 +72,13 @@ public class AppInitializer implements ApplicationRunner {
             if (dataNum == 0) {
                 log.info("[INIT] 과거 데이터를 생성합니다.");
                 // TODO
+//                dataGenerationService.
             }
             // 부분 생성
             else if (dataNum < need) {
                 log.info("[INIT] 누락된 과거 데이터를 생성합니다.");
                 // TODO
+//                dataGenerationService.
             }
             else {
                 log.info("[INIT] 과거 데이터 OK");
@@ -88,9 +93,8 @@ public class AppInitializer implements ApplicationRunner {
 
         appInitializeService.createBuildingIdSheet();
         log.info("[INIT] 빌딩 ID 시트 생성 완료");
-
+        buildingDataCache.init();
         log.info("[INIT] 서버 초기화 완료.");
-
     }
 
 }

@@ -29,8 +29,8 @@ public class BuildingDataCache {
     private List<Floor> floorEntities;
     private List<Device> deviceEntities;
 
-    public void init(Long memberId) {
-        Optional<Building> building = buildingRepository.findByMemberId(memberId);
+    public void init() {
+        Optional<Building> building = buildingRepository.findById(UUID.fromString("f6e6ac9a-9987-429c-a7cb-daeb6434af2e"));
 
         if (building.isEmpty()) {
             throw new RuntimeException("[ERROR] 해당 계정과 관련된 빌딩 정보가 없습니다.");

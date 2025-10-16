@@ -62,12 +62,7 @@ public class RealTimeDataService {
             return;
         }
 
-        // 빌딩 데이터를 등록하지 않았다면(로그인 하지 않고 실행) 빠꾸
-        if (!applicationStateService.getIsLogin()) {
-            return;
-        }
-
-        log.info("---------- 10초 간격 데이터 생성 ({}) ----------", LocalDateTime.now().format(TimeUtil.getDateTimeFormatter()));
+        log.info("[DATA] {} ----- 데이터 생성({}초)", LocalDateTime.now().format(TimeUtil.getDateTimeFormatter()), ConfigConst.DATA_UPDATE_MS / 1000);
 
         accumulateElectricityUsage(buildingDataCache.getBuildingDto());
         accumulateWaterUsage(buildingDataCache.getBuildingDto());
@@ -76,7 +71,7 @@ public class RealTimeDataService {
 
     // 실시간 데이터 저장
     @Transactional
-    @Scheduled(fixedRate = ConfigConst.DATA_UPDATE_MS)
+    @Scheduled(fixedRate = ConfigConst.DATA_SAVE_MS)
     public void saveAggregatedData() {
 
         // 과거 데이터 생성 중이라면 빠꾸
@@ -84,27 +79,22 @@ public class RealTimeDataService {
             return;
         }
 
-        // 빌딩 데이터를 등록하지 않았다면(로그인 하지 않고 실행) 빠꾸
-        if (!applicationStateService.getIsLogin()) {
-            return;
-        }
-
-        log.info("---------- 누적 데이터 DB 저장 ----------");
+        log.info("[DATA] {} ----- 누적 데이터 DB에 저장({}초)", LocalDateTime.now().format(TimeUtil.getDateTimeFormatter()), ConfigConst.DATA_SAVE_MS / 1000);
         LocalDateTime now = LocalDateTime.now();
 
         // 누적 데이터를 다른 컨테이너에 담고 누적 컨테이너는 초기화
         Map<Long, Float> elecDataToSave = electricityUsageBuffer;
-        log.info("---- 전력 데이터 {}", elecDataToSave.size());
+        log.info("  전력 데이터 {}", elecDataToSave.size());
 
         electricityUsageBuffer = new ConcurrentHashMap<>();
 
         Map<Long, Float> waterDataToSave = waterUsageBuffer;
-        log.info("---- 수도 데이터 {}", waterDataToSave.size());
+        log.info("  수도 데이터 {}", waterDataToSave.size());
 
         waterUsageBuffer = new ConcurrentHashMap<>();
 
         Map<UUID, Float> gasDataToSave = gasUsageBuffer;
-        log.info("---- 가스 데이터 {}", gasDataToSave.size());
+        log.info("  가스 데이터 {}", gasDataToSave.size());
 
         gasUsageBuffer = new ConcurrentHashMap<>();
 
@@ -141,20 +131,13 @@ public class RealTimeDataService {
         }
     }
 
-    public BuildingEnergyDto getBuildingEnergyData(UUID buildingId) {
+    public BuildingEnergyDto getBuildingEnergyData() {
 
         // 과거 데이터 생성 중이라면 빠꾸
         if (!applicationStateService.getDataGenerated()) {
             log.warn("[WARN] 과거 데이터 생성 중");
             return null;
         }
-
-        // 빌딩 데이터를 등록하지 않았다면(로그인 하지 않고 실행) 빠꾸
-        if (!applicationStateService.getIsLogin()) {
-            log.warn("[WARN] 빌딩 데이터 필요");
-            return null;
-        }
-
 
         Building building = buildingDataCache.getBuildingEntity();
         List<Floor> floors = buildingDataCache.getFloorEntities();
@@ -165,7 +148,7 @@ public class RealTimeDataService {
         // 가스 사용량 설정
         EnergyReadingDto gasUsage = new EnergyReadingDto();
         gasUsage.setEnergyType(EnergyType.GAS);
-        gasUsage.setDatas(Collections.singletonList(new ReadingDto(LocalDateTime.now(), recentGasDatas.getOrDefault(buildingId, 0f))));
+        gasUsage.setDatas(Collections.singletonList(new ReadingDto(LocalDateTime.now(), recentGasDatas.getOrDefault(building.getId(), 0f))));
         buildingEnergyDto.setGasUsage(gasUsage);
 
         Map<Long, List<Device>> devicesByFloorId = devices.stream().collect(Collectors.groupingBy(d -> d.getFloor().getId()));

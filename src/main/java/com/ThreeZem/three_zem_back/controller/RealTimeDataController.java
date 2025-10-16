@@ -53,18 +53,7 @@ public class RealTimeDataController implements DisposableBean {
     /// 실시간 에너지 사용량 조회
     @GetMapping(value = "/api/energy/sse/all", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<BuildingEnergyDto> getSseEnergyAll(Authentication auth) {
-        return createEnergyFlux(() -> {
-            String buildingId = "f6e6ac9a-9987-429c-a7cb-daeb6434af2e"; // Default value
-
-            if (auth != null && auth.getPrincipal() instanceof CustomUser) {
-                CustomUser customUser = (CustomUser) auth.getPrincipal();
-                if (customUser.getBuildingId() != null && !customUser.getBuildingId().isEmpty()) {
-                    buildingId = customUser.getBuildingId();
-                }
-            }
-
-            return realTimeDataService.getBuildingEnergyData(UUID.fromString(buildingId));
-        });
+        return createEnergyFlux(realTimeDataService::getBuildingEnergyData);
     }
 
     /// 실시간 금일 장비(전력) 누적 사용량 조회

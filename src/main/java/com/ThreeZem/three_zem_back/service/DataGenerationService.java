@@ -11,6 +11,7 @@ import com.ThreeZem.three_zem_back.data.enums.DeviceStatus;
 import com.ThreeZem.three_zem_back.data.enums.DeviceType;
 import com.ThreeZem.three_zem_back.data.enums.EnergyType;
 import com.ThreeZem.three_zem_back.repository.*;
+import com.ThreeZem.three_zem_back.util.TimeUtil;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,10 +33,12 @@ public class DataGenerationService {
 
     private final Random random = new Random();
 
+    /// 층별 사용인원
     private final Map<Integer, Integer> peoplePerFloor = new HashMap<>();
 
     @PostConstruct
     public void init() {
+        // 사용인원 임시로 정의
         peoplePerFloor.put(1, 7);
         peoplePerFloor.put(2, 30);
         peoplePerFloor.put(3, 30);
@@ -69,6 +72,7 @@ public class DataGenerationService {
         return applyNoise(usage);
     }
 
+    /// 실시간 데이터 생성 외의 데이터 생성 시 장비가 켜져 있는지 시뮬레이션
     public boolean isDeviceOn(Device device, LocalDateTime now) {
         double probability;
         DeviceType type = DeviceType.fromByte(device.getDeviceType());
@@ -128,84 +132,84 @@ public class DataGenerationService {
         float noise = (random.nextFloat() * 2 - 1) * 0.05f; // -0.05 ~ 0.05
         return value * (1 + noise);
     }
+
+    /// 과거 데이터 생성
+    private void generateHistoricalData(int startYearsAgo, int intervalMinutes) {
+        String now = LocalDateTime.now().format(TimeUtil.getDateTimeFormatter());
+        log.info("[DATA] {} ----- 과거 {}년치 데이터 생성을 시작합니다. ({}분 단위)", now, startYearsAgo, intervalMinutes);
+
+        Building building = buildingRepository.findAll().get(0);
+        List<Floor> floors = floorRepository.findByBuilding(building);
+        List<Device> devices = deviceRepository.findByFloorBuilding(building);
+
+        List<ElectricityReading> elecBuffer = new ArrayList<>();
+        List<WaterReading> waterBuffer = new ArrayList<>();
+        List<GasReading> gasBuffer = new ArrayList<>();
+
+        LocalDateTime cursor = LocalDateTime.now().minusYears(startYearsAgo);
+        LocalDateTime endTime = LocalDateTime.now();
+        YearMonth currentMonth = YearMonth.from(cursor);
+
+        log.info("{} 데이터 생성 중...", currentMonth);
+
+        while (cursor.isBefore(endTime)) {
+            if (!YearMonth.from(cursor).equals(currentMonth)) {
+                currentMonth = YearMonth.from(cursor);
+                log.info("{} 데이터 생성 중...", currentMonth);
+            }
+
+            float intervalHours = (float) intervalMinutes / 60.0f;
+
+            for (Device device : devices) {
+                if (simulationLogicService.isDeviceOn(device, cursor)) {
+                    float usage = simulationLogicService.applyNoise(PowerConsum.getPowerConsumption(DeviceType.fromByte(device.getDeviceType()).name()) * intervalHours);
+                    ElectricityReading reading = new ElectricityReading();
+                    reading.setDevice(device);
+                    reading.setReadingTime(cursor);
+                    reading.setValue(usage);
+                    elecBuffer.add(reading);
+                }
+            }
+
+            Map<Integer, Integer> peoplePerFloor = Map.of(1, 7, 2, 30, 3, 30, 4, 15);
+            for (Floor floor : floors) {
+                int people = (int) (peoplePerFloor.getOrDefault(floor.getFloorNum(), 0) * simulationLogicService.getPeopleFactor(cursor));
+                float usage = simulationLogicService.applyNoise(people * PowerConsum.WATER_PER_PERSON * intervalHours);
+                WaterReading reading = new WaterReading();
+                reading.setFloor(floor);
+                reading.setReadingTime(cursor);
+                reading.setValue(usage);
+                waterBuffer.add(reading);
+            }
+
+            int totalPeople = (int) (82 * simulationLogicService.getPeopleFactor(cursor));
+            float gasUsage = simulationLogicService.applyNoise(totalPeople * PowerConsum.GAS_PER_PERSON * intervalHours * simulationLogicService.getGasSeasonalFactor(cursor.getMonth()));
+            GasReading gasReading = new GasReading();
+            gasReading.setBuilding(building);
+            gasReading.setReadingTime(cursor);
+            gasReading.setValue(gasUsage);
+            gasBuffer.add(gasReading);
+
+            if (elecBuffer.size() >= BATCH_SIZE) {
+                electricityReadingRepository.saveAll(elecBuffer);
+                elecBuffer.clear();
+            }
+            if (waterBuffer.size() >= BATCH_SIZE) {
+                waterReadingRepository.saveAll(waterBuffer);
+                waterBuffer.clear();
+            }
+            if (gasBuffer.size() >= BATCH_SIZE) {
+                gasReadingRepository.saveAll(gasBuffer);
+                gasBuffer.clear();
+            }
+
+            cursor = cursor.plusMinutes(intervalMinutes);
+        }
+
+        if (!elecBuffer.isEmpty()) electricityReadingRepository.saveAll(elecBuffer);
+        if (!waterBuffer.isEmpty()) waterReadingRepository.saveAll(waterBuffer);
+        if (!gasBuffer.isEmpty()) gasReadingRepository.saveAll(gasBuffer);
+
+        log.info("========== 과거 데이터 생성을 완료했습니다. ==========");
+    }
 }
-
-
-
-//private void generateHistoricalData(int startYearsAgo, int intervalMinutes) {
-//        log.info("========== 과거 {}년치 데이터 생성을 시작합니다. ({}분 단위) ==========", startYearsAgo, intervalMinutes);
-//
-//        Building building = buildingRepository.findAll().get(0);
-//        List<Floor> floors = floorRepository.findByBuilding(building);
-//        List<Device> devices = deviceRepository.findByFloorBuilding(building);
-//
-//        List<ElectricityReading> elecBuffer = new ArrayList<>();
-//        List<WaterReading> waterBuffer = new ArrayList<>();
-//        List<GasReading> gasBuffer = new ArrayList<>();
-//
-//        LocalDateTime cursor = LocalDateTime.now().minusYears(startYearsAgo);
-//        LocalDateTime endTime = LocalDateTime.now();
-//        YearMonth currentMonth = YearMonth.from(cursor);
-//
-//        log.info("{} 데이터 생성 중...", currentMonth);
-//
-//        while (cursor.isBefore(endTime)) {
-//            if (!YearMonth.from(cursor).equals(currentMonth)) {
-//                currentMonth = YearMonth.from(cursor);
-//                log.info("{} 데이터 생성 중...", currentMonth);
-//            }
-//
-//            float intervalHours = (float) intervalMinutes / 60.0f;
-//
-//            for (Device device : devices) {
-//                if (simulationLogicService.isDeviceOn(device, cursor)) {
-//                    float usage = simulationLogicService.applyNoise(PowerConsum.getPowerConsumption(DeviceType.fromByte(device.getDeviceType()).name()) * intervalHours);
-//                    ElectricityReading reading = new ElectricityReading();
-//                    reading.setDevice(device);
-//                    reading.setReadingTime(cursor);
-//                    reading.setValue(usage);
-//                    elecBuffer.add(reading);
-//                }
-//            }
-//
-//            Map<Integer, Integer> peoplePerFloor = Map.of(1, 7, 2, 30, 3, 30, 4, 15);
-//            for (Floor floor : floors) {
-//                int people = (int) (peoplePerFloor.getOrDefault(floor.getFloorNum(), 0) * simulationLogicService.getPeopleFactor(cursor));
-//                float usage = simulationLogicService.applyNoise(people * PowerConsum.WATER_PER_PERSON * intervalHours);
-//                WaterReading reading = new WaterReading();
-//                reading.setFloor(floor);
-//                reading.setReadingTime(cursor);
-//                reading.setValue(usage);
-//                waterBuffer.add(reading);
-//            }
-//
-//            int totalPeople = (int) (82 * simulationLogicService.getPeopleFactor(cursor));
-//            float gasUsage = simulationLogicService.applyNoise(totalPeople * PowerConsum.GAS_PER_PERSON * intervalHours * simulationLogicService.getGasSeasonalFactor(cursor.getMonth()));
-//            GasReading gasReading = new GasReading();
-//            gasReading.setBuilding(building);
-//            gasReading.setReadingTime(cursor);
-//            gasReading.setValue(gasUsage);
-//            gasBuffer.add(gasReading);
-//
-//            if (elecBuffer.size() >= BATCH_SIZE) {
-//                electricityReadingRepository.saveAll(elecBuffer);
-//                elecBuffer.clear();
-//            }
-//            if (waterBuffer.size() >= BATCH_SIZE) {
-//                waterReadingRepository.saveAll(waterBuffer);
-//                waterBuffer.clear();
-//            }
-//            if (gasBuffer.size() >= BATCH_SIZE) {
-//                gasReadingRepository.saveAll(gasBuffer);
-//                gasBuffer.clear();
-//            }
-//
-//            cursor = cursor.plusMinutes(intervalMinutes);
-//        }
-//
-//        if (!elecBuffer.isEmpty()) electricityReadingRepository.saveAll(elecBuffer);
-//        if (!waterBuffer.isEmpty()) waterReadingRepository.saveAll(waterBuffer);
-//        if (!gasBuffer.isEmpty()) gasReadingRepository.saveAll(gasBuffer);
-//
-//        log.info("========== 과거 데이터 생성을 완료했습니다. ==========");
-//    }
