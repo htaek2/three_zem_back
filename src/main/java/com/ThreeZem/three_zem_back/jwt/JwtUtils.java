@@ -35,7 +35,7 @@ public class JwtUtils {
         return Jwts.builder()
                 .claims(payload)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(getExpirationMinute(1))
+                .expiration(getExpirationMinute(600))
                 .signWith(key)
                 .compact();
     }

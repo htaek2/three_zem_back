@@ -1,13 +1,20 @@
 package com.ThreeZem.three_zem_back.data.entity;
 
+import com.ThreeZem.three_zem_back.data.dto.building.BuildingDto;
 import com.ThreeZem.three_zem_back.data.dto.buildingConfig.BuildingConfigDto;
+import com.ThreeZem.three_zem_back.data.dto.buildingConfig.DeviceConfigDto;
+import com.ThreeZem.three_zem_back.data.dto.buildingConfig.FloorConfigDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Entity
 @ToString

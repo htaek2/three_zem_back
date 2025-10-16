@@ -3,10 +3,15 @@ package com.ThreeZem.three_zem_back.service;
 import com.ThreeZem.three_zem_back.data.constant.ResponseMessage;
 import com.ThreeZem.three_zem_back.data.dto.building.BuildingDto;
 import com.ThreeZem.three_zem_back.data.dto.building.DeviceDto;
+import com.ThreeZem.three_zem_back.data.dto.buildingConfig.BuildingConfigDto;
+import com.ThreeZem.three_zem_back.data.dto.buildingConfig.DeviceConfigDto;
+import com.ThreeZem.three_zem_back.data.dto.buildingConfig.FloorConfigDto;
 import com.ThreeZem.three_zem_back.data.entity.Building;
 import com.ThreeZem.three_zem_back.data.entity.Device;
+import com.ThreeZem.three_zem_back.data.entity.Floor;
 import com.ThreeZem.three_zem_back.repository.BuildingRepository;
 import com.ThreeZem.three_zem_back.repository.DeviceRepository;
+import com.ThreeZem.three_zem_back.repository.FloorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,13 +19,16 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class BuildingService {
 
     private final BuildingRepository buildingRepository;
+    private final FloorRepository floorRepository;
     private final DeviceRepository deviceRepository;
 
     /// 빌딩 데이터를 가져온다

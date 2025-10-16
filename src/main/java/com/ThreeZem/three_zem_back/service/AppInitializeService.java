@@ -22,8 +22,6 @@ import java.nio.charset.StandardCharsets;
 public class AppInitializeService {
 
     private final BuildingRepository buildingRepository;
-    private final ElectricityReadingRepository electricityReadingRepository;
-    private final ApplicationStateService applicationStateService;
     private final FloorRepository floorRepository;
     private final DeviceRepository deviceRepository;
     private final MemberRepository memberRepository;
@@ -92,7 +90,7 @@ public class AppInitializeService {
                 bw.write(building.getId() + "\n");
             }
         } catch (Exception e) {
-            log.error("[Init] 빌딩 ID 시트 생성 실패", e);
+            log.error("[Init] 빌딩 ID 목록 파일 생성 실패", e);
         }
     }
 }

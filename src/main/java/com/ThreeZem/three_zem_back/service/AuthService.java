@@ -1,5 +1,6 @@
 package com.ThreeZem.three_zem_back.service;
 
+import com.ThreeZem.three_zem_back.config.BuildingDataCache;
 import com.ThreeZem.three_zem_back.data.common.CustomUser;
 import com.ThreeZem.three_zem_back.data.constant.ResponseMessage;
 import com.ThreeZem.three_zem_back.data.dto.auth.LoginRequestDto;
@@ -36,6 +37,8 @@ public class AuthService {
     private final BuildingRepository buildingRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
+    private final BuildingDataCache buildingDataCache;
+    private final ApplicationStateService applicationStateService;
 
     public ResponseEntity<String> login(LoginRequestDto loginRequest, HttpServletResponse response) {
 
@@ -46,14 +49,9 @@ public class AuthService {
 
         CustomUser user = (CustomUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal(); // 등록한 Authentication 변수 사용은 이렇게
 
-        // 토큰 생성
-        Optional<Building> result = buildingRepository.findByMemberId(user.getUserDbId());
-
-        if (result.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseMessage.SERVER_ERROR);
-        }
-
-        String buildingId = String.valueOf(result.get().getId());
+        // 토큰 정보 추가
+        buildingDataCache.init(user.getUserDbId());
+        String buildingId = String.valueOf(buildingDataCache.getBuildingDto().getId());
 
         Map<String, String> claims = new HashMap<>();
         claims.put("memberEmail", user.getUserEmail());
@@ -73,6 +71,8 @@ public class AuthService {
         cookie.setHttpOnly(true);  // 쿠키 조작을 어렵게 만듬
         cookie.setPath("/");  // 어떤 페이지에서 생성할지
         response.addCookie(cookie);
+
+        applicationStateService.setIsLogin(true);
 
         return ResponseEntity.status(HttpStatus.OK).headers(headers).body(ResponseMessage.SUCCESS);
     }
@@ -105,5 +105,14 @@ public class AuthService {
         memberRepository.save(member);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(ResponseMessage.SUCCESS);
+    }
+
+    /// 로그아웃 처리
+    public ResponseEntity<String> logout() {
+        // 빌딩 데이터 제거
+        buildingDataCache.clearData();
+        applicationStateService.setIsLogin(false);
+
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseMessage.SUCCESS);
     }
 }

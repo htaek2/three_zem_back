@@ -1,6 +1,6 @@
 // sse 연결
 // 그냥 sse로 사용되는 url 넣으면 됨.
-const eventSource = new EventSource("http://localhost:7770/api/sse/energy");
+const eventSource = new EventSource("http://localhost:7770/api/energy/sse/all");
 
 // 데이터 날라왔을 때 할 거
 eventSource.onmessage = function(event) {

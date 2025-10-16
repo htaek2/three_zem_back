@@ -31,4 +31,7 @@ public class Alert {
     @Column(name = "message", nullable = false, columnDefinition = "TEXT")
     private String message;
 
+    @Column(name = "is_read", nullable = false)
+    private Boolean isRead = false;
+
 }

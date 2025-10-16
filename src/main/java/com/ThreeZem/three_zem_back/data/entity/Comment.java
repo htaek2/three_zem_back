@@ -21,15 +21,17 @@ public class Comment {
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "related_alert_id")
+    @JoinColumn(name = "related_alert_id", nullable = true)
     private Alert relatedAlert;
 
     @ManyToOne
-    @JoinColumn(name = "writed_member_id")
-    private Member writedMemberId;
+    @JoinColumn(name = "writed_member_id", nullable = false)
+    private Member writedMember;
 
+    @Column(name = "content", nullable = false)
     private String content;
 
+    @Column(name = "created_time", nullable = false)
     private LocalDateTime createdTime;
 
 }

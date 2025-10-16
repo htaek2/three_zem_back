@@ -35,6 +35,6 @@ public class AuthController {
     /// 성공시 사용자는 자체적으로 토큰을 제거한다.
     @PostMapping("/api/auth/logout")
     public ResponseEntity<String> logout() {
-        return ResponseEntity.status(HttpStatus.OK).body("로그아웃 승인. 클라이언트에서 토큰을 제거 바랍니다.");
+        return authService.logout();
     }
 }

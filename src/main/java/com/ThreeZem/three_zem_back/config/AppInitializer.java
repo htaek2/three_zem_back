@@ -4,6 +4,7 @@ import com.ThreeZem.three_zem_back.data.entity.Member;
 import com.ThreeZem.three_zem_back.repository.BuildingRepository;
 import com.ThreeZem.three_zem_back.repository.DeviceRepository;
 import com.ThreeZem.three_zem_back.repository.ElectricityReadingRepository;
+import com.ThreeZem.three_zem_back.repository.FloorRepository;
 import com.ThreeZem.three_zem_back.service.AppInitializeService;
 import com.ThreeZem.three_zem_back.service.ApplicationStateService;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +24,8 @@ public class AppInitializer implements ApplicationRunner {
     private final ApplicationStateService applicationStateService;
 
     private final BuildingRepository buildingRepository;
-    private final ElectricityReadingRepository electricityReadingRepository;
     private final DeviceRepository deviceRepository;
+    private final ElectricityReadingRepository electricityReadingRepository;
 
     private final boolean isDataCreate = false;
 
@@ -41,20 +42,20 @@ public class AppInitializer implements ApplicationRunner {
         log.info("\n");
 
         if (buildingRepository.count() == 0) {
-            log.info("[Init] 초기 DB 데이터 없음.. 데이터 생성 시작");
+            log.info("[INIT] 초기 DB 데이터 없음.. 데이터 생성 시작");
 
             // 관리자 계정 생성
             Member adminMember = appInitializeService.createDefaultMember();
-            log.info("[Init] 기본 관리자 계정 생성 및 저장 완료");
+            log.info("[INIT] 기본 관리자 계정 생성 및 저장 완료");
 
             // 빌딩 데이터 생성
             appInitializeService.createBuildingData(adminMember);
-            log.info("[Init] 빌딩 데이터 생성 및 저장 완료");
+            log.info("[INIT] 빌딩 데이터 생성 및 저장 완료");
 
-            log.info("[Init] 초기 DB 데이터 생성 완료");
+            log.info("[INIT] 초기 DB 데이터 생성 완료");
         }
         else {
-            log.info("[Init] 초기 데이터 OK");
+            log.info("[INIT] 초기 데이터 OK");
         }
 
         if (isDataCreate) {
@@ -66,29 +67,29 @@ public class AppInitializer implements ApplicationRunner {
 
             // 전부 생성
             if (dataNum == 0) {
-                log.info("[Init] 과거 데이터를 생성합니다.");
+                log.info("[INIT] 과거 데이터를 생성합니다.");
                 // TODO
             }
             // 부분 생성
             else if (dataNum < need) {
-                log.info("[Init] 누락된 과거 데이터를 생성합니다.");
+                log.info("[INIT] 누락된 과거 데이터를 생성합니다.");
                 // TODO
             }
             else {
-                log.info("[Init] 과거 데이터 OK");
+                log.info("[INIT] 과거 데이터 OK");
             }
         }
         else {
-            log.info("[Info] 과거 데이터 생성 Pass");
+            log.info("[INIT] 과거 데이터 생성 Pass");
         }
 
         // 과거 데이터 생성 및 장치 상태 설정이 모두 끝났음을 알림
         applicationStateService.setDataGenerated(true);
 
         appInitializeService.createBuildingIdSheet();
-        log.info("[Init] 빌딩 ID 시트 생성 완료");
+        log.info("[INIT] 빌딩 ID 시트 생성 완료");
 
-        log.info("[Init] 서버 초기화 완료.");
+        log.info("[INIT] 서버 초기화 완료.");
 
     }
 
