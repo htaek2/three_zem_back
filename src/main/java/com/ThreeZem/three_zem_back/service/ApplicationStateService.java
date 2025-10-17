@@ -21,15 +21,9 @@ public class ApplicationStateService {
 
     public void setDataGenerated(boolean isGenerated) {
         this.dataGenerated.set(isGenerated);
-        if (isGenerated) {
-            System.out.println("\n[STATE] 과거 데이터 생성이 완료됐습니다.");
-        }
     }
     
     public void setIsLogin(boolean isLogin) {
         this.isLogin.set(isLogin);
-        if (isLogin) {
-            log.info("\n[STATE] 로그인 됐습니다.");
-        }
     }
 }

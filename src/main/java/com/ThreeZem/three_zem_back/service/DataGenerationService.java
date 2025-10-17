@@ -1,6 +1,7 @@
 package com.ThreeZem.three_zem_back.service;
 
 import com.ThreeZem.three_zem_back.config.BuildingDataCache;
+import com.ThreeZem.three_zem_back.controller.BuildingController;
 import com.ThreeZem.three_zem_back.data.constant.ConfigConst;
 import com.ThreeZem.three_zem_back.data.constant.PowerConsum;
 import com.ThreeZem.three_zem_back.data.dto.building.BuildingDto;
@@ -38,6 +39,10 @@ public class DataGenerationService {
     private final ElectricityReadingRepository electricityReadingRepository;
     private final GasReadingRepository gasReadingRepository;
     private final WaterReadingRepository waterReadingRepository;
+    private final OtherBuildingRepository otherBuildingRepository;
+    private final ElectricityMonthlyUsageRepository electricityMonthlyUsageRepository;
+    private final GasMonthlyUsageRepository gasMonthlyUsageRepository;
+    private final WaterMonthlyUsageRepository waterMonthlyUsageRepository;
 
     private final Random random = new Random();
 
@@ -132,11 +137,30 @@ public class DataGenerationService {
         return value * (1 + noise);
     }
 
+    public void checkAndGenerateHistoricalData(int startYearsAgo, int intervalMinutes) {
+        LocalDateTime startTime = LocalDateTime.now().minusYears(startYearsAgo);
+
+        // 분 단위로 총 시간 계산
+        long totalMinutes = (long) startYearsAgo * 365 * 24 * 60;
+        long expectedReadings = totalMinutes / intervalMinutes;
+
+        long actualReadings = gasReadingRepository.countByReadingTimeAfter(startTime);
+
+        log.info("[INIT] 과거 데이터 확인: 예상 데이터 수 ({}년, {}분 간격): {}, 실제 데이터 수: {}", startYearsAgo, intervalMinutes, expectedReadings, actualReadings);
+
+        // 실제 데이터가 예상치의 90% 미만일 경우에만 데이터 생성
+        if (actualReadings < expectedReadings * 0.9) {
+            log.info("[INIT] 실제 데이터가 예상치보다 부족하여 과거 데이터 생성을 시작합니다.");
+            generateHistoricalData(startYearsAgo, intervalMinutes);
+        } else {
+            log.info("[INIT] 과거 데이터가 충분히 존재하므로, 데이터 생성을 건너뜁니다.");
+        }
+    }
+
     /// 과거 데이터 생성
     public void generateHistoricalData(int startYearsAgo, int intervalMinutes) {
 
-        String now = LocalDateTime.now().format(TimeUtil.getDateTimeFormatter());
-        log.info("[DATA] {} ----- 과거 {}년치 데이터 생성을 시작합니다. ({}분 단위)", now, startYearsAgo, intervalMinutes);
+        log.info("[DATA] 과거 {}년치 데이터 생성을 시작합니다. ({}분 단위)", startYearsAgo, intervalMinutes);
 
         Building building = buildingDataCache.getBuildingEntity();
         List<Floor> floors = buildingDataCache.getFloorEntities();
@@ -160,25 +184,30 @@ public class DataGenerationService {
 
             float intervalHours = (float) intervalMinutes / 60.0f;
 
+            // Corrected Electricity Usage Calculation
             for (Device device : devices) {
                 float usage = 0.0f;
                 if (isDeviceOn(device, cursor)) {
-                    usage = generateElecData(DeviceType.fromByte(device.getDeviceType()), DeviceStatus.fromByte(device.getStatus()), true);
+                    float powerKw = PowerConsum.getPowerConsumption(DeviceType.fromByte(device.getDeviceType()));
+                    usage = applyNoise(powerKw * intervalHours);
                 }
-
                 elecBuffer.add(new ElectricityReading(device, cursor, usage));
             }
 
+            // Corrected Water Usage Calculation
             for (Floor floor : floors) {
-                float usage = generateWaterData(floor.getFloorNum(), cursor);
-                waterBuffer.add(new WaterReading(floor, cursor, usage));
+                int peopleOnFloor = (int) (buildingDataCache.getPeoplePerFloor(floor.getFloorNum()) * getPeopleFactor(cursor));
+                float waterUsage = peopleOnFloor * PowerConsum.WATER_PER_PERSON * intervalHours;
+                waterBuffer.add(new WaterReading(floor, cursor, applyNoise(waterUsage)));
             }
 
-            float gasUsage = generateGasData(buildingDataCache.getTotalPeople(), cursor);
+            // Corrected Gas Usage Calculation
+            int totalPeople = (int) (buildingDataCache.getTotalPeople() * getPeopleFactor(cursor));
+            float gasUsage = totalPeople * PowerConsum.GAS_PER_PERSON * intervalHours * getGasSeasonalFactor(cursor.getMonth());
             GasReading gasReading = new GasReading();
             gasReading.setBuilding(building);
             gasReading.setReadingTime(cursor);
-            gasReading.setValue(gasUsage);
+            gasReading.setValue(applyNoise(gasUsage));
             gasBuffer.add(gasReading);
 
             int BATCH_SIZE = 2000;
@@ -203,6 +232,144 @@ public class DataGenerationService {
         if (!waterBuffer.isEmpty()) waterReadingRepository.saveAll(waterBuffer);
         if (!gasBuffer.isEmpty()) gasReadingRepository.saveAll(gasBuffer);
 
-        log.info("========== 과거 데이터 생성을 완료했습니다. ==========");
+        log.info("과거 데이터 생성을 완료했습니다.");
+    }
+
+    @Transactional
+    public void checkAndGenerateOtherBuildingData() {
+        if (otherBuildingRepository.count() == 0) {
+            log.info("[INIT] 비교군 빌딩 데이터가 없어 생성을 시작합니다.");
+            List<OtherBuilding> otherBuildings = generateOtherBuildings();
+            generateOtherBuildingHistoricalData(otherBuildings);
+        } else {
+            log.info("[INIT] 비교군 빌딩 데이터가 이미 존재합니다.");
+        }
+    }
+
+    private List<OtherBuilding> generateOtherBuildings() {
+        log.info("[INIT] 비교군 빌딩 생성을 시작합니다.");
+        List<OtherBuilding> otherBuildings = new ArrayList<>();
+        BuildingConfigDto mainBuilding = buildingDataCache.getBuildingDto();
+
+        // A simple weighted distribution for location codes
+        Map<Integer, Integer> locationDistribution = Map.of(
+                108, 25, // Seoul
+                133, 10, // Daejeon
+                159, 10, // Gwangju
+                143, 10, // Busan
+                112, 5,  // Daegu
+                119, 5,  // Incheon
+                131, 5,  // Ulsan
+                184, 20, // Gyeonggi-do
+                156, 10  // Chungcheong-do, etc.
+        );
+        List<Integer> baseLocationPool = new ArrayList<>();
+        locationDistribution.forEach((code, weight) -> {
+            for (int i = 0; i < weight; i++) {
+                baseLocationPool.add(code);
+            }
+        });
+
+        // Expand the pool to 1000 while maintaining distribution
+        List<Integer> locationPool = new ArrayList<>(1000);
+        for (int i = 0; i < 10; i++) {
+            locationPool.addAll(baseLocationPool);
+        }
+        Collections.shuffle(locationPool);
+
+
+        for (int i = 1; i <= 1000; i++) {
+            OtherBuilding building = new OtherBuilding();
+            building.setBuildingName("비교 빌딩 " + i + "호");
+            building.setLocationCode(locationPool.get(i-1));
+
+            building.setUsagePeople(applyVariation(buildingDataCache.getTotalPeople(), 0.2));
+
+            // Assuming device counts are derived from floor configs
+            int totalLow = 0, totalMid = 0, totalHigh = 0;
+            for (FloorConfigDto floor : mainBuilding.getFloors()) {
+                for (DeviceConfigDto device : floor.getDevices()) {
+                    // This is a simplification. A better approach would be to have power ratings.
+                    if (device.getDeviceType() == DeviceType.LIGHT) totalLow++;
+                    else if (device.getDeviceType() == DeviceType.COMPUTER) totalMid++;
+                    else if (device.getDeviceType() == DeviceType.AIR_CONDITIONER) totalHigh++;
+                }
+            }
+
+            building.setNumOfLowPowerDevices(applyVariation(totalLow, 0.2));
+            building.setNumOfMidPowerDevices(applyVariation(totalMid, 0.2));
+            building.setNumOfHighPowerDevices(applyVariation(totalHigh, 0.2));
+
+            // Assuming spots are related to number of floors
+            building.setNumOfWaterUseSpot(applyVariation(mainBuilding.getFloors().size() * 2, 0.2)); // e.g., 2 restrooms per floor
+            building.setNumOfGasUseSpot(applyVariation(1, 0.2)); // e.g., 1 central boiler
+
+            otherBuildings.add(building);
+        }
+
+        otherBuildingRepository.saveAll(otherBuildings);
+        log.info("[INIT] 비교군 빌딩 생성 및 저장 완료.");
+        return otherBuildings;
+    }
+
+    private void generateOtherBuildingHistoricalData(List<OtherBuilding> otherBuildings) {
+        log.info("[INIT] 비교군 빌딩의 과거 3년치 월별 데이터 생성을 시작합니다.");
+        List<ElectricityMonthlyUsage> elecUsages = new ArrayList<>();
+        List<GasMonthlyUsage> gasUsages = new ArrayList<>();
+        List<WaterMonthlyUsage> waterUsages = new ArrayList<>();
+
+        LocalDateTime threeYearsAgo = LocalDateTime.now().minusYears(3);
+
+        for (OtherBuilding building : otherBuildings) {
+            YearMonth cursorMonth = YearMonth.from(threeYearsAgo);
+            YearMonth endMonth = YearMonth.from(LocalDateTime.now());
+
+            while (cursorMonth.isBefore(endMonth)) {
+                LocalDateTime timestamp = cursorMonth.atDay(1).atStartOfDay();
+                Month month = cursorMonth.getMonth();
+
+                // Simplified base usage calculation
+                float baseElecUsage = (building.getNumOfLowPowerDevices() * 50) + (building.getNumOfMidPowerDevices() * 200) + (building.getNumOfHighPowerDevices() * 1500); // monthly kWh
+                float baseWaterUsage = building.getUsagePeople() * 2.5f; // monthly m3
+                float baseGasUsage = building.getUsagePeople() * 1.5f; // monthly m3
+
+                // Apply seasonal factors
+                float elecFactor = 1.0f + (getACSeasonalFactor(month) - 0.5f); // AC factor is dominant
+                float waterFactor = 1.0f; // Less seasonal variation
+                float gasFactor = getGasSeasonalFactor(month);
+
+                // Gaussian noise for normal distribution + standard noise
+                float finalElec = applyNoise(baseElecUsage * elecFactor) * (1.0f + (float) random.nextGaussian() * 0.1f);
+                float finalWater = applyNoise(baseWaterUsage * waterFactor) * (1.0f + (float) random.nextGaussian() * 0.1f);
+                float finalGas = applyNoise(baseGasUsage * gasFactor) * (1.0f + (float) random.nextGaussian() * 0.2f); // Gas has higher variance
+
+                elecUsages.add(new ElectricityMonthlyUsage(null, building.getId(), timestamp, finalElec));
+                gasUsages.add(new GasMonthlyUsage(null, building.getId(), timestamp, finalGas));
+                waterUsages.add(new WaterMonthlyUsage(null, building.getId(), timestamp, finalWater));
+
+                if (elecUsages.size() >= 500) {
+                    electricityMonthlyUsageRepository.saveAll(elecUsages);
+                    gasMonthlyUsageRepository.saveAll(gasUsages);
+                    waterMonthlyUsageRepository.saveAll(waterUsages);
+                    elecUsages.clear();
+                    gasUsages.clear();
+                    waterUsages.clear();
+                }
+                cursorMonth = cursorMonth.plusMonths(1);
+            }
+        }
+
+        if (!elecUsages.isEmpty()) {
+            electricityMonthlyUsageRepository.saveAll(elecUsages);
+            gasMonthlyUsageRepository.saveAll(gasUsages);
+            waterMonthlyUsageRepository.saveAll(waterUsages);
+        }
+        log.info("비교군 빌딩 과거 데이터 생성 완료.");
+    }
+
+    private int applyVariation(int baseValue, double percentage) {
+        // Apply +/- percentage variation
+        double variation = (random.nextDouble() * 2 - 1) * percentage; // -percentage to +percentage
+        return (int) (baseValue * (1 + variation));
     }
 }

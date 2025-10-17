@@ -1,12 +1,14 @@
 package com.ThreeZem.three_zem_back.controller;
 
+import com.ThreeZem.three_zem_back.data.common.CustomUser;
 import com.ThreeZem.three_zem_back.data.dto.auth.LoginRequestDto;
 import com.ThreeZem.three_zem_back.data.dto.auth.SignupRequestDto;
 import com.ThreeZem.three_zem_back.service.AuthService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import org.springframework.aop.scope.ScopedProxyUtils;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,6 +29,8 @@ public class AuthController {
     /// 서버는 세션을 사용하지 않는 상태 비저장(Stateless) 방식으로 동작한다.
     @PostMapping("/api/auth/login")
     public ResponseEntity<String> login(@RequestBody LoginRequestDto loginRequest, HttpServletResponse response) {
+        System.out.println(loginRequest.getEmail());
+        System.out.println(loginRequest.getPassword());
         return authService.login(loginRequest, response);
     }
 
@@ -34,7 +38,7 @@ public class AuthController {
     /// 사용자로 부터 로그아웃 요청을 받으면 성공여부를 전송하고
     /// 성공시 사용자는 자체적으로 토큰을 제거한다.
     @PostMapping("/api/auth/logout")
-    public ResponseEntity<String> logout() {
-        return authService.logout();
+    public ResponseEntity<String> logout(Authentication auth) {
+        return authService.logout(((CustomUser)auth.getPrincipal()).getUserEmail());
     }
 }

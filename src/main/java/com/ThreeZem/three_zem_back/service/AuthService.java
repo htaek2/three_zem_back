@@ -13,6 +13,7 @@ import com.ThreeZem.three_zem_back.repository.MemberRepository;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +30,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -103,11 +105,13 @@ public class AuthService {
         // DB에 저장
         memberRepository.save(member);
 
+        log.info("[INFO] 회원가입 완료: {}, {}", member.getUserName(), member.getEmail());
         return ResponseEntity.status(HttpStatus.CREATED).body(ResponseMessage.SUCCESS);
     }
 
     /// 로그아웃 처리
-    public ResponseEntity<String> logout() {
+    public ResponseEntity<String> logout(String email) {
+        log.info("[INFO] 로그아웃 완료: {}", email);
         return ResponseEntity.status(HttpStatus.OK).body(ResponseMessage.SUCCESS);
     }
 }

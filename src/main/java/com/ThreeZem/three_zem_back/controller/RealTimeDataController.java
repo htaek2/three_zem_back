@@ -41,10 +41,17 @@ public class RealTimeDataController implements DisposableBean {
         return Flux.interval(Duration.ofSeconds(ConfigConst.DATA_UPDATE_MS / 1000))
                 .flatMap(seq -> {
                     try {
-                        return Flux.just(supplier.get());
+                        BuildingEnergyDto data = supplier.get();
+                        // 데이터가 null인 경우 (서버 시작 중 데이터가 아직 준비되지 않음)
+                        if (data == null) {
+                            log.warn("[WARN] 실시간 데이터를 아직 사용할 수 없습니다. 이번 전송은 건너뜁니다.");
+                            return Flux.empty(); // 클라이언트 에러 없이 스트림 유지
+                        }
+                        return Flux.just(data);
                     } catch (Exception e) {
-                        log.error("[Error] 실시간 데이터 생성 오류", e);
-                        return Flux.empty();
+                        // 그 외 예상치 못한 에러
+                        log.error("[Error] 실시간 데이터 생성 중 예상치 못한 오류가 발생했습니다.", e);
+                        return Flux.empty(); // 클라이언트 에러 없이 스트림 유지
                     }
                 })
                 .takeUntilOther(shutdownSignal.asMono()); // 종료 신호를 받으면 스트림을 중단

@@ -1,5 +1,7 @@
 package com.ThreeZem.three_zem_back.service;
 
+import com.ThreeZem.three_zem_back.data.constant.CarbonEmissionConst;
+import com.ThreeZem.three_zem_back.data.constant.EnergyPriceConst;
 import com.ThreeZem.three_zem_back.data.dto.energy.EnergyReadingDto;
 import com.ThreeZem.three_zem_back.data.dto.energy.RangeDataRequestDto;
 import com.ThreeZem.three_zem_back.data.dto.energy.ReadingDto;
@@ -23,6 +25,7 @@ import java.time.Year;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -38,7 +41,7 @@ public class EnergyDataService {
     private final WaterReadingRepository waterReadingRepository;
 
     /// 전력 데이터를 년/월/일/시별로 조회한다
-    public ResponseEntity<EnergyReadingDto> getElecRangeData(String start, String end, byte datetimeType) {
+    public EnergyReadingDto getElecRangeData(String start, String end, byte datetimeType) {
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             LocalDateTime startTime = LocalDateTime.parse(start, formatter);
@@ -49,7 +52,7 @@ public class EnergyDataService {
 
             if (result.isEmpty()) {
                 log.info("No data found");
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                return null;
             }
 
             List<ReadingDto> aggregatedData;
@@ -109,32 +112,34 @@ public class EnergyDataService {
             }
             else {
                 log.info("[Error] 잘못된 데이터 타입");
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                return null;
             }
 
             EnergyReadingDto energyReadingDto = new EnergyReadingDto();
             energyReadingDto.setEnergyType(EnergyType.ELECTRICITY);
             energyReadingDto.setDatas(aggregatedData);
 
-            return ResponseEntity.status(HttpStatus.OK).body(energyReadingDto);
+            log.info("[INFO] 전력 데이터 호출 완료");
+            return energyReadingDto;
         }
         catch (Exception e) {
             log.error(e.getMessage());
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return null;
         }
     }
 
     /// 가스 데이터를 년/월/일/시별로 조회한다
-    public ResponseEntity<EnergyReadingDto> getGasRangeData(RangeDataRequestDto rangeDataRequestDto) {
+    public EnergyReadingDto getGasRangeData(String start, String end, byte datetimeType) {
 
-        LocalDateTime start = rangeDataRequestDto.getStart();
-        LocalDateTime end = rangeDataRequestDto.getEnd();
-        DateTimeType dateTimeType = DateTimeType.fromByte(rangeDataRequestDto.getDatetimeType());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime startTime = LocalDateTime.parse(start, formatter);
+        LocalDateTime endTime = LocalDateTime.parse(end, formatter);
+        DateTimeType dateTimeType = DateTimeType.fromByte(datetimeType);
 
-        List<GasReading> result = gasReadingRepository.findByReadingTimeBetween(start, end);
+        List<GasReading> result = gasReadingRepository.findByReadingTimeBetween(startTime, endTime);
 
         if (result.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return null;
         }
 
         List<ReadingDto> aggregatedData;
@@ -194,27 +199,28 @@ public class EnergyDataService {
         }
         else {
             log.info("[Error] 잘못된 데이터 타입");
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return null;
         }
 
         EnergyReadingDto energyReadingDto = new EnergyReadingDto();
         energyReadingDto.setEnergyType(EnergyType.GAS);
         energyReadingDto.setDatas(aggregatedData);
 
-        return ResponseEntity.status(HttpStatus.OK).body(energyReadingDto);
+        return energyReadingDto;
     }
 
     /// 수도 데이터를 년/월/일/시별로 조회한다
-    public ResponseEntity<EnergyReadingDto> getWaterRangeData(RangeDataRequestDto rangeDataRequestDto) {
+    public EnergyReadingDto getWaterRangeData(String start, String end, byte datetimeType) {
 
-        LocalDateTime start = rangeDataRequestDto.getStart();
-        LocalDateTime end = rangeDataRequestDto.getEnd();
-        DateTimeType dateTimeType = DateTimeType.fromByte(rangeDataRequestDto.getDatetimeType());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime startTime = LocalDateTime.parse(start, formatter);
+        LocalDateTime endTime = LocalDateTime.parse(end, formatter);
+        DateTimeType dateTimeType = DateTimeType.fromByte(datetimeType);
 
-        List<WaterReading> result = waterReadingRepository.findByReadingTimeBetween(start, end);
+        List<WaterReading> result = waterReadingRepository.findByReadingTimeBetween(startTime, endTime);
 
         if (result.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return null;
         }
 
         List<ReadingDto> aggregatedData;
@@ -274,13 +280,81 @@ public class EnergyDataService {
         }
         else {
             log.info("[Error] 잘못된 데이터 타입");
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return null;
         }
 
         EnergyReadingDto energyReadingDto = new EnergyReadingDto();
         energyReadingDto.setEnergyType(EnergyType.WATER);
         energyReadingDto.setDatas(aggregatedData);
 
-        return ResponseEntity.status(HttpStatus.OK).body(energyReadingDto);
+        return energyReadingDto;
+    }
+
+    public List<EnergyReadingDto> getCarbonRangeData(String start, String end, byte datetimeType) {
+
+        EnergyReadingDto elecDatas = getElecRangeData(start, end, datetimeType);
+        EnergyReadingDto gasDatas = getGasRangeData(start, end, datetimeType);
+        EnergyReadingDto waterDatas = getWaterRangeData(start, end, datetimeType);
+
+        List<EnergyReadingDto> result = new ArrayList<>();
+
+        result.add(new EnergyReadingDto(EnergyType.ELECTRICITY, aggregateByCoefficient(CarbonEmissionConst.AMOUNT_CARBON_ELECTRICITY, elecDatas)));
+        result.add(new EnergyReadingDto(EnergyType.GAS, aggregateByCoefficient(CarbonEmissionConst.AMOUNT_CARBON_GAS, gasDatas)));
+        result.add(new EnergyReadingDto(EnergyType.WATER, aggregateByCoefficient(CarbonEmissionConst.AMOUNT_CARBON_WATER, waterDatas)));
+
+        return result;
+    }
+
+    public List<EnergyReadingDto> getBillRangeData(String start, String end, byte datetimeType) {
+
+        EnergyReadingDto elecDatas = getElecRangeData(start, end, datetimeType);
+        EnergyReadingDto gasDatas = getGasRangeData(start, end, datetimeType);
+        EnergyReadingDto waterDatas = getWaterRangeData(start, end, datetimeType);
+
+        List<EnergyReadingDto> result = new ArrayList<>();
+
+        result.add(new EnergyReadingDto(EnergyType.ELECTRICITY, aggregateByCoefficient(EnergyPriceConst.UNIT_PRICE_ELECTRICITY, elecDatas)));
+        result.add(new EnergyReadingDto(EnergyType.GAS, aggregateByCoefficient(EnergyPriceConst.UNIT_PRICE_GAS, gasDatas)));
+        result.add(new EnergyReadingDto(EnergyType.WATER, aggregateByCoefficient(EnergyPriceConst.UNIT_PRICE_WATER, waterDatas)));
+
+        return result;
+    }
+
+    private List<ReadingDto> aggregateByCoefficient(float coefficient, EnergyReadingDto energyReadings) {
+
+        if (energyReadings == null || energyReadings.getDatas() == null) {
+            return new ArrayList<>();
+        }
+
+        // 각 데이터에 배출량 곱하고
+        LocalDateTime date = LocalDateTime.now().minusYears(1000);  // 데이터가 없을 시간대로 초기화
+        List<ReadingDto> resultList = new ArrayList<>();
+        ReadingDto aggregatedData = null;
+
+        for (ReadingDto readingDto : energyReadings.getDatas()) {
+
+            // 시간이 다르면 리스트에 넣고 컨테이너 초기화
+            if (!date.equals(readingDto.getTimestamp()) || aggregatedData == null) {
+                if (aggregatedData != null) {
+                    resultList.add(aggregatedData);
+                }
+                date = readingDto.getTimestamp();
+
+                aggregatedData = new ReadingDto();
+                aggregatedData.setTimestamp(date);
+                aggregatedData.setUsage(0f); // 사용량 초기화
+            }
+
+            aggregatedData.setUsage(aggregatedData.getUsage() + (readingDto.getUsage() * coefficient));
+        }
+
+        // 마지막 데이터 추가
+        if (aggregatedData != null) {
+            resultList.add(aggregatedData);
+        }
+
+        resultList.sort(Comparator.comparing(ReadingDto::getTimestamp));
+
+        return resultList;
     }
 }

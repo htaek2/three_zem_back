@@ -12,4 +12,6 @@ public interface GasReadingRepository extends JpaRepository<GasReading, Long> {
     Optional<GasReading> findByBuildingId(UUID buildingId);
     
     List<GasReading> findByReadingTimeBetween(LocalDateTime start, LocalDateTime end);
+
+    long countByReadingTimeAfter(LocalDateTime startTime);
 }

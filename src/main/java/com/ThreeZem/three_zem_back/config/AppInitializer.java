@@ -1,10 +1,7 @@
 package com.ThreeZem.three_zem_back.config;
 
 import com.ThreeZem.three_zem_back.data.entity.Member;
-import com.ThreeZem.three_zem_back.repository.BuildingRepository;
-import com.ThreeZem.three_zem_back.repository.DeviceRepository;
-import com.ThreeZem.three_zem_back.repository.ElectricityReadingRepository;
-import com.ThreeZem.three_zem_back.repository.FloorRepository;
+import com.ThreeZem.three_zem_back.repository.*;
 import com.ThreeZem.three_zem_back.service.AppInitializeService;
 import com.ThreeZem.three_zem_back.service.ApplicationStateService;
 import com.ThreeZem.three_zem_back.service.DataGenerationService;
@@ -31,11 +28,12 @@ public class AppInitializer implements ApplicationRunner {
     private final BuildingRepository buildingRepository;
     private final DeviceRepository deviceRepository;
     private final ElectricityReadingRepository electricityReadingRepository;
+    private final GasReadingRepository gasReadingRepository;
 
     private final boolean isDataCreate = true;
 
     /// 몇 년치 데이터를 만들지. 기본 2 = 2년 전부터 오늘까지
-    private final int startYearsAgo = 1;
+    private final int startYearsAgo = 3;
 
     /// 데이터 생성시간 단위. 기본 360 = 6시간
     private final int intervalMinutes = 60;
@@ -66,27 +64,9 @@ public class AppInitializer implements ApplicationRunner {
         buildingDataCache.init();
 
         if (isDataCreate) {
-            long dataNum = electricityReadingRepository.count();
-
-            // 디바이스 개수에 따른 필요 전력 데이터 개수
-            long deviceNum = deviceRepository.count();
-            long need = startYearsAgo * 365 * 24 * 60 / intervalMinutes * deviceNum;
-
-            // 전부 생성
-            if (dataNum == 0) {
-                log.info("[INIT] 과거 데이터를 생성합니다.");
-                // TODO
-                dataGenerationService.generateHistoricalData(startYearsAgo, intervalMinutes);
-            }
-            // 부분 생성
-            else if (dataNum < need) {
-                log.info("[INIT] 누락된 과거 데이터를 생성합니다.");
-                // TODO
-//                dataGenerationService.
-            }
-            else {
-                log.info("[INIT] 과거 데이터 OK");
-            }
+            // 과거 데이터 생성
+            dataGenerationService.checkAndGenerateHistoricalData(startYearsAgo, intervalMinutes);
+            dataGenerationService.checkAndGenerateOtherBuildingData();
         }
         else {
             log.info("[INIT] 과거 데이터 생성 Pass");
@@ -97,6 +77,7 @@ public class AppInitializer implements ApplicationRunner {
 
         appInitializeService.createBuildingIdSheet();
         log.info("[INIT] 빌딩 ID 시트 생성 완료");
+
         log.info("[INIT] 서버 초기화 완료.");
     }
 

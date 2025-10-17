@@ -131,7 +131,7 @@ public class RealTimeDataService {
         }
     }
 
-    public BuildingEnergyDto  getBuildingEnergyData() {
+    public BuildingEnergyDto getBuildingEnergyData() {
 
         // 과거 데이터 생성 중이라면 빠꾸
         if (!applicationStateService.getDataGenerated()) {
@@ -148,7 +148,8 @@ public class RealTimeDataService {
         // 가스 사용량 설정
         EnergyReadingDto gasUsage = new EnergyReadingDto();
         gasUsage.setEnergyType(EnergyType.GAS);
-        gasUsage.setDatas(Collections.singletonList(new ReadingDto(LocalDateTime.now(), recentGasDatas.getOrDefault(building.getId(), 0f))));
+        gasUsage.setDatas(Collections.singletonList(new ReadingDto(LocalDateTime.now(), recentGasDatas.getOrDefault(building.getId(), -1f))));
+
         buildingEnergyDto.setGasUsage(gasUsage);
 
         Map<Long, List<Device>> devicesByFloorId = devices.stream().collect(Collectors.groupingBy(d -> d.getFloor().getId()));
@@ -160,7 +161,7 @@ public class RealTimeDataService {
             // 층별 수도 사용량 설정
             EnergyReadingDto waterUsage = new EnergyReadingDto();
             waterUsage.setEnergyType(EnergyType.WATER);
-            waterUsage.setDatas(Collections.singletonList(new ReadingDto(LocalDateTime.now(), recentWaterDatas.getOrDefault(floor.getId(), 0f))));
+            waterUsage.setDatas(Collections.singletonList(new ReadingDto(LocalDateTime.now(), recentWaterDatas.getOrDefault(floor.getId(), -1f))));
             floorEnergyDto.setWaterUsage(waterUsage);
 
             // 장비별 전력 사용량 설정
@@ -174,7 +175,7 @@ public class RealTimeDataService {
                 EnergyReadingDto elecUsage = new EnergyReadingDto();
                 elecUsage.setEnergyType(EnergyType.ELECTRICITY);
 
-                elecUsage.setDatas(Collections.singletonList(new ReadingDto(LocalDateTime.now(), recentElecDatas.getOrDefault(device.getId(), 0f))));
+                elecUsage.setDatas(Collections.singletonList(new ReadingDto(LocalDateTime.now(), recentElecDatas.getOrDefault(device.getId(), -1f))));
 
                 deviceEnergyDto.setElectricityUsage(elecUsage);
 
@@ -209,7 +210,7 @@ public class RealTimeDataService {
 
     /// 가스 데이터 생성 후 버퍼에 누적
     private void accumulateGasUsage(BuildingConfigDto buildingConfig) {
-        float usage = dataGenerationService.generateGasData(buildingDataCache.getTotalPeople(), LocalDateTime.now(), false);
+        float usage = dataGenerationService.generateGasData(buildingDataCache.getTotalPeople(), LocalDateTime.now());
         UUID buildingId = buildingConfig.getId();
         recentGasDatas.put(buildingId, usage);
         gasUsageBuffer.merge(buildingId, usage, Float::sum);
@@ -218,7 +219,7 @@ public class RealTimeDataService {
     /// 수도 데이터 생성 후 버퍼에 누적
     private void accumulateWaterUsage(BuildingConfigDto buildingConfig) {
         for (FloorConfigDto floor : buildingConfig.getFloors()) {
-            float usage = dataGenerationService.generateWaterData(floor.getFloorNum(), LocalDateTime.now(), false);
+            float usage = dataGenerationService.generateWaterData(floor.getFloorNum(), LocalDateTime.now());
             Long floorId = floor.getId();
             recentWaterDatas.put(floorId, usage);
             waterUsageBuffer.merge(floorId, usage, Float::sum);
