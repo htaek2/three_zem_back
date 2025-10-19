@@ -11,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class BillAnalysisDto {
 
-    private Integer numOfBuildings;
+    private Integer total;
     private Long rowYearyPriceTop;
     private Long avgYearyPrice;
     private Long ourYearyPrice;

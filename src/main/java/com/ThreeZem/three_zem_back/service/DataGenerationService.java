@@ -251,17 +251,17 @@ public class DataGenerationService {
         List<OtherBuilding> otherBuildings = new ArrayList<>();
         BuildingConfigDto mainBuilding = buildingDataCache.getBuildingDto();
 
-        // A simple weighted distribution for location codes
+        // 지역별 코드와 비중 설정
         Map<Integer, Integer> locationDistribution = Map.of(
-                108, 25, // Seoul
-                133, 10, // Daejeon
-                159, 10, // Gwangju
-                143, 10, // Busan
-                112, 5,  // Daegu
-                119, 5,  // Incheon
-                131, 5,  // Ulsan
-                184, 20, // Gyeonggi-do
-                156, 10  // Chungcheong-do, etc.
+                108, 25, // 서울
+                133, 10, // 대전
+                159, 10, // 광주
+                143, 10, // 부산
+                112, 5,  // 대구
+                119, 5,  // 인천
+                131, 5,  // 울산
+                184, 20, // 경기도
+                156, 10  // 충청도
         );
         List<Integer> baseLocationPool = new ArrayList<>();
         locationDistribution.forEach((code, weight) -> {
@@ -270,20 +270,19 @@ public class DataGenerationService {
             }
         });
 
-        // Expand the pool to 1000 while maintaining distribution
+        // 1000개 데이터 생성
         List<Integer> locationPool = new ArrayList<>(1000);
         for (int i = 0; i < 10; i++) {
             locationPool.addAll(baseLocationPool);
         }
         Collections.shuffle(locationPool);
 
-
         for (int i = 1; i <= 1000; i++) {
             OtherBuilding building = new OtherBuilding();
             building.setBuildingName("비교 빌딩 " + i + "호");
             building.setLocationCode(locationPool.get(i-1));
 
-            building.setUsagePeople(applyVariation(buildingDataCache.getTotalPeople(), 0.2));
+            building.setUsagePeople(applyVariation((int)(buildingDataCache.getTotalPeople() * 0.8), 0.2));
 
             // Assuming device counts are derived from floor configs
             int totalLow = 0, totalMid = 0, totalHigh = 0;
@@ -296,12 +295,12 @@ public class DataGenerationService {
                 }
             }
 
-            building.setNumOfLowPowerDevices(applyVariation(totalLow, 0.2));
-            building.setNumOfMidPowerDevices(applyVariation(totalMid, 0.2));
-            building.setNumOfHighPowerDevices(applyVariation(totalHigh, 0.2));
+            building.setNumOfLowPowerDevices(applyVariation((int)(totalLow * 0.8), 0.2));
+            building.setNumOfMidPowerDevices(applyVariation((int)(totalMid * 0.8), 0.2));
+            building.setNumOfHighPowerDevices(applyVariation((int)(totalHigh * 0.8), 0.2));
 
             // Assuming spots are related to number of floors
-            building.setNumOfWaterUseSpot(applyVariation(mainBuilding.getFloors().size() * 2, 0.2)); // e.g., 2 restrooms per floor
+            building.setNumOfWaterUseSpot(applyVariation((int)(mainBuilding.getFloors().size() * 2 * 0.8), 0.2)); // e.g., 2 restrooms per floor
             building.setNumOfGasUseSpot(applyVariation(1, 0.2)); // e.g., 1 central boiler
 
             otherBuildings.add(building);

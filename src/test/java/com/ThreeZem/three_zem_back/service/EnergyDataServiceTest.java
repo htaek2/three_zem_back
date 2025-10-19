@@ -111,4 +111,9 @@ class EnergyDataServiceTest {
         float expectedWaterBill = 10f * EnergyPriceConst.UNIT_PRICE_WATER;
         assertEquals(expectedWaterBill, waterResult.getDatas().get(0).getUsage(), 0.01);
     }
+
+    @Test
+    void testest() {
+        System.out.println(Math.floorMod(123, 10));
+    }
 }
