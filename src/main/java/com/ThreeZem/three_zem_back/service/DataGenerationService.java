@@ -284,11 +284,9 @@ public class DataGenerationService {
 
             building.setUsagePeople(applyVariation((int)(buildingDataCache.getTotalPeople() * 0.8), 0.2));
 
-            // Assuming device counts are derived from floor configs
             int totalLow = 0, totalMid = 0, totalHigh = 0;
             for (FloorConfigDto floor : mainBuilding.getFloors()) {
                 for (DeviceConfigDto device : floor.getDevices()) {
-                    // This is a simplification. A better approach would be to have power ratings.
                     if (device.getDeviceType() == DeviceType.LIGHT) totalLow++;
                     else if (device.getDeviceType() == DeviceType.COMPUTER) totalMid++;
                     else if (device.getDeviceType() == DeviceType.AIR_CONDITIONER) totalHigh++;
@@ -299,9 +297,8 @@ public class DataGenerationService {
             building.setNumOfMidPowerDevices(applyVariation((int)(totalMid * 0.8), 0.2));
             building.setNumOfHighPowerDevices(applyVariation((int)(totalHigh * 0.8), 0.2));
 
-            // Assuming spots are related to number of floors
-            building.setNumOfWaterUseSpot(applyVariation((int)(mainBuilding.getFloors().size() * 2 * 0.8), 0.2)); // e.g., 2 restrooms per floor
-            building.setNumOfGasUseSpot(applyVariation(1, 0.2)); // e.g., 1 central boiler
+            building.setNumOfWaterUseSpot(applyVariation((int)(mainBuilding.getFloors().size() * 2 * 0.8), 0.2));
+            building.setNumOfGasUseSpot(applyVariation(1, 0.2));
 
             otherBuildings.add(building);
         }
@@ -317,6 +314,9 @@ public class DataGenerationService {
         List<GasMonthlyUsage> gasUsages = new ArrayList<>();
         List<WaterMonthlyUsage> waterUsages = new ArrayList<>();
 
+        float ranFactorMax = 0.62f;
+        float ranFactorMin = 0.09f;
+
         LocalDateTime threeYearsAgo = LocalDateTime.now().minusYears(3);
 
         for (OtherBuilding building : otherBuildings) {
@@ -327,20 +327,21 @@ public class DataGenerationService {
                 LocalDateTime timestamp = cursorMonth.atDay(1).atStartOfDay();
                 Month month = cursorMonth.getMonth();
 
-                // Simplified base usage calculation
-                float baseElecUsage = (building.getNumOfLowPowerDevices() * 50) + (building.getNumOfMidPowerDevices() * 200) + (building.getNumOfHighPowerDevices() * 1500); // monthly kWh
-                float baseWaterUsage = building.getUsagePeople() * 2.5f; // monthly m3
-                float baseGasUsage = building.getUsagePeople() * 1.5f; // monthly m3
+                float baseElecUsage = (building.getNumOfLowPowerDevices() * 55) + (building.getNumOfMidPowerDevices() * 350) + (building.getNumOfHighPowerDevices() * 1200); // monthly kWh
+                float baseWaterUsage = building.getUsagePeople() * 0.3f;
+                float baseGasUsage = building.getUsagePeople() * 0.1f;
 
-                // Apply seasonal factors
-                float elecFactor = 1.0f + (getACSeasonalFactor(month) - 0.5f); // AC factor is dominant
-                float waterFactor = 1.0f; // Less seasonal variation
+                float elecFactor = 1.0f + (getACSeasonalFactor(month) - 0.6f);
+                float waterFactor = 1.0f;
                 float gasFactor = getGasSeasonalFactor(month);
 
-                // Gaussian noise for normal distribution + standard noise
-                float finalElec = applyNoise(baseElecUsage * elecFactor) * (1.0f + (float) random.nextGaussian() * 0.1f);
-                float finalWater = applyNoise(baseWaterUsage * waterFactor) * (1.0f + (float) random.nextGaussian() * 0.1f);
-                float finalGas = applyNoise(baseGasUsage * gasFactor) * (1.0f + (float) random.nextGaussian() * 0.2f); // Gas has higher variance
+                float noisyElec = applyNoise(baseElecUsage * elecFactor) * (1.0f + (float) random.nextGaussian() * 0.1f);
+                float noisyWater = applyNoise(baseWaterUsage * waterFactor) * (1.0f + (float) random.nextGaussian() * 0.1f);
+                float noisyGas = applyNoise(baseGasUsage * gasFactor) * (1.0f + (float) random.nextGaussian() * 0.2f);
+
+                float finalElec = noisyElec * (random.nextFloat() * (ranFactorMax - ranFactorMin) + ranFactorMin);
+                float finalWater = noisyWater * (random.nextFloat() * (ranFactorMax - ranFactorMin) + ranFactorMin);
+                float finalGas = noisyGas * (random.nextFloat() * (ranFactorMax - ranFactorMin) + ranFactorMin);
 
                 elecUsages.add(new ElectricityMonthlyUsage(null, building.getId(), timestamp, finalElec));
                 gasUsages.add(new GasMonthlyUsage(null, building.getId(), timestamp, finalGas));
@@ -363,12 +364,11 @@ public class DataGenerationService {
             gasMonthlyUsageRepository.saveAll(gasUsages);
             waterMonthlyUsageRepository.saveAll(waterUsages);
         }
-        log.info("비교군 빌딩 과거 데이터 생성 완료.");
+        log.info("[INIT] 비교군 빌딩 과거 데이터 생성 완료");
     }
 
     private int applyVariation(int baseValue, double percentage) {
-        // Apply +/- percentage variation
-        double variation = (random.nextDouble() * 2 - 1) * percentage; // -percentage to +percentage
+        double variation = (random.nextDouble() * 2 - 1) * percentage;
         return (int) (baseValue * (1 + variation));
     }
 }

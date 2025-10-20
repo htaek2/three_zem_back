@@ -182,7 +182,7 @@ public class AnalysisService {
             long ourYearlyPrice = 0;
             for (EnergyReadingDto energyReadingDto : ourPrice) {
                 if (energyReadingDto != null && energyReadingDto.getDatas() != null && !energyReadingDto.getDatas().isEmpty()) {
-                    ourYearlyPrice += energyReadingDto.getDatas().get(0).getUsage();
+                    ourYearlyPrice += (long) energyReadingDto.getDatas().get(0).getUsage();
                 }
             }
             billAnalysisDto.setOurYearyPrice(ourYearlyPrice);

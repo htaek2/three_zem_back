@@ -32,7 +32,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
         // 쿠키 확인
         if (cookies == null) {
-            logger.error("[Error] 쿠키 없음");
+            logger.error("[ERROR] 쿠키 없음");
             filterChain.doFilter(request, response);
             return;
         }
@@ -46,7 +46,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
         // jwt 쿠키 확인
         if (jwtCookie.isEmpty()){
-            logger.error("[Error] jwt 쿠키 없음");
+            logger.error("[ERROR] jwt 쿠키 없음");
             filterChain.doFilter(request, response);
             return;
         }
@@ -58,7 +58,7 @@ public class JwtFilter extends OncePerRequestFilter {
             System.out.println(claims);
         }
         catch (Exception e) {
-            logger.error("[Error] jwt 검증 실패 {}", String.valueOf(e));
+            logger.error("[ERROR] jwt 검증 실패 {}", String.valueOf(e));
             filterChain.doFilter(request, response);
             return;
         }

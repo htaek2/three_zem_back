@@ -62,41 +62,4 @@ public class RealTimeDataController implements DisposableBean {
     public Flux<BuildingEnergyDto> getSseEnergyAll(Authentication auth) {
         return createEnergyFlux(realTimeDataService::getBuildingEnergyData);
     }
-
-    /// 실시간 금일 장비(전력) 누적 사용량 조회
-    @GetMapping(value = "/api/energy/sse/day/device", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public Flux<BuildingEnergyDto> getSseEnergyDayDevice() {
-        return createEnergyFlux(() -> null);
-    }
-
-    /// 실시간 금일 가스 누적 사용량 조회
-    @GetMapping(value = "/api/energy/sse/day/gas", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public Flux<BuildingEnergyDto> getSseEnergyDayGas() {
-        return createEnergyFlux(() -> null);
-    }
-
-    /// 실시간 금일 수도 누적 사용량 조회
-    @GetMapping(value = "/api/energy/sse/day/water", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public Flux<BuildingEnergyDto> getSseEnergyDayWater() {
-        return createEnergyFlux(() -> null);
-    }
-
-    /// 실시간 금월 장비(전력) 누적 사용량 조회
-    @GetMapping(value = "/api/energy/sse/month/device", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public Flux<BuildingEnergyDto> getSseEnergyMonthDevice() {
-        return createEnergyFlux(() -> null);
-    }
-
-    /// 실시간 금월 가스 누적 사용량 조회
-    @GetMapping(value = "/api/energy/sse/month/gas", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public Flux<BuildingEnergyDto> getSseEnergyMonthGas() {
-        return createEnergyFlux(() -> null);
-    }
-
-    /// 실시간 금월 수도 누적 사용량 조회
-    @GetMapping(value = "/api/energy/sse/month/water", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public Flux<BuildingEnergyDto> getSseEnergyMonthWater() {
-        return createEnergyFlux(() -> null);
-    }
-
 }
