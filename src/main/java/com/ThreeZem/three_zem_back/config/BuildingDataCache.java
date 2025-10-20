@@ -6,6 +6,7 @@ import com.ThreeZem.three_zem_back.data.dto.buildingConfig.FloorConfigDto;
 import com.ThreeZem.three_zem_back.data.entity.Building;
 import com.ThreeZem.three_zem_back.data.entity.Device;
 import com.ThreeZem.three_zem_back.data.entity.Floor;
+import com.ThreeZem.three_zem_back.data.enums.DeviceStatus;
 import com.ThreeZem.three_zem_back.repository.BuildingRepository;
 import com.ThreeZem.three_zem_back.repository.DeviceRepository;
 import com.ThreeZem.three_zem_back.repository.FloorRepository;
@@ -42,7 +43,7 @@ public class BuildingDataCache {
         List<Building> building = buildingRepository.findAll();
 
         if (building.isEmpty()) {
-            throw new RuntimeException("[ERROR] 해당 계정과 관련된 빌딩 정보가 없습니다.");
+            throw new RuntimeException("[ERROR] 빌딩 정보가 없습니다.");
         }
         else {
             buildingEntity = building.get(0);
@@ -56,6 +57,7 @@ public class BuildingDataCache {
             Map<Long, List<Device>> devicesByFloorId = devices.stream().collect(Collectors.groupingBy(d -> d.getFloor().getId()));
             List<FloorConfigDto> floorDtos = floors.stream().map(floor -> {
                 List<Device> floorDevices = devicesByFloorId.getOrDefault(floor.getId(), new ArrayList<>());
+                floorDevices.forEach(device -> {device.setStatus(DeviceStatus.DEVICE_ON.getValue());});  // 모든 장비 다 켜
                 List<DeviceConfigDto> deviceDtos = floorDevices.stream().map(DeviceConfigDto::new).collect(Collectors.toList());
                 return new FloorConfigDto(floor, deviceDtos);
             }).collect(Collectors.toList());

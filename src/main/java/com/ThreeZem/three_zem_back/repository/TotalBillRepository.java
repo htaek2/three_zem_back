@@ -7,5 +7,5 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface TotalBillRepository extends JpaRepository<TotalBill, Long> {
-    Optional<TotalBill> findByBuildingId(UUID buildingId);
+    Optional<TotalBill> findByBuildingId(Long buildingId);
 }

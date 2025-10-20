@@ -10,21 +10,10 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 public class BuildingDto {
-    private UUID buildingId;
+
+    private Long buildingId;
     private String buildingName;
     private String address;
     private float totalArea;
 
-    public void setBuildingId(String buildingId){
-        try {
-            this.buildingId = UUID.fromString(buildingId);
-        }
-        catch (Exception e) {
-            System.out.println(e);
-        }
-    }
-
-    public void setBuildingId(UUID buildingId){
-        this.buildingId = buildingId;
-    }
 }
