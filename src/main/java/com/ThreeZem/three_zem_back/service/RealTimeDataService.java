@@ -132,7 +132,9 @@ public class RealTimeDataService {
             log.warn("[WARN] 과거 데이터 생성 중");
             return null;
         }
-        AtomicReference<Long> totalFee = new AtomicReference<>(0L);
+        AtomicReference<Long> elecPrice = new AtomicReference<>(0L);
+        AtomicReference<Long> gasPrice = new AtomicReference<>(0L);
+        AtomicReference<Long> waterPrice = new AtomicReference<>(0L);
 
         Building building = buildingDataCache.getBuildingEntity();
         List<Floor> floors = buildingDataCache.getFloorEntities();
@@ -146,7 +148,7 @@ public class RealTimeDataService {
 
         float gasTemp = recentGasDatas.getOrDefault(building.getId(), -1f);
         gasUsage.setDatas(Collections.singletonList(new ReadingDto(LocalDateTime.now(), gasTemp)));
-        totalFee.set((long) (totalFee.get() + (gasTemp * EnergyPriceConst.UNIT_PRICE_GAS)));  // 가스 요금 계산
+        gasPrice.set((long) (gasPrice.get() + (gasTemp * EnergyPriceConst.UNIT_PRICE_GAS)));  // 가스 요금 계산
 
         buildingEnergyDto.setGasUsage(gasUsage);
 
@@ -162,7 +164,7 @@ public class RealTimeDataService {
 
             float waterTemp = recentWaterDatas.getOrDefault(floor.getId(), -1f);
             waterUsage.setDatas(Collections.singletonList(new ReadingDto(LocalDateTime.now(), waterTemp)));
-            totalFee.set((long) (totalFee.get() + (waterTemp * EnergyPriceConst.UNIT_PRICE_WATER)));
+            waterPrice.set((long) (waterPrice.get() + (waterTemp * EnergyPriceConst.UNIT_PRICE_WATER)));
 
             floorEnergyDto.setWaterUsage(waterUsage);
 
@@ -180,7 +182,7 @@ public class RealTimeDataService {
 
                 float elecTemp = recentElecDatas.getOrDefault(device.getId(), -1f);
                 elecUsage.setDatas(Collections.singletonList(new ReadingDto(LocalDateTime.now(), elecTemp)));
-                totalFee.set((long) (totalFee.get() + (elecTemp * EnergyPriceConst.UNIT_PRICE_ELECTRICITY)));
+                elecPrice.set((long) (elecPrice.get() + (elecTemp * EnergyPriceConst.UNIT_PRICE_ELECTRICITY)));
 
                 deviceEnergyDto.setElectricityUsage(elecUsage);
 
@@ -192,7 +194,9 @@ public class RealTimeDataService {
         }).collect(Collectors.toList());
 
         buildingEnergyDto.setFloors(floorEnergyDtos);
-        buildingEnergyDto.setTotalFee(totalFee.get());
+        buildingEnergyDto.setElecPrice(elecPrice.get());
+        buildingEnergyDto.setGasPrice(gasPrice.get());
+        buildingEnergyDto.setWaterPrice(waterPrice.get());
 
         recentGasDatas.clear();
         recentWaterDatas.clear();

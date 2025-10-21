@@ -13,7 +13,9 @@ public class BuildingEnergyDto {
     private EnergyReadingDto gasUsage;
 
     /// 실시간 요금
-    private Long totalFee;
+    private Long elecPrice;
+    private Long gasPrice;
+    private Long waterPrice;
 
     /// 층별 사용량
     private List<FloorEnergyDto> floors;
