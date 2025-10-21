@@ -88,13 +88,6 @@ public class AuthService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseMessage.CLIENT_ERROR);
         }
 
-        // 유효한 빌딩 ID인지 확인
-        Optional<Building> building = buildingRepository.findById(UUID.fromString(signupRequest.getBuildingId()));
-
-        if (building.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseMessage.CLIENT_ERROR);
-        }
-
         var hash = passwordEncoder.encode(signupRequest.getPassword());
 
         Member member = new Member();

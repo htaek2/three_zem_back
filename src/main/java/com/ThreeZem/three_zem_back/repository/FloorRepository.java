@@ -9,7 +9,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface FloorRepository extends JpaRepository<Floor, Long> {
-    Optional<Floor> findByBuildingId(UUID buildingId);
+    Optional<Floor> findByBuildingId(Long buildingId);
 
     List<Floor> findByBuilding(Building building);
 }

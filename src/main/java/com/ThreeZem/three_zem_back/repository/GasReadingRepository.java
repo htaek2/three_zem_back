@@ -9,7 +9,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface GasReadingRepository extends JpaRepository<GasReading, Long> {
-    Optional<GasReading> findByBuildingId(UUID buildingId);
+    Optional<GasReading> findByBuildingId(Long buildingId);
     
     List<GasReading> findByReadingTimeBetween(LocalDateTime start, LocalDateTime end);
 

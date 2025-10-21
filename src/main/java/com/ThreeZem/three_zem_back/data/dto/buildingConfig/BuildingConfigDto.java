@@ -13,7 +13,7 @@ import java.util.UUID;
 @NoArgsConstructor
 /// 빌딩 설정 파일(.json)로부터 데이터를 저장할 때 사용
 public class BuildingConfigDto {
-    private UUID id;
+    private Long id;
     private String buildingName;
     private String address;
     private float totalArea;

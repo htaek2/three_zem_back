@@ -2,7 +2,7 @@ package com.ThreeZem.three_zem_back.service;
 
 import com.ThreeZem.three_zem_back.config.BuildingDataCache;
 import com.ThreeZem.three_zem_back.data.constant.ConfigConst;
-import com.ThreeZem.three_zem_back.data.dto.WeatherDto;
+import com.ThreeZem.three_zem_back.data.constant.EnergyPriceConst;
 import com.ThreeZem.three_zem_back.data.dto.buildingConfig.BuildingConfigDto;
 import com.ThreeZem.three_zem_back.data.dto.buildingConfig.DeviceConfigDto;
 import com.ThreeZem.three_zem_back.data.dto.buildingConfig.FloorConfigDto;
@@ -11,23 +11,16 @@ import com.ThreeZem.three_zem_back.data.entity.*;
 import com.ThreeZem.three_zem_back.data.enums.DeviceType;
 import com.ThreeZem.three_zem_back.data.enums.EnergyType;
 import com.ThreeZem.three_zem_back.repository.*;
-import com.ThreeZem.three_zem_back.util.TimeUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -46,12 +39,12 @@ public class RealTimeDataService {
     private final BuildingDataCache  buildingDataCache;
 
     private volatile Map<Long, Float> recentElecDatas = new ConcurrentHashMap<>();
-    private volatile Map<UUID, Float> recentGasDatas = new ConcurrentHashMap<>();
+    private volatile Map<Long, Float> recentGasDatas = new ConcurrentHashMap<>();
     private volatile Map<Long, Float> recentWaterDatas = new ConcurrentHashMap<>();
 
     private volatile Map<Long, Float> electricityUsageBuffer = new ConcurrentHashMap<>();
     private volatile Map<Long, Float> waterUsageBuffer = new ConcurrentHashMap<>();
-    private volatile Map<UUID, Float> gasUsageBuffer = new ConcurrentHashMap<>();
+    private volatile Map<Long, Float> gasUsageBuffer = new ConcurrentHashMap<>();
 
     /// 실시간 데이터 생성 및 누적
     @Scheduled(fixedRate = ConfigConst.DATA_UPDATE_MS)
@@ -93,7 +86,7 @@ public class RealTimeDataService {
 
         waterUsageBuffer = new ConcurrentHashMap<>();
 
-        Map<UUID, Float> gasDataToSave = gasUsageBuffer;
+        Map<Long, Float> gasDataToSave = gasUsageBuffer;
         log.info("  가스 데이터 {}", gasDataToSave.size());
 
         gasUsageBuffer = new ConcurrentHashMap<>();
@@ -131,6 +124,7 @@ public class RealTimeDataService {
         }
     }
 
+    /// 빌딩 전체의 에너지 데이터 생성
     public BuildingEnergyDto getBuildingEnergyData() {
 
         // 과거 데이터 생성 중이라면 빠꾸
@@ -138,6 +132,7 @@ public class RealTimeDataService {
             log.warn("[WARN] 과거 데이터 생성 중");
             return null;
         }
+        AtomicReference<Long> totalFee = new AtomicReference<>(0L);
 
         Building building = buildingDataCache.getBuildingEntity();
         List<Floor> floors = buildingDataCache.getFloorEntities();
@@ -148,7 +143,10 @@ public class RealTimeDataService {
         // 가스 사용량 설정
         EnergyReadingDto gasUsage = new EnergyReadingDto();
         gasUsage.setEnergyType(EnergyType.GAS);
-        gasUsage.setDatas(Collections.singletonList(new ReadingDto(LocalDateTime.now(), recentGasDatas.getOrDefault(building.getId(), -1f))));
+
+        float gasTemp = recentGasDatas.getOrDefault(building.getId(), -1f);
+        gasUsage.setDatas(Collections.singletonList(new ReadingDto(LocalDateTime.now(), gasTemp)));
+        totalFee.set((long) (totalFee.get() + (gasTemp * EnergyPriceConst.UNIT_PRICE_GAS)));  // 가스 요금 계산
 
         buildingEnergyDto.setGasUsage(gasUsage);
 
@@ -161,11 +159,16 @@ public class RealTimeDataService {
             // 층별 수도 사용량 설정
             EnergyReadingDto waterUsage = new EnergyReadingDto();
             waterUsage.setEnergyType(EnergyType.WATER);
-            waterUsage.setDatas(Collections.singletonList(new ReadingDto(LocalDateTime.now(), recentWaterDatas.getOrDefault(floor.getId(), -1f))));
+
+            float waterTemp = recentWaterDatas.getOrDefault(floor.getId(), -1f);
+            waterUsage.setDatas(Collections.singletonList(new ReadingDto(LocalDateTime.now(), waterTemp)));
+            totalFee.set((long) (totalFee.get() + (waterTemp * EnergyPriceConst.UNIT_PRICE_WATER)));
+
             floorEnergyDto.setWaterUsage(waterUsage);
 
             // 장비별 전력 사용량 설정
             List<Device> floorDevices = devicesByFloorId.getOrDefault(floor.getId(), Collections.emptyList());
+
             List<DeviceEnergyDto> deviceEnergyDtos = floorDevices.stream().map(device -> {
                 DeviceEnergyDto deviceEnergyDto = new DeviceEnergyDto();
                 deviceEnergyDto.setDeviceId(device.getId());
@@ -175,7 +178,9 @@ public class RealTimeDataService {
                 EnergyReadingDto elecUsage = new EnergyReadingDto();
                 elecUsage.setEnergyType(EnergyType.ELECTRICITY);
 
-                elecUsage.setDatas(Collections.singletonList(new ReadingDto(LocalDateTime.now(), recentElecDatas.getOrDefault(device.getId(), -1f))));
+                float elecTemp = recentElecDatas.getOrDefault(device.getId(), -1f);
+                elecUsage.setDatas(Collections.singletonList(new ReadingDto(LocalDateTime.now(), elecTemp)));
+                totalFee.set((long) (totalFee.get() + (elecTemp * EnergyPriceConst.UNIT_PRICE_ELECTRICITY)));
 
                 deviceEnergyDto.setElectricityUsage(elecUsage);
 
@@ -192,6 +197,7 @@ public class RealTimeDataService {
         recentWaterDatas.clear();
         recentElecDatas.clear();
 
+        log.info(totalFee.get().toString());  // 이거 같이 주자
         log.info("[DATA] 실시간 데이터 전송");
         return buildingEnergyDto;
     }
@@ -211,7 +217,7 @@ public class RealTimeDataService {
     /// 가스 데이터 생성 후 버퍼에 누적
     private void accumulateGasUsage(BuildingConfigDto buildingConfig) {
         float usage = dataGenerationService.generateGasData(buildingDataCache.getTotalPeople(), LocalDateTime.now());
-        UUID buildingId = buildingConfig.getId();
+        Long buildingId = buildingConfig.getId();
         recentGasDatas.put(buildingId, usage);
         gasUsageBuffer.merge(buildingId, usage, Float::sum);
     }
