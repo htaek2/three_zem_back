@@ -192,12 +192,12 @@ public class RealTimeDataService {
         }).collect(Collectors.toList());
 
         buildingEnergyDto.setFloors(floorEnergyDtos);
+        buildingEnergyDto.setTotalFee(totalFee.get());
 
         recentGasDatas.clear();
         recentWaterDatas.clear();
         recentElecDatas.clear();
 
-        log.info(totalFee.get().toString());  // 이거 같이 주자
         log.info("[DATA] 실시간 데이터 전송");
         return buildingEnergyDto;
     }
