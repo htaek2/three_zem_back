@@ -60,14 +60,14 @@ public class EnergyDataController {
     }
 
     @GetMapping("/api/energy/bill/elec/{floor}")
-    public ResponseEntity<List<EnergyReadingDto>> getFloorElecBillData(@PathVariable String floor, String start, String end, byte datetimeType) {
-        List<EnergyReadingDto> data = energyDataService.getFloorElecBillData(floor, start, end, datetimeType);
+    public ResponseEntity<EnergyReadingDto> getFloorElecBillData(@PathVariable String floor, String start, String end, byte datetimeType) {
+        EnergyReadingDto data = energyDataService.getFloorElecBillData(floor, start, end, datetimeType);
         return ResponseEntity.status(HttpStatus.OK).body(data);
     }
 
     @GetMapping("/api/energy/bill/water/{floor}")
-    public ResponseEntity<List<EnergyReadingDto>> getFloorWaterBillData(@PathVariable String floor, String start, String end, byte datetimeType) {
-        List<EnergyReadingDto> data = energyDataService.getFloorWaterBillData(floor, start, end, datetimeType);
+    public ResponseEntity<EnergyReadingDto> getFloorWaterBillData(@PathVariable String floor, String start, String end, byte datetimeType) {
+        EnergyReadingDto data = energyDataService.getFloorWaterBillData(floor, start, end, datetimeType);
         return ResponseEntity.status(HttpStatus.OK).body(data);
     }
 }
