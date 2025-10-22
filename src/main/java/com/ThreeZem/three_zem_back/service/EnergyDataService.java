@@ -369,7 +369,7 @@ public class EnergyDataService {
             List<ElectricityReading> result = electricityReadingRepository.findByDevice_Floor_FloorNumAndReadingTimeBetween(floorNumber, startTime, endTime);
 
             if (result.isEmpty()) {
-                log.info("No data found for floor {}", floor);
+                log.info("[ERROR] 해당 층에 대한 데이터가 없습니다. {}", floor);
                 return null;
             }
 
@@ -537,13 +537,13 @@ public class EnergyDataService {
 
     /// 층별 전력 사용금액 조회
     public EnergyReadingDto getFloorElecBillData(String floor, String start, String end, byte datetimeType) {
-        EnergyReadingDto elecDatas = getElecRangeData(start, end, datetimeType);
+        EnergyReadingDto elecDatas = getFloorElecRangeData(floor, start, end, datetimeType);
         return new EnergyReadingDto(EnergyType.ELECTRICITY, aggregateByCoefficient(EnergyPriceConst.UNIT_PRICE_ELECTRICITY, elecDatas));
     }
 
     /// 층별 수도 사용금액 조회
     public EnergyReadingDto getFloorWaterBillData(String floor, String start, String end, byte datetimeType) {
-        EnergyReadingDto waterDatas = getWaterRangeData(start, end, datetimeType);
+        EnergyReadingDto waterDatas = getFloorWaterRangeData(floor, start, end, datetimeType);
         return new EnergyReadingDto(EnergyType.WATER, aggregateByCoefficient(EnergyPriceConst.UNIT_PRICE_WATER, waterDatas));
     }
 }
