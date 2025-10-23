@@ -162,10 +162,6 @@ public class DataGenerationService {
 
         log.info("[DATA] 과거 {}년치 데이터 생성을 시작합니다. ({}분 단위)", startYearsAgo, intervalMinutes);
 
-        Building building = buildingDataCache.getBuildingEntity();
-        List<Floor> floors = buildingDataCache.getFloorEntities();
-        List<Device> devices = buildingDataCache.getDeviceEntities();
-
         List<ElectricityReading> elecBuffer = new ArrayList<>();
         List<WaterReading> waterBuffer = new ArrayList<>();
         List<GasReading> gasBuffer = new ArrayList<>();
@@ -182,33 +178,7 @@ public class DataGenerationService {
                 log.info("{} 데이터 생성 중...", currentMonth);
             }
 
-            float intervalHours = (float) intervalMinutes / 60.0f;
-
-            // Corrected Electricity Usage Calculation
-            for (Device device : devices) {
-                float usage = 0.0f;
-                if (isDeviceOn(device, cursor)) {
-                    float powerKw = PowerConsum.getPowerConsumption(DeviceType.fromByte(device.getDeviceType()));
-                    usage = applyNoise(powerKw * intervalHours);
-                }
-                elecBuffer.add(new ElectricityReading(device, cursor, usage));
-            }
-
-            // Corrected Water Usage Calculation
-            for (Floor floor : floors) {
-                int peopleOnFloor = (int) (buildingDataCache.getPeoplePerFloor(floor.getFloorNum()) * getPeopleFactor(cursor));
-                float waterUsage = peopleOnFloor * PowerConsum.WATER_PER_PERSON * intervalHours;
-                waterBuffer.add(new WaterReading(floor, cursor, applyNoise(waterUsage)));
-            }
-
-            // Corrected Gas Usage Calculation
-            int totalPeople = (int) (buildingDataCache.getTotalPeople() * getPeopleFactor(cursor));
-            float gasUsage = totalPeople * PowerConsum.GAS_PER_PERSON * intervalHours * getGasSeasonalFactor(cursor.getMonth());
-            GasReading gasReading = new GasReading();
-            gasReading.setBuilding(building);
-            gasReading.setReadingTime(cursor);
-            gasReading.setValue(applyNoise(gasUsage));
-            gasBuffer.add(gasReading);
+            generateDataForTimestamp(cursor, intervalMinutes, elecBuffer, waterBuffer, gasBuffer);
 
             int BATCH_SIZE = 2000;
 
@@ -234,6 +204,97 @@ public class DataGenerationService {
 
         log.info("과거 데이터 생성을 완료했습니다.");
     }
+
+    @Transactional
+    public void fillMissingHistoricalData(int intervalMinutes) {
+        log.info("[INIT] 과거 한 달간의 빠진 데이터 확인 및 생성을 시작합니다");
+
+        LocalDateTime endTime = LocalDateTime.now();
+        LocalDateTime startTime = endTime.minusMonths(1);
+        LocalDateTime timeCursor = endTime.minusMonths(1);
+
+        System.out.println(timeCursor.toString());
+
+        while (timeCursor.isBefore(endTime)) {
+            int numOfData = gasReadingRepository.findByReadingTimeBetween(timeCursor, timeCursor.plusHours(24)).size();
+            System.out.println(numOfData);
+            if (numOfData < 24) {
+
+            }
+
+            timeCursor = timeCursor.plusDays(1);
+        }
+
+        Set<LocalDateTime> existingTimestamps = electricityReadingRepository.findDistinctReadingTimeByReadingTimeBetween(startTime, endTime);
+        log.info("[INIT] 확인된 기존 데이터 수 (지난 1개월): {}", existingTimestamps.size());
+
+        List<ElectricityReading> elecBuffer = new ArrayList<>();
+        List<WaterReading> waterBuffer = new ArrayList<>();
+        List<GasReading> gasBuffer = new ArrayList<>();
+
+        LocalDateTime cursor = startTime;
+        int missingCount = 0;
+
+        while (cursor.isBefore(endTime)) {
+            LocalDateTime checkTime = cursor;
+
+            if (!existingTimestamps.contains(checkTime)) {
+                missingCount++;
+                generateDataForTimestamp(checkTime, intervalMinutes, elecBuffer, waterBuffer, gasBuffer);
+            }
+
+            int BATCH_SIZE = 2000;
+            if (elecBuffer.size() >= BATCH_SIZE) {
+                electricityReadingRepository.saveAll(elecBuffer);
+                waterReadingRepository.saveAll(waterBuffer);
+                gasReadingRepository.saveAll(gasBuffer);
+                elecBuffer.clear();
+                waterBuffer.clear();
+                gasBuffer.clear();
+            }
+
+            cursor = cursor.plusMinutes(intervalMinutes);
+        }
+
+        if (!elecBuffer.isEmpty()) {
+            electricityReadingRepository.saveAll(elecBuffer);
+            waterReadingRepository.saveAll(waterBuffer);
+            gasReadingRepository.saveAll(gasBuffer);
+        }
+
+        log.info("[INIT] 총 {}개의 누락된 시점에 대한 데이터 생성을 완료했습니다.", missingCount);
+    }
+
+    private void generateDataForTimestamp(LocalDateTime timestamp, int intervalMinutes, List<ElectricityReading> elecBuffer, List<WaterReading> waterBuffer, List<GasReading> gasBuffer) {
+        Building building = buildingDataCache.getBuildingEntity();
+        List<Floor> floors = buildingDataCache.getFloorEntities();
+        List<Device> devices = buildingDataCache.getDeviceEntities();
+        float intervalHours = (float) intervalMinutes / 60.0f;
+
+        for (Device device : devices) {
+            float usage = 0.0f;
+            if (isDeviceOn(device, timestamp)) {
+                float powerKw = PowerConsum.getPowerConsumption(DeviceType.fromByte(device.getDeviceType()));
+                usage = applyNoise(powerKw * intervalHours);
+            }
+            elecBuffer.add(new ElectricityReading(device, timestamp, usage));
+        }
+
+        for (Floor floor : floors) {
+            int peopleOnFloor = (int) (buildingDataCache.getPeoplePerFloor(floor.getFloorNum()) * getPeopleFactor(timestamp));
+            float waterUsage = peopleOnFloor * PowerConsum.WATER_PER_PERSON * intervalHours;
+            waterBuffer.add(new WaterReading(floor, timestamp, applyNoise(waterUsage)));
+        }
+
+        int totalPeople = (int) (buildingDataCache.getTotalPeople() * getPeopleFactor(timestamp));
+        float gasUsage = totalPeople * PowerConsum.GAS_PER_PERSON * intervalHours * getGasSeasonalFactor(timestamp.getMonth());
+        GasReading gasReading = new GasReading();
+        gasReading.setBuilding(building);
+        gasReading.setReadingTime(timestamp);
+        gasReading.setValue(applyNoise(gasUsage));
+        gasBuffer.add(gasReading);
+    }
+
 
     @Transactional
     public void checkAndGenerateOtherBuildingData() {

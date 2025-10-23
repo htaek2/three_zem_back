@@ -54,7 +54,7 @@ public class BuildingService {
         List<Device> result = deviceRepository.findAll();
 
         if (result.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
 
         List<DeviceDto> devices = new ArrayList<>();

@@ -6,178 +6,1341 @@
     {
       "floorNum": 1,
       "devices": [
-        { "deviceName": "1F-COMPUTER-01", "deviceType": 0, "installedTime": "2025-01-20T10:00:00" },
-        { "deviceName": "1F-COMPUTER-02", "deviceType": 0, "installedTime": "2024-11-05T10:00:00" },
-        { "deviceName": "1F-COMPUTER-03", "deviceType": 0, "installedTime": "2025-03-10T10:00:00" },
-        { "deviceName": "1F-COMPUTER-04", "deviceType": 0, "installedTime": "2023-05-15T10:00:00" },
-        { "deviceName": "1F-COMPUTER-05", "deviceType": 0, "installedTime": "2024-08-22T10:00:00" },
-        { "deviceName": "1F-COMPUTER-06", "deviceType": 0, "installedTime": "2022-12-01T10:00:00" },
-        { "deviceName": "1F-COMPUTER-07", "deviceType": 0, "installedTime": "2023-11-30T10:00:00" },
-        { "deviceName": "1F-AC-01", "deviceType": 1, "installedTime": "2020-10-01T11:00:00" },
-        { "deviceName": "1F-AC-02", "deviceType": 1, "installedTime": "2020-10-01T11:00:00" },
-        { "deviceName": "1F-LIGHT-01", "deviceType": 2, "installedTime": "2022-09-01T14:00:00" },
-        { "deviceName": "1F-LIGHT-02", "deviceType": 2, "installedTime": "2022-09-01T14:00:00" },
-        { "deviceName": "1F-LIGHT-03", "deviceType": 2, "installedTime": "2024-05-20T14:00:00" },
-        { "deviceName": "1F-LIGHT-04", "deviceType": 2, "installedTime": "2022-09-01T14:00:00" },
-        { "deviceName": "1F-LIGHT-05", "deviceType": 2, "installedTime": "2022-09-01T14:00:00" },
-        { "deviceName": "1F-LIGHT-06", "deviceType": 2, "installedTime": "2022-09-01T14:00:00" },
-        { "deviceName": "1F-LIGHT-07", "deviceType": 2, "installedTime": "2023-08-10T14:00:00" },
-        { "deviceName": "1F-LIGHT-08", "deviceType": 2, "installedTime": "2022-09-01T14:00:00" },
-        { "deviceName": "1F-LIGHT-09", "deviceType": 2, "installedTime": "2022-09-01T14:00:00" },
-        { "deviceName": "1F-LIGHT-10", "deviceType": 2, "installedTime": "2022-09-01T14:00:00" },
-        { "deviceName": "1F-LIGHT-11", "deviceType": 2, "installedTime": "2022-09-01T14:00:00" },
-        { "deviceName": "1F-LIGHT-12", "deviceType": 2, "installedTime": "2024-06-11T14:00:00" },
-        { "deviceName": "1F-LIGHT-13", "deviceType": 2, "installedTime": "2022-09-01T14:00:00" },
-        { "deviceName": "1F-LIGHT-14", "deviceType": 2, "installedTime": "2022-09-01T14:00:00" },
-        { "deviceName": "1F-LIGHT-15", "deviceType": 2, "installedTime": "2022-09-01T14:00:00" },
-        { "deviceName": "1F-LIGHT-16", "deviceType": 2, "installedTime": "2022-09-01T14:00:00" },
-        { "deviceName": "1F-LIGHT-17", "deviceType": 2, "installedTime": "2022-09-01T14:00:00" },
-        { "deviceName": "1F-LIGHT-18", "deviceType": 2, "installedTime": "2023-11-20T14:00:00" }
+        {
+          "deviceName": "1F-COMPUTER-01",
+          "deviceType": 0,
+          "installedTime": "2025-01-20T10:00:00",
+          "x": -4.616440812578452,
+          "y": 0.9700000286102295,
+          "z": 3.639599095379203
+        },
+        {
+          "deviceName": "1F-COMPUTER-02",
+          "deviceType": 0,
+          "installedTime": "2024-11-05T10:00:00",
+          "x": -4.708281412017055,
+          "y": 0.9700000286102224,
+          "z": 2.1330932786746484
+        },
+        {
+          "deviceName": "1F-COMPUTER-03",
+          "deviceType": 0,
+          "installedTime": "2025-03-10T10:00:00",
+          "x": -1.3553103237207176,
+          "y": 1.0132240056991506,
+          "z": 3.4577164120743036
+        },
+        {
+          "deviceName": "1F-COMPUTER-04",
+          "deviceType": 0,
+          "installedTime": "2023-05-15T10:00:00",
+          "x": 0.4015666182187979,
+          "y": 1.0132240056991577,
+          "z": 3.359143875818595
+        },
+        {
+          "deviceName": "1F-COMPUTER-05",
+          "deviceType": 0,
+          "installedTime": "2024-08-22T10:00:00",
+          "x": 1.8202107119879787,
+          "y": 1.0132240056991648,
+          "z": 3.4178458365179862
+        },
+        {
+          "deviceName": "1F-COMPUTER-06",
+          "deviceType": 0,
+          "installedTime": "2022-12-01T10:00:00",
+          "x": 3.97165931926764,
+          "y": 1.0132240056991577,
+          "z": 3.4920790306626275
+        },
+        {
+          "deviceName": "1F-COMPUTER-07",
+          "deviceType": 0,
+          "installedTime": "2023-11-30T10:00:00",
+          "x": 6.640821428925657,
+          "y": 1.0132240056991648,
+          "z": 3.6841313616928195
+        },
+        {
+          "deviceName": "1F-AC-01",
+          "deviceType": 1,
+          "installedTime": "2020-10-01T11:00:00",
+          "x": -1.7305162582384068,
+          "y": 3.6551673412323,
+          "z": 2.581561567834147
+        },
+        {
+          "deviceName": "1F-AC-02",
+          "deviceType": 1,
+          "installedTime": "2020-10-01T11:00:00",
+          "x": 7.010829165519005,
+          "y": 3.7351672649383545,
+          "z": 2.4626033539377765
+        },
+        {
+          "deviceName": "1F-LIGHT-01",
+          "deviceType": 2,
+          "installedTime": "2022-09-01T14:00:00",
+          "x": -0.04534017492717968,
+          "y": 3.6551673412322927,
+          "z": 2.603345829133157
+        },
+        {
+          "deviceName": "1F-LIGHT-02",
+          "deviceType": 2,
+          "installedTime": "2022-09-01T14:00:00",
+          "x": -0.04534017492717968,
+          "y": 3.6551673412322927,
+          "z": 2.603345829133157
+        },
+        {
+          "deviceName": "1F-LIGHT-03",
+          "deviceType": 2,
+          "installedTime": "2024-05-20T14:00:00",
+          "x": -0.04534017492717968,
+          "y": 3.6551673412322927,
+          "z": 2.603345829133157
+        },
+        {
+          "deviceName": "1F-LIGHT-04",
+          "deviceType": 2,
+          "installedTime": "2022-09-01T14:00:00",
+          "x": -0.04534017492717968,
+          "y": 3.6551673412322927,
+          "z": 2.603345829133157
+        },
+        {
+          "deviceName": "1F-LIGHT-05",
+          "deviceType": 2,
+          "installedTime": "2022-09-01T14:00:00",
+          "x": -0.04534017492717968,
+          "y": 3.6551673412322927,
+          "z": 2.603345829133157
+        },
+        {
+          "deviceName": "1F-LIGHT-06",
+          "deviceType": 2,
+          "installedTime": "2022-09-01T14:00:00",
+          "x": -0.04534017492717968,
+          "y": 3.6551673412322927,
+          "z": 2.603345829133157
+        },
+        {
+          "deviceName": "1F-LIGHT-07",
+          "deviceType": 2,
+          "installedTime": "2023-08-10T14:00:00",
+          "x": -0.04534017492717968,
+          "y": 3.6551673412322927,
+          "z": 2.603345829133157
+        },
+        {
+          "deviceName": "1F-LIGHT-08",
+          "deviceType": 2,
+          "installedTime": "2022-09-01T14:00:00",
+          "x": -0.04534017492717968,
+          "y": 3.6551673412322927,
+          "z": 2.603345829133157
+        },
+        {
+          "deviceName": "1F-LIGHT-09",
+          "deviceType": 2,
+          "installedTime": "2022-09-01T14:00:00",
+          "x": -0.04534017492717968,
+          "y": 3.6551673412322927,
+          "z": 2.603345829133157
+        },
+        {
+          "deviceName": "1F-LIGHT-10",
+          "deviceType": 2,
+          "installedTime": "2022-09-01T14:00:00",
+          "x": 0.5445123601204852,
+          "y": 3.6551673412323,
+          "z": -4.133637839235115
+        },
+        {
+          "deviceName": "1F-LIGHT-11",
+          "deviceType": 2,
+          "installedTime": "2022-09-01T14:00:00",
+          "x": 0.5445123601204852,
+          "y": 3.6551673412323,
+          "z": -4.133637839235115
+        },
+        {
+          "deviceName": "1F-LIGHT-12",
+          "deviceType": 2,
+          "installedTime": "2024-06-11T14:00:00",
+          "x": 0.5445123601204852,
+          "y": 3.6551673412323,
+          "z": -4.133637839235115
+        },
+        {
+          "deviceName": "1F-LIGHT-13",
+          "deviceType": 2,
+          "installedTime": "2022-09-01T14:00:00",
+          "x": 0.5445123601204852,
+          "y": 3.6551673412323,
+          "z": -4.133637839235115
+        },
+        {
+          "deviceName": "1F-LIGHT-14",
+          "deviceType": 2,
+          "installedTime": "2022-09-01T14:00:00",
+          "x": 3.425326262731375,
+          "y": 3.655167341232307,
+          "z": -4.1957301271639365
+        },
+        {
+          "deviceName": "1F-LIGHT-15",
+          "deviceType": 2,
+          "installedTime": "2022-09-01T14:00:00",
+          "x": 3.425326262731375,
+          "y": 3.655167341232307,
+          "z": -4.1957301271639365
+        },
+        {
+          "deviceName": "1F-LIGHT-16",
+          "deviceType": 2,
+          "installedTime": "2022-09-01T14:00:00",
+          "x": 3.425326262731375,
+          "y": 3.655167341232307,
+          "z": -4.1957301271639365
+        },
+        {
+          "deviceName": "1F-LIGHT-17",
+          "deviceType": 2,
+          "installedTime": "2022-09-01T14:00:00",
+          "x": 1.850550394578462,
+          "y": 3.6551673412323,
+          "z": -1.458650280672873
+        },
+        {
+          "deviceName": "1F-LIGHT-18",
+          "deviceType": 2,
+          "installedTime": "2023-11-20T14:00:00",
+          "x": -1.0931723753176035,
+          "y": 3.655167341232307,
+          "z": -1.4203755928331128
+        }
       ]
     },
     {
       "floorNum": 2,
       "devices": [
-        { "deviceName": "2F-COMPUTER-01", "deviceType": 0, "installedTime": "2021-08-11T10:00:00" },
-        { "deviceName": "2F-COMPUTER-02", "deviceType": 0, "installedTime": "2022-03-15T10:00:00" },
-        { "deviceName": "2F-COMPUTER-03", "deviceType": 0, "installedTime": "2024-09-01T10:00:00" },
-        { "deviceName": "2F-COMPUTER-04", "deviceType": 0, "installedTime": "2021-08-11T10:00:00" },
-        { "deviceName": "2F-COMPUTER-05", "deviceType": 0, "installedTime": "2023-11-10T10:00:00" },
-        { "deviceName": "2F-COMPUTER-06", "deviceType": 0, "installedTime": "2022-03-15T10:00:00" },
-        { "deviceName": "2F-COMPUTER-07", "deviceType": 0, "installedTime": "2021-08-11T10:00:00" },
-        { "deviceName": "2F-COMPUTER-08", "deviceType": 0, "installedTime": "2022-03-15T10:00:00" },
-        { "deviceName": "2F-COMPUTER-09", "deviceType": 0, "installedTime": "2021-08-11T10:00:00" },
-        { "deviceName": "2F-COMPUTER-10", "deviceType": 0, "installedTime": "2022-03-15T10:00:00" },
-        { "deviceName": "2F-COMPUTER-11", "deviceType": 0, "installedTime": "2024-02-20T10:00:00" },
-        { "deviceName": "2F-COMPUTER-12", "deviceType": 0, "installedTime": "2021-08-11T10:00:00" },
-        { "deviceName": "2F-COMPUTER-13", "deviceType": 0, "installedTime": "2022-03-15T10:00:00" },
-        { "deviceName": "2F-COMPUTER-14", "deviceType": 0, "installedTime": "2020-11-20T10:00:00" },
-        { "deviceName": "2F-COMPUTER-15", "deviceType": 0, "installedTime": "2023-07-18T10:00:00" },
-        { "deviceName": "2F-COMPUTER-16", "deviceType": 0, "installedTime": "2020-11-20T10:00:00" },
-        { "deviceName": "2F-COMPUTER-17", "deviceType": 0, "installedTime": "2022-10-05T10:00:00" },
-        { "deviceName": "2F-COMPUTER-18", "deviceType": 0, "installedTime": "2020-11-20T10:00:00" },
-        { "deviceName": "2F-COMPUTER-19", "deviceType": 0, "installedTime": "2022-10-05T10:00:00" },
-        { "deviceName": "2F-COMPUTER-20", "deviceType": 0, "installedTime": "2020-11-20T10:00:00" },
-        { "deviceName": "2F-COMPUTER-21", "deviceType": 0, "installedTime": "2022-10-05T10:00:00" },
-        { "deviceName": "2F-COMPUTER-22", "deviceType": 0, "installedTime": "2024-08-30T10:00:00" },
-        { "deviceName": "2F-COMPUTER-23", "deviceType": 0, "installedTime": "2020-11-20T10:00:00" },
-        { "deviceName": "2F-COMPUTER-24", "deviceType": 0, "installedTime": "2022-10-05T10:00:00" },
-        { "deviceName": "2F-COMPUTER-25", "deviceType": 0, "installedTime": "2020-11-20T10:00:00" },
-        { "deviceName": "2F-COMPUTER-26", "deviceType": 0, "installedTime": "2022-10-05T10:00:00" },
-        { "deviceName": "2F-AC-01", "deviceType": 1, "installedTime": "2020-10-02T11:00:00" },
-        { "deviceName": "2F-AC-02", "deviceType": 1, "installedTime": "2020-10-02T11:00:00" },
-        { "deviceName": "2F-LIGHT-01", "deviceType": 2, "installedTime": "2022-09-02T14:00:00" },
-        { "deviceName": "2F-LIGHT-02", "deviceType": 2, "installedTime": "2022-09-02T14:00:00" },
-        { "deviceName": "2F-LIGHT-03", "deviceType": 2, "installedTime": "2022-09-02T14:00:00" },
-        { "deviceName": "2F-LIGHT-04", "deviceType": 2, "installedTime": "2023-12-10T14:00:00" },
-        { "deviceName": "2F-LIGHT-05", "deviceType": 2, "installedTime": "2022-09-02T14:00:00" },
-        { "deviceName": "2F-LIGHT-06", "deviceType": 2, "installedTime": "2022-09-02T14:00:00" },
-        { "deviceName": "2F-LIGHT-07", "deviceType": 2, "installedTime": "2024-01-15T14:00:00" },
-        { "deviceName": "2F-LIGHT-08", "deviceType": 2, "installedTime": "2022-09-02T14:00:00" },
-        { "deviceName": "2F-LIGHT-09", "deviceType": 2, "installedTime": "2022-09-02T14:00:00" },
-        { "deviceName": "2F-LIGHT-10", "deviceType": 2, "installedTime": "2022-09-02T14:00:00" },
-        { "deviceName": "2F-LIGHT-11", "deviceType": 2, "installedTime": "2022-09-02T14:00:00" },
-        { "deviceName": "2F-LIGHT-12", "deviceType": 2, "installedTime": "2022-09-02T14:00:00" },
-        { "deviceName": "2F-LIGHT-13", "deviceType": 2, "installedTime": "2022-09-02T14:00:00" },
-        { "deviceName": "2F-LIGHT-14", "deviceType": 2, "installedTime": "2022-09-02T14:00:00" },
-        { "deviceName": "2F-LIGHT-15", "deviceType": 2, "installedTime": "2022-09-02T14:00:00" },
-        { "deviceName": "2F-LIGHT-16", "deviceType": 2, "installedTime": "2022-09-02T14:00:00" },
-        { "deviceName": "2F-LIGHT-17", "deviceType": 2, "installedTime": "2022-09-02T14:00:00" },
-        { "deviceName": "2F-LIGHT-18", "deviceType": 2, "installedTime": "2022-09-02T14:00:00" },
-        { "deviceName": "2F-LIGHT-19", "deviceType": 2, "installedTime": "2022-09-02T14:00:00" },
-        { "deviceName": "2F-LIGHT-20", "deviceType": 2, "installedTime": "2022-09-02T14:00:00" },
-        { "deviceName": "2F-LIGHT-21", "deviceType": 2, "installedTime": "2022-09-02T14:00:00" },
-        { "deviceName": "2F-LIGHT-22", "deviceType": 2, "installedTime": "2022-09-02T14:00:00" },
-        { "deviceName": "2F-LIGHT-23", "deviceType": 2, "installedTime": "2022-09-02T14:00:00" }
+        {
+          "deviceName": "2F-COMPUTER-01",
+          "deviceType": 0,
+          "installedTime": "2021-08-11T10:00:00",
+          "x": -4.379221714769085,
+          "y": 4.766567230224609,
+          "z": 4.534392710445124
+        },
+        {
+          "deviceName": "2F-COMPUTER-02",
+          "deviceType": 0,
+          "installedTime": "2022-03-15T10:00:00",
+          "x": -2.2561652877189826,
+          "y": 4.766567230224609,
+          "z": 4.552244277011929
+        },
+        {
+          "deviceName": "2F-COMPUTER-03",
+          "deviceType": 0,
+          "installedTime": "2024-09-01T10:00:00",
+          "x": -0.228518263953692,
+          "y": 4.766567230224609,
+          "z": 4.561882401056833
+        },
+        {
+          "deviceName": "2F-COMPUTER-04",
+          "deviceType": 0,
+          "installedTime": "2021-08-11T10:00:00",
+          "x": 1.6423704034599949,
+          "y": 4.766567230224609,
+          "z": 4.618829787000342
+        },
+        {
+          "deviceName": "2F-COMPUTER-05",
+          "deviceType": 0,
+          "installedTime": "2023-11-10T10:00:00",
+          "x": 3.1148212401501087,
+          "y": 4.766567230224609,
+          "z": 4.451860667546758
+        },
+        {
+          "deviceName": "2F-COMPUTER-06",
+          "deviceType": 0,
+          "installedTime": "2022-03-15T10:00:00",
+          "x": 1.7922311732630618,
+          "y": 4.766567230224609,
+          "z": 2.8163459731364364
+        },
+        {
+          "deviceName": "2F-COMPUTER-07",
+          "deviceType": 0,
+          "installedTime": "2021-08-11T10:00:00",
+          "x": -0.15655624376247523,
+          "y": 4.766567230224602,
+          "z": 2.8268528554165204
+        },
+        {
+          "deviceName": "2F-COMPUTER-08",
+          "deviceType": 0,
+          "installedTime": "2022-03-15T10:00:00",
+          "x": -2.528147990668737,
+          "y": 4.7665672302246165,
+          "z": 2.706937477127977
+        },
+        {
+          "deviceName": "2F-COMPUTER-09",
+          "deviceType": 0,
+          "installedTime": "2021-08-11T10:00:00",
+          "x": -4.319124573977045,
+          "y": 4.766567230224609,
+          "z": 2.8431010320172954
+        },
+        {
+          "deviceName": "2F-COMPUTER-10",
+          "deviceType": 0,
+          "installedTime": "2022-03-15T10:00:00",
+          "x": -4.184591118755029,
+          "y": 4.779595851898193,
+          "z": 0.4015801849100997
+        },
+        {
+          "deviceName": "2F-COMPUTER-11",
+          "deviceType": 0,
+          "installedTime": "2024-02-20T10:00:00",
+          "x": -2.191294560639956,
+          "y": 4.766567230224609,
+          "z": 0.5953001367542816
+        },
+        {
+          "deviceName": "2F-COMPUTER-12",
+          "deviceType": 0,
+          "installedTime": "2021-08-11T10:00:00",
+          "x": -0.12217876066074851,
+          "y": 4.779595851898193,
+          "z": 0.4374340670731147
+        },
+        {
+          "deviceName": "2F-COMPUTER-13",
+          "deviceType": 0,
+          "installedTime": "2022-03-15T10:00:00",
+          "x": 1.7690838255211867,
+          "y": 4.7665672302246165,
+          "z": 0.5900753801603278
+        },
+        {
+          "deviceName": "2F-COMPUTER-14",
+          "deviceType": 0,
+          "installedTime": "2020-11-20T10:00:00",
+          "x": 5.961212338000011,
+          "y": 4.766567230224609,
+          "z": 3.6751644637030334
+        },
+        {
+          "deviceName": "2F-COMPUTER-15",
+          "deviceType": 0,
+          "installedTime": "2023-07-18T10:00:00",
+          "x": 5.959207046935091,
+          "y": 4.779595851898193,
+          "z": 1.9935526897079043
+        },
+        {
+          "deviceName": "2F-COMPUTER-16",
+          "deviceType": 0,
+          "installedTime": "2020-11-20T10:00:00",
+          "x": 5.920532193463216,
+          "y": 4.803195953369141,
+          "z": 0.33514005607012276
+        },
+        {
+          "deviceName": "2F-COMPUTER-17",
+          "deviceType": 0,
+          "installedTime": "2022-10-05T10:00:00",
+          "x": 7.21230581832168,
+          "y": 4.766567230224609,
+          "z": 0.3762301556163008
+        },
+        {
+          "deviceName": "2F-COMPUTER-18",
+          "deviceType": 0,
+          "installedTime": "2020-11-20T10:00:00",
+          "x": 7.383817219748743,
+          "y": 4.766567230224609,
+          "z": 1.9927943671651303
+        },
+        {
+          "deviceName": "2F-COMPUTER-19",
+          "deviceType": 0,
+          "installedTime": "2022-10-05T10:00:00",
+          "x": 7.345534699638777,
+          "y": 4.7665672302246165,
+          "z": 3.648057899214855
+        },
+        {
+          "deviceName": "2F-COMPUTER-20",
+          "deviceType": 0,
+          "installedTime": "2020-11-20T10:00:00",
+          "x": 9.04726968565178,
+          "y": 4.766567230224609,
+          "z": 3.727886182630289
+        },
+        {
+          "deviceName": "2F-COMPUTER-21",
+          "deviceType": 0,
+          "installedTime": "2022-10-05T10:00:00",
+          "x": 9.06890115948525,
+          "y": 4.766567230224609,
+          "z": 1.9726326579834303
+        },
+        {
+          "deviceName": "2F-COMPUTER-22",
+          "deviceType": 0,
+          "installedTime": "2024-08-30T10:00:00",
+          "x": 9.181764633995154,
+          "y": 4.766567230224609,
+          "z": 0.3331396122433521
+        },
+        {
+          "deviceName": "2F-COMPUTER-23",
+          "deviceType": 0,
+          "installedTime": "2020-11-20T10:00:00",
+          "x": 9.0747189269593,
+          "y": 4.7665672302246165,
+          "z": -1.2180589949805887
+        },
+        {
+          "deviceName": "2F-COMPUTER-24",
+          "deviceType": 0,
+          "installedTime": "2022-10-05T10:00:00",
+          "x": 7.428156411203189,
+          "y": 4.766567230224609,
+          "z": -1.2870627293132548
+        },
+        {
+          "deviceName": "2F-COMPUTER-25",
+          "deviceType": 0,
+          "installedTime": "2020-11-20T10:00:00",
+          "x": 7.3871616300000005,
+          "y": 4.766567230224609,
+          "z": -2.9103006794564523
+        },
+        {
+          "deviceName": "2F-COMPUTER-26",
+          "deviceType": 0,
+          "installedTime": "2022-10-05T10:00:00",
+          "x": 9.024573677534118,
+          "y": 4.766567230224609,
+          "z": -2.8118952013354237
+        },
+        {
+          "deviceName": "2F-COMPUTER-27",
+          "deviceType": 0,
+          "installedTime": "2021-08-11T10:00:00",
+          "x": 9.032470684501046,
+          "y": 4.7665672302246165,
+          "z": -3.728229592021923
+        },
+        {
+          "deviceName": "2F-AC-01",
+          "deviceType": 1,
+          "installedTime": "2020-10-02T11:00:00",
+          "x": -1.9645737925061382,
+          "y": 7.360334396362301,
+          "z": 2.90266061851709
+        },
+        {
+          "deviceName": "2F-AC-02",
+          "deviceType": 1,
+          "installedTime": "2020-10-02T11:00:00",
+          "x": 7.210135807821911,
+          "y": 7.360334396362301,
+          "z": 1.508605937121387
+        },
+        {
+          "deviceName": "2F-LIGHT-01",
+          "deviceType": 2,
+          "installedTime": "2022-09-02T14:00:00",
+          "x": 0.22121724268253207,
+          "y": 7.360334396362308,
+          "z": 2.795489676133264
+        },
+        {
+          "deviceName": "2F-LIGHT-02",
+          "deviceType": 2,
+          "installedTime": "2022-09-02T14:00:00",
+          "x": 0.22121724268253207,
+          "y": 7.360334396362308,
+          "z": 2.795489676133264
+        },
+        {
+          "deviceName": "2F-LIGHT-03",
+          "deviceType": 2,
+          "installedTime": "2022-09-02T14:00:00",
+          "x": 0.22121724268253207,
+          "y": 7.360334396362308,
+          "z": 2.795489676133264
+        },
+        {
+          "deviceName": "2F-LIGHT-04",
+          "deviceType": 2,
+          "installedTime": "2023-12-10T14:00:00",
+          "x": 0.22121724268253207,
+          "y": 7.360334396362308,
+          "z": 2.795489676133264
+        },
+        {
+          "deviceName": "2F-LIGHT-05",
+          "deviceType": 2,
+          "installedTime": "2022-09-02T14:00:00",
+          "x": 0.22121724268253207,
+          "y": 7.360334396362308,
+          "z": 2.795489676133264
+        },
+        {
+          "deviceName": "2F-LIGHT-06",
+          "deviceType": 2,
+          "installedTime": "2022-09-02T14:00:00",
+          "x": 0.22121724268253207,
+          "y": 7.360334396362308,
+          "z": 2.795489676133264
+        },
+        {
+          "deviceName": "2F-LIGHT-07",
+          "deviceType": 2,
+          "installedTime": "2024-01-15T14:00:00",
+          "x": 0.22121724268253207,
+          "y": 7.360334396362308,
+          "z": 2.795489676133264
+        },
+        {
+          "deviceName": "2F-LIGHT-08",
+          "deviceType": 2,
+          "installedTime": "2022-09-02T14:00:00",
+          "x": 0.22121724268253207,
+          "y": 7.360334396362308,
+          "z": 2.795489676133264
+        },
+        {
+          "deviceName": "2F-LIGHT-09",
+          "deviceType": 2,
+          "installedTime": "2022-09-02T14:00:00",
+          "x": 0.22121724268253207,
+          "y": 7.360334396362308,
+          "z": 2.795489676133264
+        },
+        {
+          "deviceName": "2F-LIGHT-10",
+          "deviceType": 2,
+          "installedTime": "2022-09-02T14:00:00",
+          "x": 7.148918903347147,
+          "y": 7.360334396362301,
+          "z": -0.38145371467596423
+        },
+        {
+          "deviceName": "2F-LIGHT-11",
+          "deviceType": 2,
+          "installedTime": "2022-09-02T14:00:00",
+          "x": 7.148918903347147,
+          "y": 7.360334396362301,
+          "z": -0.38145371467596423
+        },
+        {
+          "deviceName": "2F-LIGHT-12",
+          "deviceType": 2,
+          "installedTime": "2022-09-02T14:00:00",
+          "x": 7.148918903347147,
+          "y": 7.360334396362301,
+          "z": -0.38145371467596423
+        },
+        {
+          "deviceName": "2F-LIGHT-13",
+          "deviceType": 2,
+          "installedTime": "2022-09-02T14:00:00",
+          "x": 7.148918903347147,
+          "y": 7.360334396362301,
+          "z": -0.38145371467596423
+        },
+        {
+          "deviceName": "2F-LIGHT-14",
+          "deviceType": 2,
+          "installedTime": "2022-09-02T14:00:00",
+          "x": 7.148918903347147,
+          "y": 7.360334396362301,
+          "z": -0.38145371467596423
+        },
+        {
+          "deviceName": "2F-LIGHT-15",
+          "deviceType": 2,
+          "installedTime": "2022-09-02T14:00:00",
+          "x": 7.148918903347147,
+          "y": 7.360334396362301,
+          "z": -0.38145371467596423
+        },
+        {
+          "deviceName": "2F-LIGHT-16",
+          "deviceType": 2,
+          "installedTime": "2022-09-02T14:00:00",
+          "x": 7.148918903347147,
+          "y": 7.360334396362301,
+          "z": -0.38145371467596423
+        },
+        {
+          "deviceName": "2F-LIGHT-17",
+          "deviceType": 2,
+          "installedTime": "2022-09-02T14:00:00",
+          "x": 7.148918903347147,
+          "y": 7.360334396362301,
+          "z": -0.38145371467596423
+        },
+        {
+          "deviceName": "2F-LIGHT-18",
+          "deviceType": 2,
+          "installedTime": "2022-09-02T14:00:00",
+          "x": 7.148918903347147,
+          "y": 7.360334396362301,
+          "z": -0.38145371467596423
+        },
+        {
+          "deviceName": "2F-LIGHT-19",
+          "deviceType": 2,
+          "installedTime": "2022-09-02T14:00:00",
+          "x": 3.297978501132258,
+          "y": 7.360334396362308,
+          "z": -4.045428082837746
+        },
+        {
+          "deviceName": "2F-LIGHT-20",
+          "deviceType": 2,
+          "installedTime": "2022-09-02T14:00:00",
+          "x": 3.297978501132258,
+          "y": 7.360334396362308,
+          "z": -4.045428082837746
+        },
+        {
+          "deviceName": "2F-LIGHT-21",
+          "deviceType": 2,
+          "installedTime": "2022-09-02T14:00:00",
+          "x": 3.297978501132258,
+          "y": 7.360334396362308,
+          "z": -4.045428082837746
+        },
+        {
+          "deviceName": "2F-LIGHT-22",
+          "deviceType": 2,
+          "installedTime": "2022-09-02T14:00:00",
+          "x": -1.2880503010578352,
+          "y": 7.360334396362301,
+          "z": -1.1797165921756614
+        },
+        {
+          "deviceName": "2F-LIGHT-23",
+          "deviceType": 2,
+          "installedTime": "2022-09-02T14:00:00",
+          "x": -4.1573356319953945,
+          "y": 7.360334396362301,
+          "z": -1.2478190673592584
+        }
       ]
     },
     {
       "floorNum": 3,
       "devices": [
-        { "deviceName": "3F-COMPUTER-01", "deviceType": 0, "installedTime": "2021-08-11T10:00:00" },
-        { "deviceName": "3F-COMPUTER-02", "deviceType": 0, "installedTime": "2022-03-15T10:00:00" },
-        { "deviceName": "3F-COMPUTER-03", "deviceType": 0, "installedTime": "2021-08-11T10:00:00" },
-        { "deviceName": "3F-COMPUTER-04", "deviceType": 0, "installedTime": "2024-09-01T10:00:00" },
-        { "deviceName": "3F-COMPUTER-05", "deviceType": 0, "installedTime": "2022-03-15T10:00:00" },
-        { "deviceName": "3F-COMPUTER-06", "deviceType": 0, "installedTime": "2023-11-10T10:00:00" },
-        { "deviceName": "3F-COMPUTER-07", "deviceType": 0, "installedTime": "2021-08-11T10:00:00" },
-        { "deviceName": "3F-COMPUTER-08", "deviceType": 0, "installedTime": "2022-03-15T10:00:00" },
-        { "deviceName": "3F-COMPUTER-09", "deviceType": 0, "installedTime": "2021-08-11T10:00:00" },
-        { "deviceName": "3F-COMPUTER-10", "deviceType": 0, "installedTime": "2022-03-15T10:00:00" },
-        { "deviceName": "3F-COMPUTER-11", "deviceType": 0, "installedTime": "2021-08-11T10:00:00" },
-        { "deviceName": "3F-COMPUTER-12", "deviceType": 0, "installedTime": "2024-02-20T10:00:00" },
-        { "deviceName": "3F-COMPUTER-13", "deviceType": 0, "installedTime": "2022-03-15T10:00:00" },
-        { "deviceName": "3F-COMPUTER-14", "deviceType": 0, "installedTime": "2020-11-20T10:00:00" },
-        { "deviceName": "3F-COMPUTER-15", "deviceType": 0, "installedTime": "2022-10-05T10:00:00" },
-        { "deviceName": "3F-COMPUTER-16", "deviceType": 0, "installedTime": "2023-07-18T10:00:00" },
-        { "deviceName": "3F-COMPUTER-17", "deviceType": 0, "installedTime": "2020-11-20T10:00:00" },
-        { "deviceName": "3F-COMPUTER-18", "deviceType": 0, "installedTime": "2022-10-05T10:00:00" },
-        { "deviceName": "3F-COMPUTER-19", "deviceType": 0, "installedTime": "2020-11-20T10:00:00" },
-        { "deviceName": "3F-COMPUTER-20", "deviceType": 0, "installedTime": "2022-10-05T10:00:00" },
-        { "deviceName": "3F-COMPUTER-21", "deviceType": 0, "installedTime": "2024-08-30T10:00:00" },
-        { "deviceName": "3F-COMPUTER-22", "deviceType": 0, "installedTime": "2020-11-20T10:00:00" },
-        { "deviceName": "3F-COMPUTER-23", "deviceType": 0, "installedTime": "2022-10-05T10:00:00" },
-        { "deviceName": "3F-COMPUTER-24", "deviceType": 0, "installedTime": "2020-11-20T10:00:00" },
-        { "deviceName": "3F-COMPUTER-25", "deviceType": 0, "installedTime": "2022-10-05T10:00:00" },
-        { "deviceName": "3F-COMPUTER-26", "deviceType": 0, "installedTime": "2020-11-20T10:00:00" },
-        { "deviceName": "3F-AC-01", "deviceType": 1, "installedTime": "2020-10-03T11:00:00" },
-        { "deviceName": "3F-AC-02", "deviceType": 1, "installedTime": "2020-10-03T11:00:00" },
-        { "deviceName": "3F-LIGHT-01", "deviceType": 2, "installedTime": "2022-09-03T14:00:00" },
-        { "deviceName": "3F-LIGHT-02", "deviceType": 2, "installedTime": "2024-02-22T14:00:00" },
-        { "deviceName": "3F-LIGHT-03", "deviceType": 2, "installedTime": "2022-09-03T14:00:00" },
-        { "deviceName": "3F-LIGHT-04", "deviceType": 2, "installedTime": "2022-09-03T14:00:00" },
-        { "deviceName": "3F-LIGHT-05", "deviceType": 2, "installedTime": "2023-10-30T14:00:00" },
-        { "deviceName": "3F-LIGHT-06", "deviceType": 2, "installedTime": "2022-09-03T14:00:00" },
-        { "deviceName": "3F-LIGHT-07", "deviceType": 2, "installedTime": "2022-09-03T14:00:00" },
-        { "deviceName": "3F-LIGHT-08", "deviceType": 2, "installedTime": "2022-09-03T14:00:00" },
-        { "deviceName": "3F-LIGHT-09", "deviceType": 2, "installedTime": "2022-09-03T14:00:00" },
-        { "deviceName": "3F-LIGHT-10", "deviceType": 2, "installedTime": "2022-09-03T14:00:00" },
-        { "deviceName": "3F-LIGHT-11", "deviceType": 2, "installedTime": "2022-09-03T14:00:00" },
-        { "deviceName": "3F-LIGHT-12", "deviceType": 2, "installedTime": "2022-09-03T14:00:00" },
-        { "deviceName": "3F-LIGHT-13", "deviceType": 2, "installedTime": "2022-09-03T14:00:00" },
-        { "deviceName": "3F-LIGHT-14", "deviceType": 2, "installedTime": "2022-09-03T14:00:00" },
-        { "deviceName": "3F-LIGHT-15", "deviceType": 2, "installedTime": "2022-09-03T14:00:00" },
-        { "deviceName": "3F-LIGHT-16", "deviceType": 2, "installedTime": "2022-09-03T14:00:00" },
-        { "deviceName": "3F-LIGHT-17", "deviceType": 2, "installedTime": "2022-09-03T14:00:00" },
-        { "deviceName": "3F-LIGHT-18", "deviceType": 2, "installedTime": "2022-09-03T14:00:00" },
-        { "deviceName": "3F-LIGHT-19", "deviceType": 2, "installedTime": "2022-09-03T14:00:00" },
-        { "deviceName": "3F-LIGHT-20", "deviceType": 2, "installedTime": "2022-09-03T14:00:00" },
-        { "deviceName": "3F-LIGHT-21", "deviceType": 2, "installedTime": "2022-09-03T14:00:00" },
-        { "deviceName": "3F-LIGHT-22", "deviceType": 2, "installedTime": "2022-09-03T14:00:00" },
-        { "deviceName": "3F-LIGHT-23", "deviceType": 2, "installedTime": "2022-09-03T14:00:00" }
+        {
+          "deviceName": "3F-COMPUTER-01",
+          "deviceType": 0,
+          "installedTime": "2021-08-11T10:00:00",
+          "x": -3.902830030626387,
+          "y": 8.471735000610359,
+          "z": 0.266408211276314
+        },
+        {
+          "deviceName": "3F-COMPUTER-02",
+          "deviceType": 0,
+          "installedTime": "2022-03-15T10:00:00",
+          "x": -3.9400279651715167,
+          "y": 8.471735000610348,
+          "z": 1.6918862795687146
+        },
+        {
+          "deviceName": "3F-COMPUTER-03",
+          "deviceType": 0,
+          "installedTime": "2021-08-11T10:00:00",
+          "x": -4.027623362345292,
+          "y": 8.471735000610352,
+          "z": 3.3328467890732396
+        },
+        {
+          "deviceName": "3F-COMPUTER-04",
+          "deviceType": 0,
+          "installedTime": "2024-09-01T10:00:00",
+          "x": -4.042411304579241,
+          "y": 8.471735000610352,
+          "z": 4.986382199986334
+        },
+        {
+          "deviceName": "3F-COMPUTER-05",
+          "deviceType": 0,
+          "installedTime": "2022-03-15T10:00:00",
+          "x": -2.069840742567931,
+          "y": 8.471735000610359,
+          "z": 0.33050212693574377
+        },
+        {
+          "deviceName": "3F-COMPUTER-06",
+          "deviceType": 0,
+          "installedTime": "2023-11-10T10:00:00",
+          "x": -2.137050618528956,
+          "y": 8.471735000610355,
+          "z": 1.573445282151953
+        },
+        {
+          "deviceName": "3F-COMPUTER-07",
+          "deviceType": 0,
+          "installedTime": "2021-08-11T10:00:00",
+          "x": -2.0217774122978622,
+          "y": 8.471735000610352,
+          "z": 3.3963418747844716
+        },
+        {
+          "deviceName": "3F-COMPUTER-08",
+          "deviceType": 0,
+          "installedTime": "2022-03-15T10:00:00",
+          "x": -2.0517524405022316,
+          "y": 8.471735000610348,
+          "z": 4.854776658711399
+        },
+        {
+          "deviceName": "3F-COMPUTER-09",
+          "deviceType": 0,
+          "installedTime": "2021-08-11T10:00:00",
+          "x": -0.11059310131380959,
+          "y": 8.471735000610355,
+          "z": 0.3584342125723765
+        },
+        {
+          "deviceName": "3F-COMPUTER-10",
+          "deviceType": 0,
+          "installedTime": "2022-03-15T10:00:00",
+          "x": -0.15301021440082826,
+          "y": 8.471735000610352,
+          "z": 1.801143426022107
+        },
+        {
+          "deviceName": "3F-COMPUTER-11",
+          "deviceType": 0,
+          "installedTime": "2021-08-11T10:00:00",
+          "x": -0.17788541872847213,
+          "y": 8.471735000610348,
+          "z": 3.441128169183618
+        },
+        {
+          "deviceName": "3F-COMPUTER-12",
+          "deviceType": 0,
+          "installedTime": "2024-02-20T10:00:00",
+          "x": -0.20161495576858815,
+          "y": 8.471735000610355,
+          "z": 4.863796795145769
+        },
+        {
+          "deviceName": "3F-COMPUTER-13",
+          "deviceType": 0,
+          "installedTime": "2022-03-15T10:00:00",
+          "x": 1.7039052536212391,
+          "y": 8.471735000610348,
+          "z": 0.3305177052617596
+        },
+        {
+          "deviceName": "3F-COMPUTER-14",
+          "deviceType": 0,
+          "installedTime": "2020-11-20T10:00:00",
+          "x": 1.7410778233831223,
+          "y": 8.471735000610352,
+          "z": 1.7195838694687557
+        },
+        {
+          "deviceName": "3F-COMPUTER-15",
+          "deviceType": 0,
+          "installedTime": "2022-10-05T10:00:00",
+          "x": 1.6475349904234424,
+          "y": 8.471735000610352,
+          "z": 3.4858132671260136
+        },
+        {
+          "deviceName": "3F-COMPUTER-16",
+          "deviceType": 0,
+          "installedTime": "2023-07-18T10:00:00",
+          "x": 1.613155716672185,
+          "y": 8.471735000610348,
+          "z": 4.854968362907584
+        },
+        {
+          "deviceName": "3F-COMPUTER-17",
+          "deviceType": 0,
+          "installedTime": "2020-11-20T10:00:00",
+          "x": 2.954772890928104,
+          "y": 8.471735000610352,
+          "z": 4.454202039620406
+        },
+        {
+          "deviceName": "3F-COMPUTER-18",
+          "deviceType": 0,
+          "installedTime": "2022-10-05T10:00:00",
+          "x": 5.686053794637985,
+          "y": 8.471735000610348,
+          "z": 3.7199817545221463
+        },
+        {
+          "deviceName": "3F-COMPUTER-19",
+          "deviceType": 0,
+          "installedTime": "2020-11-20T10:00:00",
+          "x": 5.62555763878899,
+          "y": 8.471735000610352,
+          "z": 2.1193793171997153
+        },
+        {
+          "deviceName": "3F-COMPUTER-20",
+          "deviceType": 0,
+          "installedTime": "2022-10-05T10:00:00",
+          "x": 5.709807840940631,
+          "y": 8.471735000610352,
+          "z": 0.4786674297234752
+        },
+        {
+          "deviceName": "3F-COMPUTER-21",
+          "deviceType": 0,
+          "installedTime": "2024-08-30T10:00:00",
+          "x": 7.1980568848436235,
+          "y": 8.471735000610352,
+          "z": 0.4491893064579555
+        },
+        {
+          "deviceName": "3F-COMPUTER-22",
+          "deviceType": 0,
+          "installedTime": "2020-11-20T10:00:00",
+          "x": 7.337417523673793,
+          "y": 8.471735000610355,
+          "z": 2.0915071426687195
+        },
+        {
+          "deviceName": "3F-COMPUTER-23",
+          "deviceType": 0,
+          "installedTime": "2022-10-05T10:00:00",
+          "x": 7.292071832069166,
+          "y": 8.471735000610348,
+          "z": 3.817059980232224
+        },
+        {
+          "deviceName": "3F-COMPUTER-24",
+          "deviceType": 0,
+          "installedTime": "2020-11-20T10:00:00",
+          "x": 9.027439433516614,
+          "y": 8.471735000610355,
+          "z": 3.7898295854504713
+        },
+        {
+          "deviceName": "3F-COMPUTER-25",
+          "deviceType": 0,
+          "installedTime": "2022-10-05T10:00:00",
+          "x": 8.997366907243427,
+          "y": 8.471735000610355,
+          "z": 2.0271296958608955
+        },
+        {
+          "deviceName": "3F-COMPUTER-26",
+          "deviceType": 0,
+          "installedTime": "2020-11-20T10:00:00",
+          "x": 9.141062633351476,
+          "y": 8.471735000610355,
+          "z": 0.4035396156352684
+        },
+        {
+          "deviceName": "3F-COMPUTER-27",
+          "deviceType": 0,
+          "installedTime": "2021-08-11T10:00:00",
+          "x": 9.047678501427391,
+          "y": 8.471735000610355,
+          "z": -1.2068946651316157
+        },
+        {
+          "deviceName": "3F-COMPUTER-28",
+          "deviceType": 0,
+          "installedTime": "2022-03-15T10:00:00",
+          "x": 7.383459254733289,
+          "y": 8.471735000610352,
+          "z": -1.1591216621018114
+        },
+        {
+          "deviceName": "3F-COMPUTER-29",
+          "deviceType": 0,
+          "installedTime": "2021-08-11T10:00:00",
+          "x": 7.330359536307519,
+          "y": 8.471735000610352,
+          "z": -2.7343381641827564
+        },
+        {
+          "deviceName": "3F-COMPUTER-30",
+          "deviceType": 0,
+          "installedTime": "2022-03-15T10:00:00",
+          "x": 9.041703890541674,
+          "y": 8.471735000610352,
+          "z": -2.7637514556562843
+        },
+        {
+          "deviceName": "3F-COMPUTER-31",
+          "deviceType": 0,
+          "installedTime": "2021-08-11T10:00:00",
+          "x": 9.066546084961175,
+          "y": 8.471735000610355,
+          "z": -3.7686017069123965
+        },
+        {
+          "deviceName": "3F-COMPUTER-32",
+          "deviceType": 0,
+          "installedTime": "2024-02-20T10:00:00",
+          "x": -6.01194067082466,
+          "y": 8.471735000610348,
+          "z": 3.4842446899480057
+        },
+        {
+          "deviceName": "3F-COMPUTER-33",
+          "deviceType": 0,
+          "installedTime": "2022-03-15T10:00:00",
+          "x": -5.966251589530461,
+          "y": 8.471735000610352,
+          "z": 4.80033694215104
+        },
+        {
+          "deviceName": "3F-AC-01",
+          "deviceType": 1,
+          "installedTime": "2020-10-03T11:00:00",
+          "x": -1.7125152215654906,
+          "y": 11.065502166748047,
+          "z": 2.782284241369031
+        },
+        {
+          "deviceName": "3F-AC-02",
+          "deviceType": 1,
+          "installedTime": "2020-10-03T11:00:00",
+          "x": 7.280724374065044,
+          "y": 11.065502166748047,
+          "z": 1.4599450679875172
+        },
+        {
+          "deviceName": "3F-LIGHT-01",
+          "deviceType": 2,
+          "installedTime": "2022-09-03T14:00:00",
+          "x": 0.2676189435286836,
+          "y": 11.065502166748047,
+          "z": 2.659422834506586
+        },
+        {
+          "deviceName": "3F-LIGHT-02",
+          "deviceType": 2,
+          "installedTime": "2024-02-22T14:00:00",
+          "x": 0.2676189435286836,
+          "y": 11.065502166748047,
+          "z": 2.659422834506586
+        },
+        {
+          "deviceName": "3F-LIGHT-03",
+          "deviceType": 2,
+          "installedTime": "2022-09-03T14:00:00",
+          "x": 0.2676189435286836,
+          "y": 11.065502166748047,
+          "z": 2.659422834506586
+        },
+        {
+          "deviceName": "3F-LIGHT-04",
+          "deviceType": 2,
+          "installedTime": "2022-09-03T14:00:00",
+          "x": 0.2676189435286836,
+          "y": 11.065502166748047,
+          "z": 2.659422834506586
+        },
+        {
+          "deviceName": "3F-LIGHT-05",
+          "deviceType": 2,
+          "installedTime": "2023-10-30T14:00:00",
+          "x": 0.2676189435286836,
+          "y": 11.065502166748047,
+          "z": 2.659422834506586
+        },
+        {
+          "deviceName": "3F-LIGHT-06",
+          "deviceType": 2,
+          "installedTime": "2022-09-03T14:00:00",
+          "x": 0.2676189435286836,
+          "y": 11.065502166748047,
+          "z": 2.659422834506586
+        },
+        {
+          "deviceName": "3F-LIGHT-07",
+          "deviceType": 2,
+          "installedTime": "2022-09-03T14:00:00",
+          "x": 0.2676189435286836,
+          "y": 11.065502166748047,
+          "z": 2.659422834506586
+        },
+        {
+          "deviceName": "3F-LIGHT-08",
+          "deviceType": 2,
+          "installedTime": "2022-09-03T14:00:00",
+          "x": 0.2676189435286836,
+          "y": 11.065502166748047,
+          "z": 2.659422834506586
+        },
+        {
+          "deviceName": "3F-LIGHT-09",
+          "deviceType": 2,
+          "installedTime": "2022-09-03T14:00:00",
+          "x": 0.2676189435286836,
+          "y": 11.065502166748047,
+          "z": 2.659422834506586
+        },
+        {
+          "deviceName": "3F-LIGHT-10",
+          "deviceType": 2,
+          "installedTime": "2022-09-03T14:00:00",
+          "x": 7.390878397322602,
+          "y": 11.065502166748043,
+          "z": -0.502532477656553
+        },
+        {
+          "deviceName": "3F-LIGHT-11",
+          "deviceType": 2,
+          "installedTime": "2022-09-03T14:00:00",
+          "x": 7.390878397322602,
+          "y": 11.065502166748043,
+          "z": -0.502532477656553
+        },
+        {
+          "deviceName": "3F-LIGHT-12",
+          "deviceType": 2,
+          "installedTime": "2022-09-03T14:00:00",
+          "x": 7.390878397322602,
+          "y": 11.065502166748043,
+          "z": -0.502532477656553
+        },
+        {
+          "deviceName": "3F-LIGHT-13",
+          "deviceType": 2,
+          "installedTime": "2022-09-03T14:00:00",
+          "x": 7.390878397322602,
+          "y": 11.065502166748043,
+          "z": -0.502532477656553
+        },
+        {
+          "deviceName": "3F-LIGHT-14",
+          "deviceType": 2,
+          "installedTime": "2022-09-03T14:00:00",
+          "x": 7.390878397322602,
+          "y": 11.065502166748043,
+          "z": -0.502532477656553
+        },
+        {
+          "deviceName": "3F-LIGHT-15",
+          "deviceType": 2,
+          "installedTime": "2022-09-03T14:00:00",
+          "x": 7.390878397322602,
+          "y": 11.065502166748043,
+          "z": -0.502532477656553
+        },
+        {
+          "deviceName": "3F-LIGHT-16",
+          "deviceType": 2,
+          "installedTime": "2022-09-03T14:00:00",
+          "x": 7.390878397322602,
+          "y": 11.065502166748043,
+          "z": -0.502532477656553
+        },
+        {
+          "deviceName": "3F-LIGHT-17",
+          "deviceType": 2,
+          "installedTime": "2022-09-03T14:00:00",
+          "x": 7.390878397322602,
+          "y": 11.065502166748043,
+          "z": -0.502532477656553
+        },
+        {
+          "deviceName": "3F-LIGHT-18",
+          "deviceType": 2,
+          "installedTime": "2022-09-03T14:00:00",
+          "x": 7.390878397322602,
+          "y": 11.065502166748043,
+          "z": -0.502532477656553
+        },
+        {
+          "deviceName": "3F-LIGHT-19",
+          "deviceType": 2,
+          "installedTime": "2022-09-03T14:00:00",
+          "x": 0.4797979159418082,
+          "y": 11.065502166748047,
+          "z": -4.095167398651255
+        },
+        {
+          "deviceName": "3F-LIGHT-20",
+          "deviceType": 2,
+          "installedTime": "2022-09-03T14:00:00",
+          "x": 0.4797979159418082,
+          "y": 11.065502166748047,
+          "z": -4.095167398651255
+        },
+        {
+          "deviceName": "3F-LIGHT-21",
+          "deviceType": 2,
+          "installedTime": "2022-09-03T14:00:00",
+          "x": 0.4797979159418082,
+          "y": 11.065502166748047,
+          "z": -4.095167398651255
+        },
+        {
+          "deviceName": "3F-LIGHT-22",
+          "deviceType": 2,
+          "installedTime": "2022-09-03T14:00:00",
+          "x": -1.0864846835669937,
+          "y": 11.065502166748047,
+          "z": -1.297940663111592
+        },
+        {
+          "deviceName": "3F-LIGHT-23",
+          "deviceType": 2,
+          "installedTime": "2022-09-03T14:00:00",
+          "x": -3.9279594475314705,
+          "y": 11.065502166748043,
+          "z": -1.3289934958481693
+        }
       ]
     },
     {
       "floorNum": 4,
       "devices": [
-        { "deviceName": "4F-COMPUTER-01", "deviceType": 0, "installedTime": "2024-04-10T10:00:00" },
-        { "deviceName": "4F-COMPUTER-02", "deviceType": 0, "installedTime": "2024-04-10T10:00:00" },
-        { "deviceName": "4F-COMPUTER-03", "deviceType": 0, "installedTime": "2024-04-10T10:00:00" },
-        { "deviceName": "4F-COMPUTER-04", "deviceType": 0, "installedTime": "2023-08-01T10:00:00" },
-        { "deviceName": "4F-COMPUTER-05", "deviceType": 0, "installedTime": "2024-04-10T10:00:00" },
-        { "deviceName": "4F-COMPUTER-06", "deviceType": 0, "installedTime": "2024-04-10T10:00:00" },
-        { "deviceName": "4F-COMPUTER-07", "deviceType": 0, "installedTime": "2024-04-10T10:00:00" },
-        { "deviceName": "4F-COMPUTER-08", "deviceType": 0, "installedTime": "2024-04-10T10:00:00" },
-        { "deviceName": "4F-COMPUTER-09", "deviceType": 0, "installedTime": "2025-01-15T10:00:00" },
-        { "deviceName": "4F-COMPUTER-10", "deviceType": 0, "installedTime": "2024-04-10T10:00:00" },
-        { "deviceName": "4F-COMPUTER-11", "deviceType": 0, "installedTime": "2024-04-10T10:00:00" },
-        { "deviceName": "4F-COMPUTER-12", "deviceType": 0, "installedTime": "2022-11-11T10:00:00" },
-        { "deviceName": "4F-COMPUTER-13", "deviceType": 0, "installedTime": "2024-04-10T10:00:00" },
-        { "deviceName": "4F-AC-01", "deviceType": 1, "installedTime": "2020-10-05T11:00:00" },
-        { "deviceName": "4F-LIGHT-01", "deviceType": 2, "installedTime": "2022-09-05T14:00:00" },
-        { "deviceName": "4F-LIGHT-02", "deviceType": 2, "installedTime": "2022-09-05T14:00:00" },
-        { "deviceName": "4F-LIGHT-03", "deviceType": 2, "installedTime": "2024-07-25T14:00:00" },
-        { "deviceName": "4F-LIGHT-04", "deviceType": 2, "installedTime": "2022-09-05T14:00:00" },
-        { "deviceName": "4F-LIGHT-05", "deviceType": 2, "installedTime": "2022-09-05T14:00:00" },
-        { "deviceName": "4F-LIGHT-06", "deviceType": 2, "installedTime": "2022-09-05T14:00:00" },
-        { "deviceName": "4F-LIGHT-07", "deviceType": 2, "installedTime": "2022-09-05T14:00:00" },
-        { "deviceName": "4F-LIGHT-08", "deviceType": 2, "installedTime": "2022-09-05T14:00:00" },
-        { "deviceName": "4F-LIGHT-09", "deviceType": 2, "installedTime": "2022-09-05T14:00:00" },
-        { "deviceName": "4F-LIGHT-10", "deviceType": 2, "installedTime": "2022-09-05T14:00:00" },
-        { "deviceName": "4F-LIGHT-11", "deviceType": 2, "installedTime": "2022-09-05T14:00:00" },
-        { "deviceName": "4F-LIGHT-12", "deviceType": 2, "installedTime": "2022-09-05T14:00:00" },
-        { "deviceName": "4F-LIGHT-13", "deviceType": 2, "installedTime": "2022-09-05T14:00:00" },
-        { "deviceName": "4F-LIGHT-14", "deviceType": 2, "installedTime": "2022-09-05T14:00:00" }
+        {
+          "deviceName": "4F-COMPUTER-01",
+          "deviceType": 0,
+          "installedTime": "2024-04-10T10:00:00",
+          "x": -4.320782901293105,
+          "y": 12.176901817321777,
+          "z": 0.8430846888508192
+        },
+        {
+          "deviceName": "4F-COMPUTER-02",
+          "deviceType": 0,
+          "installedTime": "2024-04-10T10:00:00",
+          "x": -4.344206023374707,
+          "y": 12.176901817321777,
+          "z": 2.582874616808022
+        },
+        {
+          "deviceName": "4F-COMPUTER-03",
+          "deviceType": 0,
+          "installedTime": "2024-04-10T10:00:00",
+          "x": -4.225195842356223,
+          "y": 12.176901817321784,
+          "z": 4.378315273367264
+        },
+        {
+          "deviceName": "4F-COMPUTER-04",
+          "deviceType": 0,
+          "installedTime": "2023-08-01T10:00:00",
+          "x": -2.2925746002616085,
+          "y": 12.176901817321784,
+          "z": 0.6710872317765872
+        },
+        {
+          "deviceName": "4F-COMPUTER-05",
+          "deviceType": 0,
+          "installedTime": "2024-04-10T10:00:00",
+          "x": -2.194243341592405,
+          "y": 12.176901817321777,
+          "z": 2.632928544387674
+        },
+        {
+          "deviceName": "4F-COMPUTER-06",
+          "deviceType": 0,
+          "installedTime": "2024-04-10T10:00:00",
+          "x": -2.175453252139884,
+          "y": 12.176901817321777,
+          "z": 4.4182214443421834
+        },
+        {
+          "deviceName": "4F-COMPUTER-07",
+          "deviceType": 0,
+          "installedTime": "2024-04-10T10:00:00",
+          "x": -0.27997705967613484,
+          "y": 12.176901817321777,
+          "z": 0.6886551832704875
+        },
+        {
+          "deviceName": "4F-COMPUTER-08",
+          "deviceType": 0,
+          "installedTime": "2024-04-10T10:00:00",
+          "x": -0.22774929712567005,
+          "y": 12.176901817321777,
+          "z": 2.6290395389225996
+        },
+        {
+          "deviceName": "4F-COMPUTER-09",
+          "deviceType": 0,
+          "installedTime": "2025-01-15T10:00:00",
+          "x": -0.26133558118537437,
+          "y": 12.17690181732177,
+          "z": 4.436619413417425
+        },
+        {
+          "deviceName": "4F-COMPUTER-10",
+          "deviceType": 0,
+          "installedTime": "2024-04-10T10:00:00",
+          "x": 1.5067804243493423,
+          "y": 12.176901817321784,
+          "z": 0.8691840232146166
+        },
+        {
+          "deviceName": "4F-COMPUTER-11",
+          "deviceType": 0,
+          "installedTime": "2024-04-10T10:00:00",
+          "x": 1.6396511691235975,
+          "y": 12.176901817321777,
+          "z": 2.711830571955476
+        },
+        {
+          "deviceName": "4F-COMPUTER-12",
+          "deviceType": 0,
+          "installedTime": "2022-11-11T10:00:00",
+          "x": 1.7254032085604933,
+          "y": 12.176901817321777,
+          "z": 4.405189273830299
+        },
+        {
+          "deviceName": "4F-COMPUTER-13",
+          "deviceType": 0,
+          "installedTime": "2024-04-10T10:00:00",
+          "x": 3.0382610487480886,
+          "y": 12.176901817321777,
+          "z": 4.164443327307536
+        },
+        {
+          "deviceName": "4F-AC-01",
+          "deviceType": 1,
+          "installedTime": "2020-10-05T11:00:00",
+          "x": -1.6948131731848064,
+          "y": 14.770668983459473,
+          "z": 2.6247596492879053
+        },
+        {
+          "deviceName": "4F-LIGHT-01",
+          "deviceType": 2,
+          "installedTime": "2022-09-05T14:00:00",
+          "x": 0.10257621989198729,
+          "y": 14.770668983459473,
+          "z": 2.64910428376575
+        },
+        {
+          "deviceName": "4F-LIGHT-02",
+          "deviceType": 2,
+          "installedTime": "2022-09-05T14:00:00",
+          "x": 0.10257621989198729,
+          "y": 14.770668983459473,
+          "z": 2.64910428376575
+        },
+        {
+          "deviceName": "4F-LIGHT-03",
+          "deviceType": 2,
+          "installedTime": "2024-07-25T14:00:00",
+          "x": 0.10257621989198729,
+          "y": 14.770668983459473,
+          "z": 2.64910428376575
+        },
+        {
+          "deviceName": "4F-LIGHT-04",
+          "deviceType": 2,
+          "installedTime": "2022-09-05T14:00:00",
+          "x": 0.10257621989198729,
+          "y": 14.770668983459473,
+          "z": 2.64910428376575
+        },
+        {
+          "deviceName": "4F-LIGHT-05",
+          "deviceType": 2,
+          "installedTime": "2022-09-05T14:00:00",
+          "x": 0.10257621989198729,
+          "y": 14.770668983459473,
+          "z": 2.64910428376575
+        },
+        {
+          "deviceName": "4F-LIGHT-06",
+          "deviceType": 2,
+          "installedTime": "2022-09-05T14:00:00",
+          "x": 0.10257621989198729,
+          "y": 14.770668983459473,
+          "z": 2.64910428376575
+        },
+        {
+          "deviceName": "4F-LIGHT-07",
+          "deviceType": 2,
+          "installedTime": "2022-09-05T14:00:00",
+          "x": 0.10257621989198729,
+          "y": 14.770668983459473,
+          "z": 2.64910428376575
+        },
+        {
+          "deviceName": "4F-LIGHT-08",
+          "deviceType": 2,
+          "installedTime": "2022-09-05T14:00:00",
+          "x": 0.10257621989198729,
+          "y": 14.770668983459473,
+          "z": 2.64910428376575
+        },
+        {
+          "deviceName": "4F-LIGHT-09",
+          "deviceType": 2,
+          "installedTime": "2022-09-05T14:00:00",
+          "x": 0.10257621989198729,
+          "y": 14.770668983459473,
+          "z": 2.64910428376575
+        },
+        {
+          "deviceName": "4F-LIGHT-10",
+          "deviceType": 2,
+          "installedTime": "2022-09-05T14:00:00",
+          "x": 0.48037074353756726,
+          "y": 14.770668983459476,
+          "z": -4.012902037096785
+        },
+        {
+          "deviceName": "4F-LIGHT-11",
+          "deviceType": 2,
+          "installedTime": "2022-09-05T14:00:00",
+          "x": 0.48037074353756726,
+          "y": 14.770668983459476,
+          "z": -4.012902037096785
+        },
+        {
+          "deviceName": "4F-LIGHT-12",
+          "deviceType": 2,
+          "installedTime": "2022-09-05T14:00:00",
+          "x": 0.48037074353756726,
+          "y": 14.770668983459476,
+          "z": -4.012902037096785
+        },
+        {
+          "deviceName": "4F-LIGHT-13",
+          "deviceType": 2,
+          "installedTime": "2022-09-05T14:00:00",
+          "x": -1.1928430701932786,
+          "y": 14.770668983459469,
+          "z": -1.2532309162636501
+        },
+        {
+          "deviceName": "4F-LIGHT-14",
+          "deviceType": 2,
+          "installedTime": "2022-09-05T14:00:00",
+          "x": -4.20493812684976,
+          "y": 14.770668983459473,
+          "z": -1.373092172680023
+        }
       ]
     }
   ]

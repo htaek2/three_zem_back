@@ -32,7 +32,7 @@ public class AppInitializer implements ApplicationRunner {
 
     private final boolean isDataCreate = true;
 
-    /// 몇 년치 데이터를 만들지. 기본 2 = 2년 전부터 오늘까지
+    /// 몇 년치 데이터를 만들지. N년 전부터 오늘까지
     private final int startYearsAgo = 3;
 
     /// 데이터 생성시간 단위. 기본 360 = 6시간
@@ -64,9 +64,13 @@ public class AppInitializer implements ApplicationRunner {
         buildingDataCache.init();
 
         if (isDataCreate) {
-            // 과거 데이터 생성
+            // 과거 데이터 확인 및 생성
             dataGenerationService.checkAndGenerateHistoricalData(startYearsAgo, intervalMinutes);
+            // 과거 타 빌딩 데이터 확인 및 생성
             dataGenerationService.checkAndGenerateOtherBuildingData();
+            // 과거 빠진 데이터 확인 및 생성
+//            dataGenerationService.fillMissingHistoricalData(intervalMinutes);
+
         }
         else {
             log.info("[INIT] 과거 데이터 생성 Pass");

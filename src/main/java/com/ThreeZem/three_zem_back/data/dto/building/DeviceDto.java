@@ -24,8 +24,11 @@ public class DeviceDto {
     private byte deviceType;
     private LocalDateTime installedTime;
     private byte status;
+    private Double x;
+    private Double y;
+    private Double z;
 
     public Device toEntity(Floor floor) {
-        return new Device(this.deviceId, this.deviceName, floor, this.deviceType, this.installedTime, this.status);
+        return new Device(this.deviceId, this.deviceName, floor, this.deviceType, this.installedTime, this.status, this.x, this.y, this.z);
     }
 }

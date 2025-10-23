@@ -17,6 +17,9 @@ public class DeviceConfigDto {
     private DeviceType deviceType;
     private String installedTime;
     private DeviceStatus status;
+    private Double x;
+    private Double y;
+    private Double z;
 
     public DeviceConfigDto(Device device) {
         this.id = device.getId();
