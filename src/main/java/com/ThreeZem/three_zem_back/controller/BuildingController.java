@@ -2,6 +2,7 @@ package com.ThreeZem.three_zem_back.controller;
 
 import com.ThreeZem.three_zem_back.data.dto.building.BuildingDto;
 import com.ThreeZem.three_zem_back.data.dto.building.DeviceDto;
+import com.ThreeZem.three_zem_back.data.dto.building.DeviceUpdateResponseDto;
 import com.ThreeZem.three_zem_back.service.BuildingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -42,8 +43,7 @@ public class BuildingController {
 
     /// 장비의 상태를 수정한다
     @PatchMapping("/api/device/{id}")
-    public ResponseEntity<String> updateDevice(@RequestBody Map<String, Byte> payload, @PathVariable Long id) {
+    public ResponseEntity<DeviceUpdateResponseDto> updateDevice(@RequestBody Map<String, Byte> payload, @PathVariable Long id) {
         return buildingService.updateDevice(id, payload.get("status"));
     }
-
 }
