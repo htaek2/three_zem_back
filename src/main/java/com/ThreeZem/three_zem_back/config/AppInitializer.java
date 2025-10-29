@@ -5,6 +5,7 @@ import com.ThreeZem.three_zem_back.repository.*;
 import com.ThreeZem.three_zem_back.service.AppInitializeService;
 import com.ThreeZem.three_zem_back.service.ApplicationStateService;
 import com.ThreeZem.three_zem_back.service.DataGenerationService;
+import com.ThreeZem.three_zem_back.service.PredictionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
@@ -24,6 +25,7 @@ public class AppInitializer implements ApplicationRunner {
     private final ApplicationStateService applicationStateService;
     private final BuildingDataCache buildingDataCache;
     private final DataGenerationService dataGenerationService;
+    private final PredictionService predictionService;
 
     private final BuildingRepository buildingRepository;
     private final DeviceRepository deviceRepository;
@@ -80,9 +82,12 @@ public class AppInitializer implements ApplicationRunner {
         applicationStateService.setDataGenerated(true);
 
         appInitializeService.createBuildingIdSheet();
-        log.info("[INIT] 빌딩 ID 시트 생성 완료");
+        log.info("[INIT] 빌딩 ID 시트 생성 OK");
 
-        log.info("[INIT] 서버 초기화 완료.");
+        log.info("[INIT] 예측 데이터 캐싱 시작");
+        predictionService.initializePredictions();
+
+        log.info("[INIT] 서버 초기화 OK");
     }
 
 }

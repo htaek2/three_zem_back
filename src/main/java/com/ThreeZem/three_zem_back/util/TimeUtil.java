@@ -8,7 +8,7 @@ public class TimeUtil {
 
     /// 시간 Fomatter를 반환한다.
     public static DateTimeFormatter getDateTimeFormatter() {
-        return DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+        return DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     }
 
     /// 현재 시간을 가져온다.
