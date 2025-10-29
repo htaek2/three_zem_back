@@ -198,16 +198,14 @@ public class RealTimeDataService {
         buildingEnergyDto.setGasPrice(gasPrice.get());
         buildingEnergyDto.setWaterPrice(waterPrice.get());
 
-        recentGasDatas.clear();
-        recentWaterDatas.clear();
-        recentElecDatas.clear();
-
         log.info("[DATA] 실시간 데이터 전송");
         return buildingEnergyDto;
     }
 
     /// 전력 데이터 생성 후 버퍼에 누적
     private void accumulateElectricityUsage(BuildingConfigDto buildingConfig) {
+        recentElecDatas.clear();
+
         for (FloorConfigDto floor : buildingConfig.getFloors()) {
             for (DeviceConfigDto device : floor.getDevices()) {
                 float usage = dataGenerationService.generateElecData(device.getDeviceType(), device.getStatus(), false);
@@ -220,6 +218,8 @@ public class RealTimeDataService {
 
     /// 가스 데이터 생성 후 버퍼에 누적
     private void accumulateGasUsage(BuildingConfigDto buildingConfig) {
+        recentGasDatas.clear();
+
         float usage = dataGenerationService.generateGasData(buildingDataCache.getTotalPeople(), LocalDateTime.now());
         Long buildingId = buildingConfig.getId();
         recentGasDatas.put(buildingId, usage);
@@ -228,6 +228,8 @@ public class RealTimeDataService {
 
     /// 수도 데이터 생성 후 버퍼에 누적
     private void accumulateWaterUsage(BuildingConfigDto buildingConfig) {
+        recentWaterDatas.clear();
+
         for (FloorConfigDto floor : buildingConfig.getFloors()) {
             float usage = dataGenerationService.generateWaterData(floor.getFloorNum(), LocalDateTime.now());
             Long floorId = floor.getId();
