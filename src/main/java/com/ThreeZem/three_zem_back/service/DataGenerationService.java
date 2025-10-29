@@ -27,7 +27,11 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.YearMonth;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Queue;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 @Service
@@ -159,50 +163,121 @@ public class DataGenerationService {
 
     /// 과거 데이터 생성
     public void generateHistoricalData(int startYearsAgo, int intervalMinutes) {
-
         log.info("[DATA] 과거 {}년치 데이터 생성을 시작합니다. ({}분 단위)", startYearsAgo, intervalMinutes);
 
-        List<ElectricityReading> elecBuffer = new ArrayList<>();
-        List<WaterReading> waterBuffer = new ArrayList<>();
-        List<GasReading> gasBuffer = new ArrayList<>();
+        Queue<ElectricityReading> elecBuffer = new ConcurrentLinkedQueue<>();
+        Queue<WaterReading> waterBuffer = new ConcurrentLinkedQueue<>();
+        Queue<GasReading> gasBuffer = new ConcurrentLinkedQueue<>();
 
-        LocalDateTime cursor = LocalDateTime.now().minusYears(startYearsAgo);
-        LocalDateTime endTime = LocalDateTime.now();
+        LocalDateTime overallStartTime = LocalDateTime.now().minusYears(startYearsAgo);
+        LocalDateTime overallEndTime = LocalDateTime.now();
+
+        int numberOfThreads = 16;
+        ExecutorService executor = Executors.newFixedThreadPool(numberOfThreads);
+        List<CompletableFuture<Void>> futures = new ArrayList<>();
+
+        LocalDateTime monthCursor = overallStartTime;
+        while (monthCursor.isBefore(overallEndTime)) {
+            LocalDateTime start = monthCursor;
+            LocalDateTime end = monthCursor.plusMonths(1);
+            if (end.isAfter(overallEndTime)) {
+                end = overallEndTime;
+            }
+            final LocalDateTime taskStart = start;
+            final LocalDateTime taskEnd = end;
+            futures.add(CompletableFuture.runAsync(() -> generateDataForTimeRange(taskStart, taskEnd, intervalMinutes, elecBuffer, waterBuffer, gasBuffer), executor));
+            monthCursor = monthCursor.plusMonths(1);
+        }
+
+        CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
+        executor.shutdown();
+
+        log.info("데이터 생성 완료. 데이터베이스 저장을 시작합니다...");
+        saveDataInBatches(elecBuffer, waterBuffer, gasBuffer);
+        log.info("과거 데이터 생성을 완료했습니다.");
+    }
+
+    private void saveDataInBatches(Queue<ElectricityReading> elecReadings, Queue<WaterReading> waterReadings, Queue<GasReading> gasReadings) {
+        final int BATCH_SIZE = 5000;
+
+        List<ElectricityReading> elecBatch = new ArrayList<>();
+        while (!elecReadings.isEmpty()) {
+            elecBatch.add(elecReadings.poll());
+            if (elecBatch.size() >= BATCH_SIZE) {
+                electricityReadingRepository.saveAll(elecBatch);
+                elecBatch.clear();
+            }
+        }
+        if (!elecBatch.isEmpty()) {
+            electricityReadingRepository.saveAll(elecBatch);
+        }
+        log.info("전기 데이터 저장 완료.");
+
+        List<WaterReading> waterBatch = new ArrayList<>();
+        while (!waterReadings.isEmpty()) {
+            waterBatch.add(waterReadings.poll());
+            if (waterBatch.size() >= BATCH_SIZE) {
+                waterReadingRepository.saveAll(waterBatch);
+                waterBatch.clear();
+            }
+        }
+        if (!waterBatch.isEmpty()) {
+            waterReadingRepository.saveAll(waterBatch);
+        }
+        log.info("수도 데이터 저장 완료.");
+
+        List<GasReading> gasBatch = new ArrayList<>();
+        while (!gasReadings.isEmpty()) {
+            gasBatch.add(gasReadings.poll());
+            if (gasBatch.size() >= BATCH_SIZE) {
+                gasReadingRepository.saveAll(gasBatch);
+                gasBatch.clear();
+            }
+        }
+        if (!gasBatch.isEmpty()) {
+            gasReadingRepository.saveAll(gasBatch);
+        }
+        log.info("가스 데이터 저장 완료.");
+    }
+
+    private void generateDataForTimeRange(LocalDateTime startTime, LocalDateTime endTime, int intervalMinutes,
+                                          Queue<ElectricityReading> elecBuffer,
+                                          Queue<WaterReading> waterBuffer,
+                                          Queue<GasReading> gasBuffer) {
+        List<ElectricityReading> localElecBuffer = new ArrayList<>();
+        List<WaterReading> localWaterBuffer = new ArrayList<>();
+        List<GasReading> localGasBuffer = new ArrayList<>();
+        LocalDateTime cursor = startTime;
+
         YearMonth currentMonth = YearMonth.from(cursor);
-
-        log.info("{} 데이터 생성 중...", currentMonth);
+        log.info("Thread {}: {} 데이터 생성 시작", Thread.currentThread().getName(), currentMonth);
 
         while (cursor.isBefore(endTime)) {
             if (!YearMonth.from(cursor).equals(currentMonth)) {
                 currentMonth = YearMonth.from(cursor);
-                log.info("{} 데이터 생성 중...", currentMonth);
+                log.info("Thread {}: {} 데이터 생성 중...", Thread.currentThread().getName(), currentMonth);
             }
+            generateDataForTimestamp(cursor, intervalMinutes, localElecBuffer, localWaterBuffer, localGasBuffer);
 
-            generateDataForTimestamp(cursor, intervalMinutes, elecBuffer, waterBuffer, gasBuffer);
-
-            int BATCH_SIZE = 2000;
-
-            if (elecBuffer.size() >= BATCH_SIZE) {
-                electricityReadingRepository.saveAll(elecBuffer);
-                elecBuffer.clear();
-            }
-            if (waterBuffer.size() >= BATCH_SIZE) {
-                waterReadingRepository.saveAll(waterBuffer);
-                waterBuffer.clear();
-            }
-            if (gasBuffer.size() >= BATCH_SIZE) {
-                gasReadingRepository.saveAll(gasBuffer);
-                gasBuffer.clear();
+            if (localElecBuffer.size() >= 2000) {
+                elecBuffer.addAll(localElecBuffer);
+                waterBuffer.addAll(localWaterBuffer);
+                gasBuffer.addAll(localGasBuffer);
+                localElecBuffer.clear();
+                localWaterBuffer.clear();
+                localGasBuffer.clear();
             }
 
             cursor = cursor.plusMinutes(intervalMinutes);
         }
 
-        if (!elecBuffer.isEmpty()) electricityReadingRepository.saveAll(elecBuffer);
-        if (!waterBuffer.isEmpty()) waterReadingRepository.saveAll(waterBuffer);
-        if (!gasBuffer.isEmpty()) gasReadingRepository.saveAll(gasBuffer);
+        if (!localElecBuffer.isEmpty()) {
+            elecBuffer.addAll(localElecBuffer);
+            waterBuffer.addAll(localWaterBuffer);
+            gasBuffer.addAll(localGasBuffer);
+        }
 
-        log.info("과거 데이터 생성을 완료했습니다.");
+        log.info("Thread {}: 데이터 생성 완료 ({} ~ {})", Thread.currentThread().getName(), startTime, endTime);
     }
 
     @Transactional

@@ -87,7 +87,7 @@ public class RealTimeDataController implements DisposableBean {
         return createEnergyFlux(realTimeDataService::getBuildingEnergyData);
     }
 
-    /// 실시간 에너지 사용량 조회
+    /// 실시간 장비 상태 조회
     @GetMapping(value = "/api/energy/sse/devices", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<List<DeviceDto>> getSseDevices() {
         return createDevicesFlux(buildingService::getDevicesMethod);
