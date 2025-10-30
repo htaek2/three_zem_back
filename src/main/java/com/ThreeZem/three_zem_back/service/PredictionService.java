@@ -6,6 +6,7 @@ import com.ThreeZem.three_zem_back.data.dto.CarbonPredictionDto;
 import com.ThreeZem.three_zem_back.data.dto.MonthDto;
 import com.ThreeZem.three_zem_back.data.dto.PredictBillDto;
 import com.ThreeZem.three_zem_back.data.dto.YearDto;
+import com.ThreeZem.three_zem_back.data.dto.energy.EnergyReadingDto;
 import com.ThreeZem.three_zem_back.data.dto.energy.PredictionResponseDto;
 import com.ThreeZem.three_zem_back.data.dto.energy.ReadingDto;
 import com.ThreeZem.three_zem_back.data.enums.DateTimeType;
@@ -45,6 +46,9 @@ public class PredictionService {
         }
     }
 
+    /// 머신러닝 서버로 이전 사용금액을 보내면 예상 사용금액을 받는다.
+    /// 이전 사용 금액 최소 개수 : 1년치
+    /// 예상 사용 금액 반환 개수 : 약 1년치
     private PredictionResponseDto fetchPredictions() {
         LocalDateTime now = LocalDateTime.now();
         String startTime = now.minusYears(3).format(TimeUtil.getDateTimeFormatter());
@@ -114,6 +118,7 @@ public class PredictionService {
         return carbonPredictions;
     }
 
+    /// 각 에너지마다 일별 데이터를 구해서 반환
     private Map<LocalDate, Map<String, Double>> getDailyUsageMap() {
         if (predictionCache == null) {
             log.warn("예측 데이터 캐시가 비어있습니다.");
@@ -127,6 +132,7 @@ public class PredictionService {
         return dailyUsage;
     }
 
+    /// 일별 에너지 사용량을 합산
     private void groupReadingsByDay(Map<LocalDate, Map<String, Double>> dailyUsage, List<ReadingDto> readings, String type) {
         if (readings == null) return;
         for (ReadingDto reading : readings) {
@@ -138,26 +144,72 @@ public class PredictionService {
     private List<MonthDto> calculateMonthPredictions(Map<LocalDate, Map<String, Double>> dailyUsage) {
         LocalDate today = LocalDate.now();
         YearMonth currentMonth = YearMonth.from(today);
+        LocalDate startOfMonth = currentMonth.atDay(1);
         LocalDate endOfMonth = currentMonth.atEndOfMonth();
 
-        return today.datesUntil(endOfMonth.plusDays(1))
-                .map(date -> {
+        Map<LocalDate, Double> monthlyCosts = new java.util.TreeMap<>();
+
+        // 이번 달 시작부터 어제까지의 실제 사용량
+        if (today.isAfter(startOfMonth)) {
+            String startOfMonthStr = startOfMonth.atStartOfDay().format(TimeUtil.getDateTimeFormatter());
+            String yesterdayStr = today.minusDays(1).atTime(23, 59, 59).format(TimeUtil.getDateTimeFormatter());
+            List<EnergyReadingDto> billRangeData = energyDataService.getBillRangeData(startOfMonthStr, yesterdayStr, DateTimeType.DAY.getValue());
+            for (EnergyReadingDto energyReadingDto : billRangeData) {
+                if (energyReadingDto.getDatas() != null) {
+                    for (ReadingDto readingDto : energyReadingDto.getDatas()) {
+                        monthlyCosts.merge(readingDto.getTimestamp().toLocalDate(), (double) readingDto.getUsage(), Double::sum);
+                    }
+                }
+            }
+        }
+
+        // 오늘부터 이번 달 말까지의 예상 사용량
+        today.datesUntil(endOfMonth.plusDays(1))
+                .forEach(date -> {
                     Map<String, Double> usage = dailyUsage.getOrDefault(date, Map.of());
                     double dailyCost = calculateCost(usage);
-                    return MonthDto.builder()
-                            .date(date.toString())
-                            .value(dailyCost)
-                            .build();
-                })
+                    monthlyCosts.put(date, dailyCost);
+                });
+
+        return monthlyCosts.entrySet().stream()
+                .map(entry -> MonthDto.builder()
+                        .date(entry.getKey().toString())
+                        .value(entry.getValue())
+                        .build())
                 .collect(Collectors.toList());
     }
 
     private List<YearDto> calculateYearPredictions(Map<LocalDate, Map<String, Double>> dailyUsage) {
         double[] quarterlyCosts = new double[4];
+        LocalDate today = LocalDate.now();
+        int currentYear = today.getYear();
+
+        // 올해 1월 1일부터 어제까지의 실제 사용량 계산
+        if (today.isAfter(today.withDayOfYear(1))) {
+            String startOfYear = today.withDayOfYear(1).atStartOfDay().format(TimeUtil.getDateTimeFormatter());
+            String yesterday = today.minusDays(1).atTime(23, 59, 59).format(TimeUtil.getDateTimeFormatter());
+
+            List<EnergyReadingDto> billRangeData = energyDataService.getBillRangeData(startOfYear, yesterday, DateTimeType.DAY.getValue());
+            for (EnergyReadingDto energyReadingDto : billRangeData) {
+                if (energyReadingDto.getDatas() != null) {
+                    for (ReadingDto readingDto : energyReadingDto.getDatas()) {
+                        LocalDate date = readingDto.getTimestamp().toLocalDate();
+                        if (date.getYear() == currentYear) {
+                            int quarter = (date.getMonthValue() - 1) / 3;
+                            quarterlyCosts[quarter] += readingDto.getUsage();
+                        }
+                    }
+                }
+            }
+        }
+
+        // 오늘부터 올해 말까지의 예상 사용량 계산
         dailyUsage.forEach((date, usage) -> {
-            double dailyCost = calculateCost(usage);
-            int quarter = (date.getMonthValue() - 1) / 3;
-            quarterlyCosts[quarter] += dailyCost;
+            if (date.getYear() == currentYear && !date.isBefore(today)) {
+                double dailyCost = calculateCost(usage);
+                int quarter = (date.getMonthValue() - 1) / 3;
+                quarterlyCosts[quarter] += dailyCost;
+            }
         });
 
         List<YearDto> yearPredictions = new ArrayList<>();

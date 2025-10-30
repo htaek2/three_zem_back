@@ -13,12 +13,15 @@ class ThreeZemBackApplicationTests {
     @Test
     void getRandomNumber() {
 
-        for (int i = 0; i <= 100; i++){
-            double variation = (random.nextDouble() * 2 - 1) * 0.2;
-            double dd = (int) (80 * (1 + variation));
-            System.out.println(dd);
+//        for (int i = 0; i <= 100; i++){
+//            double variation = (random.nextDouble() * 2 - 1) * 0.2;
+//            double dd = (int) (80 * (1 + variation));
+//            System.out.println(dd);
+//
+//        }
 
-        }
+        int quarter = (1 - 1) / 3;
+        System.out.println(quarter);
     }
 
 }
