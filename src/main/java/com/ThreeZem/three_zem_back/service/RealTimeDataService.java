@@ -8,6 +8,7 @@ import com.ThreeZem.three_zem_back.data.dto.buildingConfig.DeviceConfigDto;
 import com.ThreeZem.three_zem_back.data.dto.buildingConfig.FloorConfigDto;
 import com.ThreeZem.three_zem_back.data.dto.energy.*;
 import com.ThreeZem.three_zem_back.data.entity.*;
+import com.ThreeZem.three_zem_back.data.enums.DeviceStatus;
 import com.ThreeZem.three_zem_back.data.enums.DeviceType;
 import com.ThreeZem.three_zem_back.data.enums.EnergyType;
 import com.ThreeZem.three_zem_back.repository.*;
@@ -36,7 +37,7 @@ public class RealTimeDataService {
     private final FloorRepository floorRepository;
     private final ApplicationStateService applicationStateService;
     private final DataGenerationService dataGenerationService;
-    private final BuildingDataCache  buildingDataCache;
+    private final BuildingDataCache buildingDataCache;
 
     private volatile Map<Long, Float> recentElecDatas = new ConcurrentHashMap<>();
     private volatile Map<Long, Float> recentGasDatas = new ConcurrentHashMap<>();
@@ -208,10 +209,18 @@ public class RealTimeDataService {
 
         for (FloorConfigDto floor : buildingConfig.getFloors()) {
             for (DeviceConfigDto device : floor.getDevices()) {
-                float usage = dataGenerationService.generateElecData(device.getDeviceType(), device.getStatus(), false);
-                Long deviceId = device.getId();
-                recentElecDatas.put(deviceId, usage);
-                electricityUsageBuffer.merge(deviceId, usage, Float::sum);
+                Optional<Device> deviceData = deviceRepository.findById(device.getId());
+
+                if (deviceData.isPresent() && deviceData.get().getStatus() == DeviceStatus.DEVICE_ON.getValue()) {
+                    float usage = dataGenerationService.generateElecData(DeviceType.fromByte(deviceData.get().getDeviceType()),
+                            DeviceStatus.fromByte(deviceData.get().getStatus()), false);
+
+                    recentElecDatas.put(deviceData.get().getId(), usage);
+                    electricityUsageBuffer.merge(deviceData.get().getId(), usage, Float::sum);
+                }
+                else {
+                    electricityUsageBuffer.merge(deviceData.get().getId(), 0.0f, Float::sum);
+                }
             }
         }
     }
