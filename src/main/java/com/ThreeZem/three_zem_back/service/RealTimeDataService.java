@@ -147,7 +147,7 @@ public class RealTimeDataService {
         EnergyReadingDto gasUsage = new EnergyReadingDto();
         gasUsage.setEnergyType(EnergyType.GAS);
 
-        float gasTemp = recentGasDatas.getOrDefault(building.getId(), -1f);
+        float gasTemp = recentGasDatas.getOrDefault(building.getId(), 0.0f);
         gasUsage.setDatas(Collections.singletonList(new ReadingDto(LocalDateTime.now(), gasTemp)));
         gasPrice.set((long) (gasPrice.get() + (gasTemp * EnergyPriceConst.UNIT_PRICE_GAS)));  // 가스 요금 계산
 
@@ -163,7 +163,7 @@ public class RealTimeDataService {
             EnergyReadingDto waterUsage = new EnergyReadingDto();
             waterUsage.setEnergyType(EnergyType.WATER);
 
-            float waterTemp = recentWaterDatas.getOrDefault(floor.getId(), -1f);
+            float waterTemp = recentWaterDatas.getOrDefault(floor.getId(), 0.0f);
             waterUsage.setDatas(Collections.singletonList(new ReadingDto(LocalDateTime.now(), waterTemp)));
             waterPrice.set((long) (waterPrice.get() + (waterTemp * EnergyPriceConst.UNIT_PRICE_WATER)));
 
@@ -181,7 +181,7 @@ public class RealTimeDataService {
                 EnergyReadingDto elecUsage = new EnergyReadingDto();
                 elecUsage.setEnergyType(EnergyType.ELECTRICITY);
 
-                float elecTemp = recentElecDatas.getOrDefault(device.getId(), -1f);
+                float elecTemp = recentElecDatas.getOrDefault(device.getId(), 0.0f);
                 elecUsage.setDatas(Collections.singletonList(new ReadingDto(LocalDateTime.now(), elecTemp)));
                 elecPrice.set((long) (elecPrice.get() + (elecTemp * EnergyPriceConst.UNIT_PRICE_ELECTRICITY)));
 
